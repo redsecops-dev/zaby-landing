@@ -1,0 +1,15 @@
+export { HeroSection } from "./HeroSection";
+export { LogosSection } from "./LogosSection";
+export { FeaturesSection } from "./FeaturesSection";
+export { WorkflowSection } from "./WorkflowSection";
+export { DataSynchronySection } from "./DataSynchronySection";
+export { FutureWorkspacesSection } from "./FutureWorkspacesSection";
+export { BentoSection } from "./BentoSection";
+export { PricingSection } from "./PricingSection";
+export { IriaPricingSection } from "./IriaPricingSection";
+export { TestimonialsSection } from "./TestimonialsSection";
+export { DesignInspirationSection } from "./DesignInspirationSection";
+export { JoinTheMovementSection } from "./JoinTheMovementSection";
+export { FaqSection } from "./FaqSection";
+export { CtaSection } from "./CtaSection";
+export { default as FooterSection } from "./footer/Footer";

@@ -1,0 +1,106 @@
+/* ─────────────────────────────────────────────
+   ZABY — Utility Classes
+   All values reference CSS vars from globals.css.
+   Never use raw hex or hardcoded values here.
+   ───────────────────────────────────────────── */
+
+/* Glass surface — used by GlassPanel component */
+.glass-panel {
+  backdrop-filter: blur(var(--blur-panel));
+  -webkit-backdrop-filter: blur(var(--blur-panel));
+  background: var(--color-glass-bg);
+  border: 1.2px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+}
+
+.glass-panel-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-sm);
+}
+
+/* Gradient border shell — premium card treatment from design spec */
+.gradient-border-shell {
+  padding: 1.5px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    to right top,
+    rgb(226, 216, 240),
+    rgb(250, 221, 240)
+  );
+}
+
+/* Gradient text — accent text treatment */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Gradient text — primary variant (Iria magenta → violet) */
+.gradient-text-primary {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-accent-soft) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Gradient text — orange variant (legacy, now uses Iria colors) */
+.gradient-text-orange {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-accent-soft) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Section divider */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0;
+}
+
+/* Display heading — used in hero / section headings */
+.display-heading {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+
+/* Scrollbar — minimal styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: var(--radius-full);
+}
+
+/* Focus ring — consistent with Zaby accent */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
