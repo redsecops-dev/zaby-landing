@@ -101,7 +101,7 @@ export function FeaturesSection() {
                   <p className="reveal-text text-xs text-slate-500 mb-6 mt-2">
                     Autonomous agents operate continuously, completing real tasks across your entire business.
                   </p>
-                  <button className="bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors">
+                  <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors">
                     Get Started
                   </button>
                 </div>
@@ -207,9 +207,9 @@ export function FeaturesSection() {
                   <input
                     type="email"
                     placeholder="Email address"
-                    className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-slate-400 font-medium"
+                    className="flex-1 cursor-text bg-transparent px-3 text-sm outline-none placeholder:text-slate-400 font-medium"
                   />
-                  <button className="bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-1">
+                  <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-1">
                     Join{" "}
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </button>
@@ -295,7 +295,7 @@ export function FeaturesSection() {
               <p className="reveal-text text-sm text-slate-500 mb-6 mt-2">
                 Agent Squad, Open Agents, Workflows, Memory, and AI Workspace — built for enterprise operations.
               </p>
-              <button className="bg-(--color-button-primary-bg) text-white text-xs px-5 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-2 mt-2">
+              <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-5 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-2 mt-2">
                 Explore platform{" "}
                 <ArrowUpRight size={14} strokeWidth={1.5} />
               </button>

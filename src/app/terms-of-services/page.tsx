@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { FooterSection } from "@/components/sections/FooterSection";
+import { FooterSection } from "@/components/sections";
 
 // ─── Terms Content ─────────────────────────────────────────────────────────
 
@@ -408,9 +408,10 @@ export default function TermsPage() {
   return (
     <>
       {/* Hero / Header */}
-      <div className="border-b border-neutral-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
-          {/* Breadcrumb */}
+            <section className="relative mt-30 flex items-center justify-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
+          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-8 md:p-10 lg:p-12">
+
+            {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-8">
             <Link href="/" className="hover:text-fuchsia-600 transition-colors">
               Home
@@ -441,7 +442,7 @@ export default function TermsPage() {
             </time>
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Main layout */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
@@ -513,7 +514,6 @@ export default function TermsPage() {
         </div>
       </div>
 
-      <FooterSection />
     </>
   );
 }

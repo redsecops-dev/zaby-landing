@@ -4,11 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Calendar,
-  Clock,
   Loader2,
   Search,
-  User,
   X,
 } from "lucide-react";
 
@@ -288,7 +285,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
   const category = getCategoryName(post);
   const accent = getAccent(category);
   const author = getAuthorName(post);
-  const href = `/blog/${post.slug || post.id}`;
+  const href = `/blog/${post.id}`;
 
   return (
     <article className="grid lg:grid-cols-2 gap-10 items-center border-b border-neutral-200 pb-14 mb-14">
@@ -338,7 +335,7 @@ function PostCard({ post }: { post: BlogPost }) {
   const category = getCategoryName(post);
   const accent = getAccent(category);
   const author = getAuthorName(post);
-  const href = `/blog/${post.slug || post.id}`;
+  const href = `/blog/${post.id}`;
 
   return (
     <article className="group flex flex-col bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-fuchsia-200 hover:shadow-lg hover:shadow-fuchsia-50 transition-all duration-300">
@@ -467,6 +464,7 @@ export default function BlogPage() {
   }, [debouncedSearch, page]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadBlogs();
   }, [loadBlogs]);
 
@@ -478,19 +476,18 @@ export default function BlogPage() {
     return [FALLBACK_CATEGORY, ...names];
   }, [posts]);
 
+  const selectedCategory =
+    activeCategory !== FALLBACK_CATEGORY && !categories.includes(activeCategory)
+      ? FALLBACK_CATEGORY
+      : activeCategory;
+
   const filteredPosts = useMemo(() => {
-    if (activeCategory === FALLBACK_CATEGORY) return posts;
-    return posts.filter((post) => getCategoryName(post) === activeCategory);
-  }, [activeCategory, posts]);
+    if (selectedCategory === FALLBACK_CATEGORY) return posts;
+    return posts.filter((post) => getCategoryName(post) === selectedCategory);
+  }, [selectedCategory, posts]);
 
   const featured = filteredPosts[0];
   const remaining = filteredPosts.slice(1);
-
-  useEffect(() => {
-    if (activeCategory !== FALLBACK_CATEGORY && !categories.includes(activeCategory)) {
-      setActiveCategory(FALLBACK_CATEGORY);
-    }
-  }, [activeCategory, categories]);
 
   return (
     <>
@@ -555,7 +552,7 @@ export default function BlogPage() {
                     type="button"
                     onClick={() => setActiveCategory(category)}
                     className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                      activeCategory === category
+                      selectedCategory === category
                         ? "bg-fuchsia-600 text-white border-fuchsia-600 shadow-sm shadow-fuchsia-200"
                         : "bg-white text-neutral-600 border-neutral-200 hover:border-fuchsia-300 hover:text-fuchsia-600"
                     }`}
@@ -579,7 +576,7 @@ export default function BlogPage() {
               </span>
             ) : (
               <span>
-                {totalResults} article{totalResults === 1 ? "" : "s"} found for "{debouncedSearch}"
+                {totalResults} article{totalResults === 1 ? "" : "s"} found for &quot;{debouncedSearch}&quot;
               </span>
             )}
           </div>
@@ -618,7 +615,7 @@ export default function BlogPage() {
               </div>
             ) : null}
 
-            {hasMore && activeCategory === FALLBACK_CATEGORY ? (
+            {hasMore && selectedCategory === FALLBACK_CATEGORY ? (
               <div className="mt-14 flex justify-center">
                 <button
                   type="button"
@@ -660,7 +657,7 @@ export default function BlogPage() {
             <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
               Get the latest from Zaby
             </h2>
-            <p className="text-neutral-500 text-[15px] max-w-md mx-auto leading-relaxed mb-7">
+          <p className="text-neutral-500 text-[15px] max-w-md mx-auto leading-relaxed mb-7">
               Insights on operational AI, assessments, automation, and enterprise infrastructure delivered to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">

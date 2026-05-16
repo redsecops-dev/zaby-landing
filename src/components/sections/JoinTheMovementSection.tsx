@@ -71,6 +71,7 @@ function ClockComponent() {
     let angleOrange = 180;
     const speedBlue = 1.2;
     const speedOrange = 0.3;
+    let animationFrame = 0;
 
     function animateClock() {
       angleBlue = (angleBlue + speedBlue) % 360;
@@ -79,9 +80,14 @@ function ClockComponent() {
       if (sysBlueRef.current) sysBlueRef.current.style.transform = `rotate(${angleBlue}deg)`;
       if (sysOrangeRef.current) sysOrangeRef.current.style.transform = `rotate(${angleOrange}deg)`;
 
-      requestAnimationFrame(animateClock);
+      animationFrame = requestAnimationFrame(animateClock);
     }
-    requestAnimationFrame(animateClock);
+
+    animationFrame = requestAnimationFrame(animateClock);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
   }, []);
 
   return (
@@ -173,6 +179,8 @@ function ClockComponent() {
 
 function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement | null> }) {
   useEffect(() => {
+    let frame = 0;
+
     const initAnimations = async () => {
       const section = scopeRef.current;
       if (!section) return;
@@ -191,23 +199,33 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
           revealElements.forEach((el: Element) => {
             const htmlEl = el as HTMLElement;
             if (htmlEl.tagName === "H1" || htmlEl.tagName === "P") {
-              const text = htmlEl.innerHTML;
-              const words = text.replace(/<br\s*\/?>/gi, " <br> ").split(/\s+/);
+              const lineSource = htmlEl.dataset.revealLines;
+              const textSource = htmlEl.dataset.revealText;
+              const lines = lineSource
+                ? lineSource.split("|")
+                : [textSource || htmlEl.textContent || ""];
+
               htmlEl.innerHTML = "";
 
-              words.forEach((word) => {
-                if (word === "<br>") {
+              lines.forEach((line, lineIndex) => {
+                line
+                  .trim()
+                  .split(/\s+/)
+                  .filter(Boolean)
+                  .forEach((word) => {
+                    const wordWrapper = document.createElement("span");
+                    wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom";
+
+                    const innerSpan = document.createElement("span");
+                    innerSpan.className = "inline-block translate-y-[120%] opacity-0 will-change-transform";
+                    innerSpan.textContent = `${word} `;
+
+                    wordWrapper.appendChild(innerSpan);
+                    htmlEl.appendChild(wordWrapper);
+                  });
+
+                if (lineIndex < lines.length - 1) {
                   htmlEl.appendChild(document.createElement("br"));
-                } else if (word.trim() !== "") {
-                  const wordWrapper = document.createElement("span");
-                  wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom";
-
-                  const innerSpan = document.createElement("span");
-                  innerSpan.className = "inline-block translate-y-[120%] opacity-0 will-change-transform";
-                  innerSpan.innerHTML = word + "&nbsp;";
-
-                  wordWrapper.appendChild(innerSpan);
-                  htmlEl.appendChild(wordWrapper);
                 }
               });
 
@@ -249,8 +267,14 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
       }
     };
 
-    const cleanup = initAnimations();
+    const cleanup = new Promise<(() => void) | void>((resolve) => {
+      frame = window.requestAnimationFrame(() => {
+        void initAnimations().then(resolve);
+      });
+    });
+
     return () => {
+      window.cancelAnimationFrame(frame);
       cleanup.then((fn) => fn?.());
     };
   }, [scopeRef]);
@@ -289,6 +313,7 @@ export function JoinTheMovementSection() {
           <div className="flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2 space-y-4 sm:space-y-6">
             <h1 
               className="jtm-reveal text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
+              data-reveal-lines="Join the|Movement"
               style={{ color: COLORS.black }}
             >
               Join the<br />Movement
@@ -296,6 +321,7 @@ export function JoinTheMovementSection() {
 
             <p 
               className="jtm-reveal text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
+              data-reveal-text="Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here."
               style={{ color: COLORS.textSecondary }}
             >
               Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here.

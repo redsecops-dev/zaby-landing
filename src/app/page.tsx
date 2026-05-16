@@ -6,6 +6,7 @@ import {
   IriaPricingSection,
   DesignInspirationSection,
   JoinTheMovementSection,
+  InfrastructureSection,
 } from "@/components/sections";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <DataSynchronySection />
       <FutureWorkspacesSection />
       <IriaPricingSection />
+      {/* <InfrastructureSection /> */}
       <JoinTheMovementSection />
       <DesignInspirationSection />
       {/* <PricingSection /> */}

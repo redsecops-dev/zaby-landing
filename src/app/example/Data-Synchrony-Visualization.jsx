@@ -482,7 +482,7 @@ function CardStack() {
               zIndex: card.type === "engine" ? 10 : card.type === "throughput" || card.type === "efficiency" ? 2 : 1,
               opacity: 0,
               scale: 0.6,
-              transformStyle: "preserve-3d"
+          transformStyle: "preserve-3d"
             }}
             data-x={card.x}
             data-y={card.y}

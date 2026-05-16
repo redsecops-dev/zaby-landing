@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -12,7 +13,26 @@ interface SectionData {
   image: string;
   action: string;
   hasArrow: boolean;
+  href?: string;
 }
+
+type BlogPost = {
+  id: string;
+  title?: string | null;
+  slug?: string | null;
+  excerpt?: string | null;
+  content?: string | null;
+  featuredImage?: string | null;
+};
+
+type BlogsApiResponse = {
+  success?: boolean;
+  data?: {
+    data?: BlogPost[];
+  };
+};
+
+const BLOGS_API_URL = "https://prod-api.zaby.io/api/v1/public/blogs";
 
 const SECTIONS_DATA: SectionData[] = [
   {
@@ -57,6 +77,71 @@ const SECTIONS_DATA: SectionData[] = [
   },
 ];
 
+function stripHtmlTags(input?: string | null): string {
+  if (!input) return "";
+
+  return input
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractFirstImage(content?: string | null): string | null {
+  if (!content) return null;
+
+  const match = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match?.[1] ?? null;
+}
+
+function truncateText(text: string, limit: number): string {
+  if (text.length <= limit) return text;
+  return `${text.slice(0, limit).trim()}...`;
+}
+
+function mapBlogsToSections(posts: BlogPost[]): SectionData[] {
+  return posts.slice(0, 4).map((post, index) => {
+    const fallback = SECTIONS_DATA[index % SECTIONS_DATA.length];
+    const plainExcerpt = stripHtmlTags(post.excerpt || post.content);
+
+    return {
+      id: fallback.id,
+      title: post.title?.trim() || fallback.title,
+      description:
+        truncateText(plainExcerpt, 140) || fallback.description,
+      image: post.featuredImage || extractFirstImage(post.content) || fallback.image,
+      action: "Read article",
+      hasArrow: true,
+      href: `/blog/${post.slug || post.id}`,
+    };
+  });
+}
+
+async function fetchBlogs(): Promise<BlogPost[]> {
+  const params = new URLSearchParams({
+    page: "1",
+    limit: "4",
+  });
+
+  const response = await fetch(`${BLOGS_API_URL}?${params.toString()}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) return [];
+
+  const payload = (await response.json()) as BlogsApiResponse;
+  if (!payload.success) return [];
+
+  return payload.data?.data ?? [];
+}
+
 // ─── ArchitectureSection ─────────────────────────────────────────────────────
 
 function ArchitectureSection({ section }: { section: SectionData }) {
@@ -91,9 +176,18 @@ function ArchitectureSection({ section }: { section: SectionData }) {
             <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent group-hover:via-white transition-all duration-500" />
             {section.hasArrow ? (
               <>
-                <span className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700">
-                  {section.action}
-                </span>
+                {section.href ? (
+                  <Link
+                    href={section.href}
+                    className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700"
+                  >
+                    {section.action}
+                  </Link>
+                ) : (
+                  <span className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700">
+                    {section.action}
+                  </span>
+                )}
                 <Icon
                   icon="solar:arrow-right-linear"
                   className="text-white text-lg opacity-0 -translate-x-4 transition-all duration-300 group-hover/btn:opacity-100 group-hover/btn:translate-x-0"
@@ -210,6 +304,36 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
 
 export function FutureWorkspacesSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [sections, setSections] = useState<SectionData[]>(SECTIONS_DATA);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadBlogs = async () => {
+      try {
+        const blogs = await fetchBlogs();
+
+        if (!isMounted || blogs.length === 0) return;
+
+        const dynamicSections = mapBlogsToSections(blogs);
+        if (dynamicSections.length >= SECTIONS_DATA.length) {
+          setSections(dynamicSections.slice(0, SECTIONS_DATA.length));
+          return;
+        }
+
+        const remainingFallback = SECTIONS_DATA.slice(dynamicSections.length);
+        setSections([...dynamicSections, ...remainingFallback]);
+      } catch {
+        // If API fails, keep dummy section data.
+      }
+    };
+
+    loadBlogs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section
@@ -219,7 +343,7 @@ export function FutureWorkspacesSection() {
       <AnimationsManager scopeRef={sectionRef} />
 
       <main className="relative z-10 w-full min-h-dvh flex flex-col lg:flex-row">
-        {SECTIONS_DATA.map((section) => (
+        {sections.map((section) => (
           <ArchitectureSection key={section.id} section={section} />
         ))}
       </main>

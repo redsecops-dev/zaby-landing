@@ -10,6 +10,7 @@ export { IriaPricingSection } from "./IriaPricingSection";
 export { TestimonialsSection } from "./TestimonialsSection";
 export { DesignInspirationSection } from "./DesignInspirationSection";
 export { JoinTheMovementSection } from "./JoinTheMovementSection";
+export { InfrastructureSection } from "./InfrastructureSection";
 export { FaqSection } from "./FaqSection";
 export { CtaSection } from "./CtaSection";
 export { default as FooterSection } from "./footer/Footer";
