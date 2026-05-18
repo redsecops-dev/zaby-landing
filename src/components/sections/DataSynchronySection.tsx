@@ -1,9 +1,12 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
+
+// ─── Glassmorphism Premium Helper ─────────────────────────────────────────────
+// ... rest of imports/helpers ...
 
 // ─── Glassmorphism Premium Helper ─────────────────────────────────────────────
 
@@ -172,7 +175,7 @@ function ThroughputCard() {
         </p>
       </div>
 
-      <div className="flex items-end justify-between h-24 gap-0.75 mt-6 mb-2 px-1">
+      <div className="relative z-10 flex items-end justify-between h-24 gap-0.75 mt-6 mb-2 px-1 rounded-3xl bg-fuchsia-50/70 border border-fuchsia-200/50">
         {[40, 70, 50, 100, 30, 60, 85, 45, 75].map((height, i) => (
           <motion.div
             key={i}
@@ -181,20 +184,21 @@ function ThroughputCard() {
             transition={{ duration: 2 + i * 0.2, repeat: Infinity, ease: "easeInOut" }}
             className={cn(
               "w-2 rounded-full origin-bottom",
-              "shadow-[0_0_8px_rgba(232,121,249,0.4)]",
-              height === 100 ? "shadow-[0_0_12px_rgba(232,121,249,0.6)]" : ""
+              "shadow-[0_0_10px_rgba(232,121,249,0.55)]",
+              height === 100 ? "shadow-[0_0_16px_rgba(232,121,249,0.75)]" : ""
             )}
             style={{
               height: `${height}%`,
-              backgroundColor: height === 100
-                ? "rgba(232,121,249,1)"
-                : `rgba(232,121,249,${(height / 100) * 0.8})`,
+              backgroundColor:
+                height === 100
+                  ? "rgba(217,70,239,1)"
+                  : `rgba(217,70,239,${Math.max(0.55, (height / 100) * 0.9)})`,
             }}
           />
         ))}
       </div>
 
-      <div className="space-y-2 mt-auto">
+      <div className="relative z-10 space-y-2 mt-auto">
         <div className={cn(
           "bg-linear-to-r from-slate-50/60 to-slate-50/40 rounded-full px-4 py-2.5 flex justify-between items-center text-xs",
           "border border-slate-200/40 backdrop-blur-sm",
@@ -261,7 +265,7 @@ function CoreEngineCard() {
       </p>
 
       <div className={cn(
-        "grow bg-white/85 backdrop-blur-md rounded-4xl p-6 relative overflow-hidden",
+        "relative z-10 grow bg-white/92 backdrop-blur-md rounded-4xl p-6 overflow-hidden",
         "flex flex-col justify-between mb-8",
         "border border-slate-200/60 shadow-[inset_0_1px_2px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(0,0,0,0.03)]"
       )}>
@@ -282,7 +286,12 @@ function CoreEngineCard() {
 
         <div className="relative h-24 mt-4 w-full">
           <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 40" preserveAspectRatio="none">
-            <path d="M0,20 Q20,30 40,15 T70,25 T100,15" fill="none" stroke="currentColor" strokeWidth="1" className="text-slate-300" />
+            <defs>
+              <filter id="graphGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+              </filter>
+            </defs>
+            <path d="M0,20 Q20,30 40,15 T70,25 T100,15" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-slate-300" />
             <motion.path
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -290,22 +299,23 @@ function CoreEngineCard() {
               d="M0,25 Q15,10 30,22 T55,10 T75,25 T100,18"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.5"
+              strokeWidth="3.2"
               className="text-blue-600 drop-shadow-lg"
+              filter="url(#graphGlow)"
             />
             {[30, 55, 75].map((cx, i) => (
               <motion.circle 
                 key={i} 
                 cx={cx} 
                 cy={cx === 30 ? 22 : cx === 55 ? 10 : 25} 
-                r="3.5" 
+                r="4.2" 
                 initial={{ scale: 0 }}
-                animate={{ scale: [1, 1.3, 1] }}
+                animate={{ scale: [1, 1.4, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
                 fill="currentColor" 
                 stroke="white" 
-                strokeWidth="1.5" 
-                className="text-blue-600 drop-shadow-md" 
+                strokeWidth="2" 
+                className="text-blue-600 drop-shadow-lg" 
               />
             ))}
           </svg>
@@ -339,9 +349,26 @@ function CoreEngineCard() {
 
 export function DataSynchronySection() {
   const [centerIndex, setCenterIndex] = useState(2); // Start with Execution Core in center
+  const [isPaused, setIsPaused] = useState(false);
 
-  const handleNext = () => setCenterIndex((prev) => (prev + 1) % CARDS_DATA.length);
-  const handlePrev = () => setCenterIndex((prev) => (prev - 1 + CARDS_DATA.length) % CARDS_DATA.length);
+  const handleNext = useCallback(() => {
+    setCenterIndex((prev) => (prev + 1) % CARDS_DATA.length);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    setCenterIndex((prev) => (prev - 1 + CARDS_DATA.length) % CARDS_DATA.length);
+  }, []);
+
+  // Auto-scroll logic
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3000); // Increased speed: Swipe every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, handleNext]);
 
   const getCardSlot = (cardIndex: number) => {
     const diff = (cardIndex - centerIndex + CARDS_DATA.length) % CARDS_DATA.length;
@@ -354,45 +381,46 @@ export function DataSynchronySection() {
   };
 
   const slotVariants = {
+    // ... variants unchanged ...
     "far-left": {
       x: "-110%",
-      scale: 0.6,
-      opacity: 0.25,
+      scale: 0.65,
+      opacity: 2,
       zIndex: 10,
-      filter: "blur(1px)",
-      rotateY: 45,
+      filter: "blur(0px)",
+      rotateY: 35,
     },
     "left": {
       x: "-65%",
-      scale: 0.8,
-      opacity: 0.55,
+      scale: 0.85,
+      opacity: 2,
       zIndex: 20,
-      filter: "blur(0.5px)",
-      rotateY: 25,
+      filter: "blur(0px)",
+      rotateY: 20,
     },
     "center": {
       x: "0%",
       scale: 1,
-      opacity: 1,
+      opacity: 2,
       zIndex: 30,
       filter: "blur(0px)",
       rotateY: 0,
     },
     "right": {
       x: "65%",
-      scale: 0.8,
-      opacity: 0.55,
+      scale: 0.85,
+      opacity: 2,
       zIndex: 20,
-      filter: "blur(0.5px)",
-      rotateY: -25,
+      filter: "blur(0px)",
+      rotateY: -20,
     },
     "far-right": {
       x: "110%",
-      scale: 0.6,
-      opacity: 0.25,
+      scale: 0.65,
+      opacity: 2,
       zIndex: 10,
-      filter: "blur(1px)",
-      rotateY: -45,
+      filter: "blur(0px)",
+      rotateY: -35,
     },
     "hidden": {
       scale: 0.4,
@@ -402,7 +430,11 @@ export function DataSynchronySection() {
   };
 
   return (
-    <section className="relative w-full text-slate-800 antialiased py-24 md:py-32 px-4 md:px-8 overflow-hidden">
+    <section 
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="relative w-full text-slate-800 antialiased py-24 md:py-32 px-4 md:px-8 overflow-hidden"
+    >
       {/* Cinematic ambient lighting - subtle radial glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Center blue glow */}
@@ -414,7 +446,7 @@ export function DataSynchronySection() {
       </div>
 
       {/* Hero header */}
-      <div className="text-center w-full max-w-2xl mx-auto mb-16 md:mb-24 z-10 flex flex-col items-center">
+      <div className="text-center w-full max-w-2xl mx-auto z-10 flex flex-col items-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -652,9 +684,9 @@ export function DataSynchronySection() {
                   )}
                   {card.type === "facility" && (
                     <div className={cn(
-                      "relative w-full h-full rounded-[2.5rem] overflow-hidden flex flex-col justify-end p-8",
-                      "border border-white/35 shadow-[0_12px_40px_rgba(0,0,0,0.15),inset_0_1px_2px_rgba(255,255,255,0.2)]",
-                      GLASS_STYLES.premiumMid
+                      "relative w-full h-full rounded-[2.5rem] overflow-hidden flex flex-col justify-between p-8",
+                      "border border-emerald-200/60 shadow-[0_12px_40px_rgba(16,185,129,0.1),inset_0_1px_2px_rgba(255,255,255,0.25)]",
+                      "bg-white/90 backdrop-blur-xl"
                     )}>
                       <SleekCardBorder tone="emerald" />
 
@@ -662,39 +694,101 @@ export function DataSynchronySection() {
                       <img
                         src={card.bgImage}
                         alt="Modern Architecture"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover opacity-6 mix-blend-overlay pointer-events-none"
                       />
-                      {/* Premium gradient overlay - cinematic lighting */}
-                      <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent" />
-                      {/* Subtle rim light */}
-                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent opacity-30 pointer-events-none" />
 
-                      <div className="relative z-10 flex justify-end w-full mb-auto">
-                        <div className={cn(
-                          "bg-white/15 backdrop-blur-xl p-3 rounded-2xl border border-white/20 text-white",
-                          "shadow-[0_8px_24px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)]",
-                          "transition-all duration-300 hover:bg-white/20 hover:border-white/30"
-                        )}>
-                          <Icon icon={card.icon!} width={24} height={24} />
+                      <div className="relative z-10 flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2.5 mb-3">
+                            <div className={cn(
+                              "w-10 h-10 rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white",
+                              "shadow-[0_8px_16px_rgba(16,185,129,0.3),inset_0_1px_2px_rgba(255,255,255,0.3)]",
+                              "ring-1 ring-emerald-300/50"
+                            )}>
+                              <Icon icon={card.icon!} width={20} />
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold tracking-tight text-slate-950 leading-none">Enterprise Node</h3>
+                              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 mt-1">Dedicated Cluster</p>
+                            </div>
+                          </div>
+                          <p className="text-sm leading-relaxed text-slate-700 font-medium">Isolated, high-performance infrastructure clusters with dedicated compute and secure networking.</p>
                         </div>
+                        <motion.div 
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ml-4",
+                            "bg-emerald-500/15 text-emerald-700 border border-emerald-500/40",
+                            "shadow-[0_4px_12px_rgba(16,185,129,0.15)]"
+                          )}
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-md shadow-emerald-500/60" />
+                          Active
+                        </motion.div>
                       </div>
-                      <div className="relative z-10 pt-4">
-                        <h4 className="text-white text-2xl font-bold mb-2 drop-shadow-lg">Enterprise Node</h4>
-                        <div className="flex items-center justify-between">
-                          <div className="text-[10px] text-white/80 font-bold uppercase tracking-wider">Dedicated Cluster</div>
-                          <div className={cn(
-                            "flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold uppercase",
-                            "bg-emerald-500/20 text-emerald-200 border-emerald-500/40",
-                            "shadow-[0_4px_12px_rgba(16,185,129,0.2)]"
-                          )}>
+
+                      <div className="relative z-10 grid grid-cols-2 gap-3 mt-6">
+                        <div className={cn(
+                          "rounded-2xl p-4 bg-white/60 backdrop-blur-sm border border-slate-200/50",
+                          "shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+                        )}>
+                          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">CPU Usage</p>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-lg font-bold text-slate-950">87%</span>
                             <motion.div 
-                              animate={{ scale: [1, 1.2, 1] }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                              className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-md shadow-emerald-400/50" 
-                            />
-                            Active
+                              initial={{ width: 0 }}
+                              animate={{ width: "100%" }}
+                              className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden"
+                            >
+                              <motion.div 
+                                animate={{ scaleX: [0.7, 1, 0.7] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="h-full bg-linear-to-r from-emerald-500 to-emerald-400 rounded-full origin-left"
+                              />
+                            </motion.div>
                           </div>
                         </div>
+                        <div className={cn(
+                          "rounded-2xl p-4 bg-white/60 backdrop-blur-sm border border-slate-200/50",
+                          "shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+                        )}>
+                          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">Memory</p>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-lg font-bold text-slate-950">62%</span>
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: "100%" }}
+                              className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden"
+                            >
+                              <motion.div 
+                                animate={{ scaleX: [0.5, 0.8, 0.5] }}
+                                transition={{ duration: 2.5, repeat: Infinity }}
+                                className="h-full bg-linear-to-r from-blue-500 to-blue-400 rounded-full origin-left"
+                              />
+                            </motion.div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2.5 mt-auto pt-6 relative z-10">
+                        <button className={cn(
+                          "flex-1 text-slate-700 text-xs font-bold py-3 rounded-2xl transition-all",
+                          "bg-white/70 hover:bg-white/90 active:scale-95",
+                          "border border-slate-200/60 backdrop-blur-sm",
+                          "shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+                        )}>
+                          Monitor
+                        </button>
+                        <button className={cn(
+                          "flex-1 bg-linear-to-r from-emerald-600 to-emerald-500 text-white text-xs font-bold py-3 rounded-2xl",
+                          "transition-all active:scale-95",
+                          "hover:from-emerald-500 hover:to-emerald-400 hover:shadow-lg hover:shadow-emerald-300/50",
+                          "shadow-[0_8px_24px_rgba(16,185,129,0.3)]",
+                          "border border-emerald-400/30"
+                        )}>
+                          Deploy
+                        </button>
                       </div>
                     </div>
                   )}

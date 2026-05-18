@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 
 // Color constants
 const COLORS = {
@@ -214,11 +215,11 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
                   .filter(Boolean)
                   .forEach((word) => {
                     const wordWrapper = document.createElement("span");
-                    wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom";
+                    wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom mr-[0.25em]";
 
                     const innerSpan = document.createElement("span");
                     innerSpan.className = "inline-block translate-y-[120%] opacity-0 will-change-transform";
-                    innerSpan.textContent = `${word} `;
+                    innerSpan.textContent = word;
 
                     wordWrapper.appendChild(innerSpan);
                     htmlEl.appendChild(wordWrapper);
@@ -288,7 +289,7 @@ export function JoinTheMovementSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-24"
+      className="relative w-full min-h-[92vh] md:min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-10 sm:py-14 md:py-24"
     >
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -301,18 +302,18 @@ export function JoinTheMovementSection() {
 
       {/* Main Content */}
       <div className="relative z-10 w-full max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 items-center">
           {/* Left: Clock Component */}
-          <div className="flex justify-center md:justify-start order-2 md:order-1">
-            <div className="scale-75 sm:scale-90 md:scale-100 origin-center">
+          <div className="flex justify-center md:justify-start order-2 md:order-1 pt-2 sm:pt-0">
+            <div className="scale-[0.68] xs:scale-75 sm:scale-90 md:scale-100 origin-center">
               <ClockComponent />
             </div>
           </div>
 
           {/* Right: Typography & Actions */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2 space-y-4 sm:space-y-6">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2 space-y-3 sm:space-y-6 px-1 sm:px-0">
             <h1 
-              className="jtm-reveal text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
+              className="jtm-reveal text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
               data-reveal-lines="Join the|Movement"
               style={{ color: COLORS.black }}
             >
@@ -320,16 +321,17 @@ export function JoinTheMovementSection() {
             </h1>
 
             <p 
-              className="jtm-reveal text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
+              className="jtm-reveal text-sm sm:text-base md:text-lg leading-relaxed max-w-[34ch] sm:max-w-md"
               data-reveal-text="Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here."
               style={{ color: COLORS.textSecondary }}
             >
               Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here.
             </p>
 
-            <div className="flex gap-3 w-full sm:w-auto jtm-reveal pt-2 sm:pt-4">
-              <button 
-                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 w-full sm:w-auto jtm-reveal pt-2 sm:pt-4">
+              <Link
+                href="https://platform.zaby.io/tenant/signup"
+                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto cursor-pointer touch-manipulation flex items-center justify-center"
                 style={{
                   background: "linear-gradient(135deg, #e879f9 0%, #d946ef 100%)",
                   color: COLORS.white,
@@ -337,10 +339,10 @@ export function JoinTheMovementSection() {
                 }}
               >
                 <span className="relative z-10">See in action</span>
-              </button>
+              </Link>
 
               <button 
-                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 w-full sm:w-auto"
+                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 w-full sm:w-auto cursor-pointer touch-manipulation"
                 style={{
                   background: "rgba(255,255,255,0.1)",
                   color: COLORS.black,

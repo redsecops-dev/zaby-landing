@@ -140,9 +140,9 @@ export function PricingSection() {
                     ))}
                   </ul>
                   <a
-                    href="#"
+                    href="https://platform.zaby.io/tenant/signup"
                     className={cn(
-                      "block text-center rounded-full py-3 text-sm font-semibold transition-opacity",
+                      "block text-center rounded-full py-3 text-sm font-semibold transition-opacity cursor-pointer",
                       plan.highlighted
                         ? "bg-(--color-button-primary-bg) text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] hover:bg-(--color-button-primary-hover)"
                         : "border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) text-(--color-button-secondary-text) hover:bg-white"

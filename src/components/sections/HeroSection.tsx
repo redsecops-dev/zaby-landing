@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { HeroGlobe } from "./hero/HeroGlobe";
 import { HeroMarquee } from "./hero/HeroMarquee";
@@ -124,7 +125,7 @@ export function HeroSection() {
               <RevealWord>AI FOR</RevealWord>{" "}
               <br className="hidden lg:block" />
               <RevealWord className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
-                Next-GEN.
+                Next-GEN
               </RevealWord>
             </h1>
 
@@ -136,13 +137,13 @@ export function HeroSection() {
 
             {/* CTA buttons */}
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <button
-                type="button"
+              <Link
+                href="https://platform.zaby.io/tenant/signup"
                 className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
               >
                 <Icon icon="solar:bolt-linear" width={20} height={20} />
                 Get started free
-              </button>
+              </Link>
 
               <button
                 type="button"

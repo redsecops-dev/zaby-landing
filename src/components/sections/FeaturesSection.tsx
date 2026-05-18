@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -101,9 +102,9 @@ export function FeaturesSection() {
                   <p className="reveal-text text-xs text-slate-500 mb-6 mt-2">
                     Autonomous agents operate continuously, completing real tasks across your entire business.
                   </p>
-                  <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors">
+                  <Link href="https://platform.zaby.io/tenant/signup" className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors inline-block">
                     Get Started
-                  </button>
+                  </Link>
                 </div>
                 <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full border-16 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute -top-12 -right-4 w-32 h-32 rounded-full border-12 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500 delay-75" />

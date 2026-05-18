@@ -90,7 +90,7 @@ const PLANS: Plan[] = [
     description: "For large organizations requiring custom AI workforce infrastructure.",
     monthlyPrice: null,
     annualPrice: null,
-    ctaLabel: "Contact sales",
+    ctaLabel: "Upgrade to Enterprise",
     backgroundImage:
       "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5ee0a38a-b5d3-4531-8793-98beed4af162_1600w.jpg",
     features: [
@@ -133,7 +133,7 @@ const PLAN_UI_META: Record<
   },
   enterprise: {
     displayName: "Enterprise",
-    ctaLabel: "Contact sales",
+    ctaLabel: "Upgrade to Enterprise",
     highlighted: false,
     backgroundImage:
       "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5ee0a38a-b5d3-4531-8793-98beed4af162_1600w.jpg",
@@ -335,7 +335,7 @@ function PlanCard({
         ) : null}
 
         <a
-          href="#"
+          href="https://platform.zaby.io/tenant/signup"
           className={`relative z-10 mb-8 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm transition-opacity ${
             plan.highlighted
               ? "text-white hover:opacity-80"

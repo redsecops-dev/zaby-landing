@@ -145,8 +145,8 @@ async function fetchBlogs(): Promise<BlogPost[]> {
 // ─── ArchitectureSection ─────────────────────────────────────────────────────
 
 function ArchitectureSection({ section }: { section: SectionData }) {
-  return (
-    <section className="col-section group relative flex-1 h-[70vh] lg:h-dvh overflow-hidden cursor-pointer">
+  const content = (
+    <>
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-2000 ease-out group-hover:scale-105"
@@ -163,10 +163,10 @@ function ArchitectureSection({ section }: { section: SectionData }) {
       {/* Content */}
       <div className="relative z-10 p-8 lg:p-12 xl:p-16 h-full flex flex-col pt-16 lg:pt-24">
         <div className="content-wrapper">
-          <h2 className="reveal-text text-3xl lg:text-4xl font-extralight tracking-tight text-white mb-6 transition-colors duration-700">
+          <h2 className="reveal-text text-3xl lg:text-4xl font-extralight tracking-tight text-white mb-6 transition-colors duration-700 line-clamp-3">
             {section.title}
           </h2>
-          <p className="reveal-text text-sm font-extralight text-zinc-300 leading-relaxed max-w-[85%] transition-colors duration-700">
+          <p className="reveal-text text-sm font-extralight text-zinc-300 leading-relaxed max-w-[90%] transition-colors duration-700 line-clamp-4">
             {section.description}
           </p>
         </div>
@@ -174,35 +174,37 @@ function ArchitectureSection({ section }: { section: SectionData }) {
         <div className="mt-auto pb-4 lg:pb-12 content-wrapper">
           <div className="relative w-full pt-4 flex items-center justify-between group/btn">
             <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent group-hover:via-white transition-all duration-500" />
-            {section.hasArrow ? (
-              <>
-                {section.href ? (
-                  <Link
-                    href={section.href}
-                    className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700"
-                  >
-                    {section.action}
-                  </Link>
-                ) : (
-                  <span className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700">
-                    {section.action}
-                  </span>
-                )}
-                <Icon
-                  icon="solar:arrow-right-linear"
-                  className="text-white text-lg opacity-0 -translate-x-4 transition-all duration-300 group-hover/btn:opacity-100 group-hover/btn:translate-x-0"
-                  width={18}
-                  height={18}
-                />
-              </>
-            ) : (
-              <p className="text-[10px] tracking-widest uppercase text-white font-normal leading-relaxed group-hover/btn:opacity-70 transition-all duration-700">
-                {section.action}
-              </p>
-            )}
+            
+            <span className="text-[10px] tracking-widest uppercase text-white font-normal group-hover/btn:opacity-70 transition-all duration-700">
+              {section.action}
+            </span>
+            
+            <Icon
+              icon="solar:arrow-right-linear"
+              className="text-white text-lg opacity-0 -translate-x-4 transition-all duration-300 group-hover/btn:opacity-100 group-hover/btn:translate-x-0"
+              width={18}
+              height={18}
+            />
           </div>
         </div>
       </div>
+    </>
+  );
+
+  if (section.href) {
+    return (
+      <Link 
+        href={section.href} 
+        className="col-section group relative flex-1 h-[70vh] lg:h-dvh overflow-hidden cursor-pointer block"
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <section className="col-section group relative flex-1 h-[70vh] lg:h-dvh overflow-hidden cursor-pointer">
+      {content}
     </section>
   );
 }

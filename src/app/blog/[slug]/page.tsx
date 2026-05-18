@@ -300,7 +300,7 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
 
   return (
     <article className="group flex flex-col bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-fuchsia-200 hover:shadow-lg hover:shadow-fuchsia-50 transition-all duration-300">
-      <Link href={href} className="block">
+      <Link href={href} className="block cursor-pointer">
         {image ? (
           <div className="h-36 overflow-hidden bg-neutral-100">
             <img
@@ -329,7 +329,7 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
           </time>
         </div>
 
-        <Link href={href}>
+        <Link href={href} className="cursor-pointer">
           <h3 className="text-base font-bold text-neutral-900 leading-snug mb-3 group-hover:text-fuchsia-700 transition-colors line-clamp-2">
             {post.title}
           </h3>
@@ -341,7 +341,7 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
 
         <Link
           href={href}
-          className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link"
+          className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link cursor-pointer"
         >
           Read more
           <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
@@ -387,7 +387,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className=" min-h-screen">
-      <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24">
+      <section className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 md:pt-40 md:pb-24">
         <div
           className={`absolute top-0 right-0 w-[520px] h-[520px] bg-linear-to-br ${styles.gradient} opacity-60 blur-3xl rounded-full -translate-y-1/2 translate-x-1/4`}
         />
@@ -396,37 +396,45 @@ export default async function BlogPostPage({ params }: Props) {
         />
 
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 relative z-10">
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-10">
-            <Link href="/" className="hover:text-black transition-colors">
+          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-8 sm:mb-10">
+            <Link
+              href="/"
+              className="group relative text-neutral-600 hover:text-neutral-950 transition-all duration-300 cursor-pointer inline-flex items-center gap-1"
+            >
               Home
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-fuchsia-500 to-fuchsia-400 group-hover:w-full transition-all duration-300" />
             </Link>
-            <span>/</span>
-            <Link href="/blog" className="hover:text-black transition-colors">
+            <span className="text-neutral-300">/</span>
+            <Link
+              href="/blog"
+              className="group relative text-neutral-600 hover:text-neutral-950 transition-all duration-300 cursor-pointer inline-flex items-center gap-1"
+            >
               Blog
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-fuchsia-500 to-fuchsia-400 group-hover:w-full transition-all duration-300" />
             </Link>
-            <span>/</span>
+            <span className="text-neutral-300">/</span>
             <span className="text-neutral-400 line-clamp-1">{post.title}</span>
           </nav>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-4 mb-6">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
                 <CategoryBadge category={category} accent={accent} />
-                <div className="flex items-center gap-2 text-neutral-500 text-sm">
-                  <Calendar className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-neutral-500 text-xs sm:text-sm">
+                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {formatDate(publishedDate)}
                 </div>
-                <div className="flex items-center gap-2 text-neutral-500 text-sm">
-                  <Clock className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-neutral-500 text-xs sm:text-sm">
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {calculateReadingTime(post.content)}
                 </div>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-neutral-950 leading-[1.1] tracking-tight mb-8">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-neutral-950 leading-[1.15] sm:leading-[1.1] tracking-tight mb-6 sm:mb-8">
                 {post.title}
               </h1>
 
-              <p className="text-xl text-neutral-600 leading-relaxed max-w-2xl">
+              <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed max-w-2xl">
                 {getExcerpt(post)}
               </p>
             </div>
@@ -438,20 +446,20 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section className="py-12 sm:py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24">
-          <div className="grid lg:grid-cols-[1fr_300px] gap-16 md:gap-24">
+          <div className="grid lg:grid-cols-[1fr_300px] gap-12 sm:gap-16 md:gap-24">
             <article className="max-w-none">
               <div
-                className={`blog-content max-w-none text-neutral-700 ${styles.prose} [&_p]:mb-6 [&_p]:text-lg [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-neutral-900 [&_h2]:mt-14 [&_h2]:mb-6 [&_h2]:border-b [&_h2]:border-neutral-100 [&_h2]:pb-4 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-neutral-900 [&_h3]:mt-10 [&_h3]:mb-4 [&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-neutral-900 [&_ul]:mb-8 [&_ul]:ml-6 [&_ul]:list-disc [&_ol]:mb-8 [&_ol]:ml-6 [&_ol]:list-decimal [&_li]:mb-3 [&_li_p]:mb-0 [&_hr]:my-12 [&_hr]:border-neutral-200 [&_img]:my-8 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-neutral-100 [&_img]:object-cover [&_img]:shadow-sm`}
+                className={`blog-content max-w-none text-neutral-700 ${styles.prose} [&_p]:mb-6 [&_p]:text-base sm:[&_p]:text-lg [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-neutral-900 [&_h2]:mt-10 sm:[&_h2]:mt-14 [&_h2]:mb-4 sm:[&_h2]:mb-6 [&_h2]:border-b [&_h2]:border-neutral-100 [&_h2]:pb-3 sm:[&_h2]:pb-4 [&_h2]:text-2xl sm:[&_h2]:text-3xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-neutral-900 [&_h3]:mt-8 sm:[&_h3]:mt-10 [&_h3]:mb-3 sm:[&_h3]:mb-4 [&_h3]:text-xl sm:[&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-neutral-900 [&_ul]:mb-8 [&_ul]:ml-5 sm:[&_ul]:ml-6 [&_ul]:list-disc [&_ol]:mb-8 [&_ol]:ml-5 sm:[&_ol]:ml-6 [&_ol]:list-decimal [&_li]:mb-3 [&_li_p]:mb-0 [&_hr]:my-10 sm:[&_hr]:my-12 [&_hr]:border-neutral-200 [&_img]:my-6 sm:[&_img]:my-8 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-neutral-100 [&_img]:object-cover [&_img]:shadow-sm`}
                 dangerouslySetInnerHTML={{ __html: post.content || "" }}
               />
             </article>
 
             <aside>
-              <div className="sticky top-32 space-y-12">
+              <div className="sticky top-32 space-y-10 sm:space-y-12">
                 <div className="pt-0">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-6">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
                     Author
                   </h4>
                   <div className="flex items-center gap-4">
@@ -467,14 +475,14 @@ export default async function BlogPostPage({ params }: Props) {
 
                 {post.tags && post.tags.length > 0 ? (
                   <div className="pt-8 border-t border-neutral-100">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-6">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
                       Tags
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-600"
+                          className="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-[11px] font-medium text-neutral-600"
                         >
                           {tag.name}
                         </span>
@@ -484,7 +492,7 @@ export default async function BlogPostPage({ params }: Props) {
                 ) : null}
 
                 <div className="pt-8 border-t border-neutral-100">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-6">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
                     Share post
                   </h4>
                   <div className="flex gap-3">
@@ -492,7 +500,7 @@ export default async function BlogPostPage({ params }: Props) {
                       href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all"
+                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
                       aria-label="Share on Twitter"
                     >
                       <Twitter className="w-4 h-4" />
@@ -501,14 +509,14 @@ export default async function BlogPostPage({ params }: Props) {
                       href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all"
+                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
                       aria-label="Share on LinkedIn"
                     >
                       <Linkedin className="w-4 h-4" />
                     </a>
                     <Link
                       href={sharePath}
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all"
+                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
                       aria-label="Open canonical blog link"
                     >
                       <LinkIcon className="w-4 h-4" />
@@ -521,16 +529,16 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </section>
 
-       <section className="relative mb-10 flex items-center justify-center text-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
-          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-8 md:p-10 lg:p-12">
-          <div className="flex items-end justify-between mb-12">
+       <section className="relative mb-10 flex items-center justify-center text-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black px-4 sm:px-0">
+          <div className="w-full max-w-7xl md:bg-white/40 md:backdrop-blur-3xl md:rounded-[2.5rem] md:border md:border-white/60 md:shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-6 sm:p-10 md:p-12 lg:p-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 text-left gap-6">
             <div>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-4">Related posts</h2>
-              <p className="text-neutral-500">More insights from the Zaby team.</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3 sm:mb-4">Related posts</h2>
+              <p className="text-neutral-500 text-sm sm:text-base">More insights from the Zaby team.</p>
             </div>
             <Link
               href="/blog"
-              className="hidden sm:flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors"
+              className="hidden sm:flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors cursor-pointer"
             >
               View all posts
               <ArrowLeft className="w-4 h-4 rotate-180" />
@@ -538,7 +546,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
 
           {relatedPosts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {relatedPosts.map((relatedPost) => (
                 <RelatedPostCard key={relatedPost.id} post={relatedPost} />
               ))}
@@ -549,10 +557,10 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
 
-          <div className="mt-12 sm:hidden text-center">
+          <div className="mt-10 sm:hidden text-center">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors cursor-pointer"
             >
               View all posts
               <ArrowLeft className="w-4 h-4 rotate-180" />
