@@ -4,13 +4,18 @@ import { useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CompliancePlatform from "@/app/example/Compliance-Platform";
+import { AgentSquadPreview } from "@/components/modals/AgentSquadPreview";
+import { OpenAgentsPreview } from "@/components/modals/OpenAgentsPreview";
+import { AiMemoryPreview } from "@/components/modals/AiMemoryPreview";
+import { AgenticWorkflowPreview } from "@/components/modals/AgenticWorkflowPreview";
 
 interface PreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedCard?: number | null;
 }
 
-export function PreviewModal({ isOpen, onClose }: PreviewModalProps) {
+export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProps) {
   // Close on ESC key
   useEffect(() => {
     if (!isOpen) return;
@@ -60,7 +65,7 @@ export function PreviewModal({ isOpen, onClose }: PreviewModalProps) {
                 stiffness: 300,
                 damping: 30,
               }}
-              className="relative min-h-dvh h-auto w-full max-w-none rounded-none bg-white shadow-none sm:h-auto sm:max-w-5xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)] my-auto"
+              className="relative min-h-dvh h-auto w-full max-w-none rounded-none bg-white shadow-none sm:my-6 sm:max-h-[calc(100dvh-3rem)] sm:min-h-0 sm:max-w-7xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Floating close button */}
@@ -73,8 +78,13 @@ export function PreviewModal({ isOpen, onClose }: PreviewModalProps) {
               </button>
 
               {/* Content */}
-              <div className="h-full overflow-hidden rounded-none sm:rounded-2xl">
-                <CompliancePlatform />
+              <div className="h-full overflow-y-auto overflow-x-hidden rounded-none sm:rounded-2xl">
+                {selectedCard === 1 && <AgentSquadPreview />}
+                {selectedCard === 4 && <OpenAgentsPreview />}
+                {selectedCard === 7 && <AiMemoryPreview />}
+                {selectedCard === 8 && <AgenticWorkflowPreview />}
+                {!selectedCard && <CompliancePlatform />}
+                {selectedCard && ![1, 4, 7, 8].includes(selectedCard) && <CompliancePlatform />}
               </div>
             </motion.div>
           </div>

@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 
-const BLOGS_API_URL = "https://prod-api.zaby.io/api/v1/public/blogs";
+const BLOGS_API_URL = "https://prod-api.zaby.io/api/v1/public//blogs";
 const PAGE_SIZE = 9;
 const FALLBACK_CATEGORY = "All";
 
