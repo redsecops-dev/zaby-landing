@@ -1,3 +1,4 @@
+import AgentSquad from "@/components/modals/components/AgentSquad";
 import {
   HeroSection,
   FeaturesSection,
@@ -6,6 +7,7 @@ import {
   IriaPricingSection,
   DesignInspirationSection,
   JoinTheMovementSection,
+  InfrastructureSection,
 } from "@/components/sections";
 
 export default function Home() {
@@ -16,8 +18,10 @@ export default function Home() {
       <DataSynchronySection />
       <FutureWorkspacesSection />
       <IriaPricingSection />
-      <JoinTheMovementSection />
+      {/* <InfrastructureSection /> */}
+      {/* <JoinTheMovementSection /> */}
       <DesignInspirationSection />
+      <AgentSquad/>
       {/* <PricingSection /> */}
       {/* <TestimonialsSection /> */}
       {/* <FaqSection /> */}

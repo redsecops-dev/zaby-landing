@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { PageShell } from "@/components/layout";
 import { BackgroundImage } from "@/components/shared/BackgroundImage";
+import { CookieConsent } from "@/components/shared/CookieConsent";
 import { siteConfig } from "@/config/site";
 
 const inter = Inter({
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body>
         <BackgroundImage />
         <PageShell>{children}</PageShell>
+        <CookieConsent />
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { FooterSection } from "@/components/sections/FooterSection";
+import { FooterSection } from "@/components/sections";
 
 // ─── Privacy Content ────────────────────────────────────────────────────────
 
@@ -438,7 +438,7 @@ function TableOfContents({
           <li key={section.id}>
             <button
               onClick={() => onSectionClick(section.id)}
-              className={`text-left text-sm w-full px-2 py-1.5 rounded-md transition-colors leading-snug ${
+              className={`text-left text-sm w-full px-2 py-1.5 rounded-md transition-colors leading-snug cursor-pointer ${
                 activeSection === section.id
                   ? "text-fuchsia-600 font-medium bg-fuchsia-50"
                   : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"
@@ -453,30 +453,58 @@ function TableOfContents({
   );
 }
 
+function MobileSectionSelector({
+  activeSection,
+  onSectionClick,
+}: {
+  activeSection: string;
+  onSectionClick: (id: string) => void;
+}) {
+  return (
+    <div className="lg:hidden mb-10 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide">
+      <div className="flex gap-2 whitespace-nowrap">
+        {PRIVACY_SECTIONS.map((section) => (
+          <button
+            key={section.id}
+            onClick={() => onSectionClick(section.id)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
+              activeSection === section.id
+                ? "bg-fuchsia-600 text-white shadow-md shadow-fuchsia-200"
+                : "bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-300"
+            }`}
+          >
+            {section.title.split(". ")[1] || section.title}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SectionContent({ content }: { content: ContentBlock[] }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {content.map((block, i) => {
         if (block.type === "paragraph") {
           return (
-            <p key={i} className="text-[15px] leading-relaxed text-neutral-600">
+            <p key={i} className="text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
               {block.text}
             </p>
           );
         }
         if (block.type === "subheading") {
           return (
-            <h3 key={i} className="text-base font-semibold text-neutral-800 mt-3">
+            <h3 key={i} className="text-lg font-bold text-neutral-800 mt-4">
               {block.text}
             </h3>
           );
         }
         if (block.type === "list") {
           return (
-            <ul key={i} className="flex flex-col gap-2.5 pl-1">
+            <ul key={i} className="flex flex-col gap-3.5 pl-1 sm:pl-2">
               {block.items.map((item, j) => (
-                <li key={j} className="flex items-start gap-3 text-[15px] leading-relaxed text-neutral-600">
-                  <span className="mt-1.75 w-1.5 h-1.5 rounded-full bg-fuchsia-500 shrink-0" />
+                <li key={j} className="flex items-start gap-3.5 text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
+                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-fuchsia-500 shrink-0" />
                   {item}
                 </li>
               ))}
@@ -527,9 +555,10 @@ export default function PrivacyPage() {
   return (
     <>
       {/* Hero / Header */}
-      <div className="border-b border-neutral-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
-          {/* Breadcrumb */}
+            <section className="relative mt-30 flex items-center justify-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
+          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-8 md:p-10 lg:p-12">
+
+           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-8">
             <Link href="/" className="hover:text-fuchsia-600 transition-colors">
               Home
@@ -560,21 +589,24 @@ export default function PrivacyPage() {
             </time>
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Main layout */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
+        {/* Mobile Section Selector */}
+        <MobileSectionSelector activeSection={activeSection} onSectionClick={scrollToSection} />
+
         <div className="flex gap-16 xl:gap-20">
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             {/* Intro block */}
             <div className="mb-12 pb-10 border-b border-neutral-200">
-              <p className="text-[15px] leading-relaxed text-neutral-600">
+              <p className="text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
                 This Privacy Policy describes how Zaby AI, Inc. collects, uses, stores, and protects
                 information when you use the Zaby platform, including{" "}
                 <a
                   href="https://zaby.ai"
-                  className="text-fuchsia-600 hover:underline"
+                  className="text-fuchsia-600 hover:underline cursor-pointer"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -582,13 +614,13 @@ export default function PrivacyPage() {
                 </a>{" "}
                 and all related services, APIs, and applications.
               </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-neutral-600">
+              <p className="mt-4 text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
                 For questions about our Terms of Service, visit our{" "}
-                <Link href="/terms" className="text-fuchsia-600 hover:underline">
+                <Link href="/terms" className="text-fuchsia-600 hover:underline cursor-pointer">
                   Terms of Service
                 </Link>{" "}
                 page. To exercise your privacy rights, contact us at{" "}
-                <a href="mailto:privacy@zaby.ai" className="text-fuchsia-600 hover:underline">
+                <a href="mailto:privacy@zaby.ai" className="text-fuchsia-600 hover:underline cursor-pointer">
                   privacy@zaby.ai
                 </a>
                 .
@@ -638,7 +670,6 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      <FooterSection />
     </>
   );
 }

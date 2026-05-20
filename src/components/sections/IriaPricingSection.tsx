@@ -6,6 +6,42 @@ import { Icon } from "@iconify/react";
 
 type BillingCycle = "monthly" | "annually";
 
+type ApiPlanFeature = {
+  id: string;
+  name: string;
+  description: string | null;
+  type: string;
+  unit: string | null;
+  value: unknown;
+};
+
+type TenantApiPlan = {
+  id: string;
+  name: string;
+  description: string | null;
+  type: string;
+  status: string;
+  price: number;
+  comparePrice: number | null;
+  currency: string;
+  billingCycle: string;
+  interval: number;
+  trialDays: number | null;
+  isPopular: boolean;
+  sortOrder: number;
+  isCustom: boolean;
+  isVisible: boolean;
+  targetUserType: string;
+  features: ApiPlanFeature[];
+};
+
+type PlansApiResponse = {
+  success: boolean;
+  data?: {
+    plans?: TenantApiPlan[];
+  };
+};
+
 type Plan = {
   name: string;
   description: string;
@@ -54,7 +90,7 @@ const PLANS: Plan[] = [
     description: "For large organizations requiring custom AI workforce infrastructure.",
     monthlyPrice: null,
     annualPrice: null,
-    ctaLabel: "Contact sales",
+    ctaLabel: "Upgrade to Enterprise",
     backgroundImage:
       "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5ee0a38a-b5d3-4531-8793-98beed4af162_1600w.jpg",
     features: [
@@ -67,6 +103,130 @@ const PLANS: Plan[] = [
     ],
   },
 ];
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://prod-api.zaby.io";
+
+const PLAN_UI_META: Record<
+  string,
+  Pick<Plan, "ctaLabel" | "highlighted" | "backgroundImage"> & {
+    displayName?: string;
+  }
+> = {
+  starter: {
+    displayName: "Starter",
+    ctaLabel: "Start for free",
+    highlighted: false,
+  },
+  growth: {
+    displayName: "Professional",
+    ctaLabel: "Upgrade to Professional",
+    highlighted: true,
+    backgroundImage:
+      "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e534354d-c5f2-4399-a1d9-2f50338e8c47_1600w.jpg",
+  },
+  professional: {
+    displayName: "Professional",
+    ctaLabel: "Upgrade to Professional",
+    highlighted: true,
+    backgroundImage:
+      "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e534354d-c5f2-4399-a1d9-2f50338e8c47_1600w.jpg",
+  },
+  enterprise: {
+    displayName: "Enterprise",
+    ctaLabel: "Upgrade to Enterprise",
+    highlighted: false,
+    backgroundImage:
+      "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5ee0a38a-b5d3-4531-8793-98beed4af162_1600w.jpg",
+  },
+};
+
+function normalizeCycle(cycle: string): "monthly" | "annually" | null {
+  const value = cycle.trim().toLowerCase();
+  if (value === "monthly" || value === "month") return "monthly";
+  if (value === "yearly" || value === "annual" || value === "annually" || value === "year") {
+    return "annually";
+  }
+  return null;
+}
+
+function normalizePlanKey(name: string): string {
+  return name.toLowerCase().replace(/^tenant_/, "").trim();
+}
+
+function formatInr(amount: number): string {
+  return new Intl.NumberFormat("en-IN").format(amount);
+}
+
+function mapTenantPlans(apiPlans: TenantApiPlan[]): Plan[] {
+  const grouped: Record<
+    string,
+    { monthly?: TenantApiPlan; annually?: TenantApiPlan }
+  > = {};
+
+  apiPlans
+    .filter((plan) => {
+      return (
+        plan.targetUserType === "TENANT" &&
+        plan.status === "ACTIVE" &&
+        plan.isVisible
+      );
+    })
+    .forEach((plan) => {
+      const key = normalizePlanKey(plan.name);
+      if (!grouped[key]) grouped[key] = {};
+      const cycle = normalizeCycle(plan.billingCycle);
+      if (cycle === "annually") grouped[key].annually = plan;
+      else grouped[key].monthly = plan;
+    });
+
+  return Object.entries(grouped)
+    .sort(([, aVariants], [, bVariants]) => {
+      const aPlan = aVariants.monthly ?? aVariants.annually;
+      const bPlan = bVariants.monthly ?? bVariants.annually;
+      const aSort = aPlan?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+      const bSort = bPlan?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+      if (aSort !== bSort) return aSort - bSort;
+      return (aPlan?.price ?? Number.MAX_SAFE_INTEGER) - (bPlan?.price ?? Number.MAX_SAFE_INTEGER);
+    })
+    .map(([key, variants]) => {
+      const monthlyPlan = variants.monthly ?? variants.annually;
+      const annuallyPlan = variants.annually ?? variants.monthly;
+      if (!monthlyPlan && !annuallyPlan) return null;
+
+      const meta = PLAN_UI_META[key];
+      const displayName =
+        meta?.displayName ??
+        key
+          .split("_")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+
+      const sourcePlanForContent = monthlyPlan ?? annuallyPlan;
+      const features = (sourcePlanForContent?.features ?? []).map((feature) => feature.name);
+      const uniqueFeatures = Array.from(new Set(features));
+
+      return {
+        name: displayName,
+        description: sourcePlanForContent?.description ?? "",
+        monthlyPrice:
+          monthlyPlan && typeof monthlyPlan.price === "number"
+            ? monthlyPlan.price
+            : null,
+        annualPrice:
+          annuallyPlan && typeof annuallyPlan.price === "number"
+            ? annuallyPlan.price
+            : null,
+        ctaLabel: meta?.ctaLabel ?? "Get started",
+        highlighted:
+          Boolean(monthlyPlan?.isPopular) ||
+          Boolean(annuallyPlan?.isPopular) ||
+          meta?.highlighted,
+        backgroundImage: meta?.backgroundImage,
+        features: uniqueFeatures,
+      } as Plan;
+    })
+    .filter((plan): plan is Plan => Boolean(plan));
+}
 
 const textureOverlayStyle: CSSProperties = {
   backgroundImage:
@@ -102,12 +262,12 @@ function PlanCard({
   isReady: boolean;
   delay: number;
 }) {
-  const hasFixedPrice = plan.monthlyPrice !== null && plan.annualPrice !== null;
-  const currentPrice = !hasFixedPrice
-    ? "Custom"
-    : billingCycle === "monthly"
-      ? `$${plan.monthlyPrice}`
-      : `$${plan.annualPrice}`;
+  const activePrice =
+    billingCycle === "monthly" ? plan.monthlyPrice : plan.annualPrice;
+  const hasPriceForCycle = activePrice !== null;
+  const currentPrice = hasPriceForCycle
+    ? `₹${formatInr(activePrice)}`
+    : "Custom";
   const featureIcon = plan.highlighted
     ? "solar:check-circle-bold"
     : "solar:check-circle-linear";
@@ -161,19 +321,21 @@ function PlanCard({
           <span className="text-4xl font-light tracking-tighter text-(--foreground)">
             {currentPrice}
           </span>
-          {hasFixedPrice ? (
-            <span className="text-sm text-(--foreground)/60">/ month</span>
+          {hasPriceForCycle ? (
+            <span className="text-sm text-(--foreground)/60">
+              / {billingCycle === "monthly" ? "month" : "year"}
+            </span>
           ) : null}
         </div>
 
-        {hasFixedPrice && billingCycle === "annually" && plan.annualPrice !== 0 ? (
+        {hasPriceForCycle && billingCycle === "annually" && plan.annualPrice !== 0 ? (
           <p className="relative z-10 mb-6 text-xs font-medium uppercase tracking-[0.12em]" style={{ color: "var(--color-accent)" }}>
             Billed annually
           </p>
         ) : null}
 
         <a
-          href="#"
+          href="https://platform.zaby.io/tenant/signup"
           className={`relative z-10 mb-8 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm transition-opacity ${
             plan.highlighted
               ? "text-white hover:opacity-80"
@@ -279,6 +441,7 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
 export function IriaPricingSection() {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
   const [isReady, setIsReady] = useState(false);
+  const [plans, setPlans] = useState<Plan[]>(PLANS);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -289,7 +452,9 @@ export function IriaPricingSection() {
     let secondFrame = 0;
 
     if (prefersReducedMotion) {
-      setIsReady(true);
+      firstFrame = window.requestAnimationFrame(() => {
+        startTransition(() => setIsReady(true));
+      });
     } else {
       firstFrame = window.requestAnimationFrame(() => {
         secondFrame = window.requestAnimationFrame(() => {
@@ -301,6 +466,44 @@ export function IriaPricingSection() {
     return () => {
       window.cancelAnimationFrame(firstFrame);
       window.cancelAnimationFrame(secondFrame);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchTenantPlans = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/api/v1/public/plans`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const payload: PlansApiResponse = await response.json();
+        const apiPlans = payload?.data?.plans;
+
+        if (!payload?.success || !Array.isArray(apiPlans)) {
+          return;
+        }
+
+        const mappedPlans = mapTenantPlans(apiPlans);
+        if (!cancelled && mappedPlans.length > 0) {
+          setPlans(mappedPlans);
+        }
+      } catch {
+        // Keep static fallback plans when API fails.
+      }
+    };
+
+    void fetchTenantPlans();
+
+    return () => {
+      cancelled = true;
     };
   }, []);
 
@@ -390,7 +593,7 @@ export function IriaPricingSection() {
           </div>
 
           <div className="relative z-10 mt-16 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
-            {PLANS.map((plan, index) => (
+            {plans.map((plan, index) => (
               <PlanCard
                 key={plan.name}
                 plan={plan}

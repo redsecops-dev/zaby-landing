@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -45,9 +46,54 @@ function wrapWordsForGSAP(node: ChildNode) {
   }
 }
 
+const CARD_HASH_MAP: Record<number, string> = {
+  1: "agent-squad",
+  4: "open-agents",
+  7: "ai-memory",
+  8: "agentic-workflow",
+  9: "conversational-ai",
+};
+
+const HASH_CARD_MAP: Record<string, number> = {
+  "agent-squad": 1,
+  "open-agents": 4,
+  "ai-memory": 7,
+  "agentic-workflow": 8,
+  "conversational-ai": 9,
+};
+
 export function FeaturesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+
+  // Handle hash changes from URL
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash && HASH_CARD_MAP[hash]) {
+        setSelectedCard(HASH_CARD_MAP[hash]);
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Update URL when card is selected
+  const handleCardClick = (cardNumber: number) => {
+    setSelectedCard(cardNumber);
+    const hash = CARD_HASH_MAP[cardNumber];
+    if (hash) {
+      window.history.pushState(null, "", `#${hash}`);
+    }
+  };
+
+  // Handle modal close and restore previous URL
+  const handleCloseModal = () => {
+    setSelectedCard(null);
+    window.history.pushState(null, "", window.location.pathname);
+  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -81,7 +127,7 @@ export function FeaturesSection() {
         <div className="grid grid-cols-12 gap-4 lg:gap-5">
 
           {/* Card 1: UI Stack — col-span-3 row-span-2 */}
-          <div className="col-span-12 lg:col-span-3 lg:row-span-2 h-full rounded-2xl bg-linear-to-br from-[#EAE2F8]/80 via-white/40 to-[#FADDF0]/60 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(1)}>
+          <div className="col-span-12 lg:col-span-8 lg:row-span-2 h-full rounded-2xl bg-linear-to-br from-[#EAE2F8]/80 via-white/40 to-[#FADDF0]/60 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(1)}>
             <div className="bg-white rounded-[15px] overflow-hidden relative flex flex-col h-full w-full">
               <div className="flex-1 bg-linear-to-br from-[#EAE2F8] to-[#F3E8FF] p-6 relative overflow-hidden">
                 <div className="flex items-center justify-between mb-8 relative z-10">
@@ -101,9 +147,9 @@ export function FeaturesSection() {
                   <p className="reveal-text text-xs text-slate-500 mb-6 mt-2">
                     Autonomous agents operate continuously, completing real tasks across your entire business.
                   </p>
-                  <button className="bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors">
+                  <Link href="https://platform.zaby.io/tenant/signup" className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors inline-block">
                     Get Started
-                  </button>
+                  </Link>
                 </div>
                 <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full border-16 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute -top-12 -right-4 w-32 h-32 rounded-full border-12 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500 delay-75" />
@@ -125,10 +171,10 @@ export function FeaturesSection() {
           </div>
 
           {/* Card 2: Intro — col-span-3 */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-[#E0F2FE]/80 via-slate-100/50 to-[#FCE7F3]/80 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(2)}>
+          {/* <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-[#E0F2FE]/80 via-slate-100/50 to-[#FCE7F3]/80 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(2)}>
             <div className="bg-white rounded-[15px] overflow-hidden relative p-6 flex flex-col justify-between h-full min-h-55">
               <div className="absolute inset-0 bg-linear-to-br from-[#E0F2FE] via-[#F3E8FF] to-[#FCE7F3] opacity-40" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              
               <img
                 src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/eca707cc-a5b7-439a-b4fd-247f6106c2e1_1600w.jpg"
                 className="absolute -top-10 -right-10 w-40 h-40 rounded-full object-cover shadow-[0_25px_50px_-12px_rgb(0,0,0,0.25)] border-[6px] border-white/40 opacity-90 transition-transform duration-500 hover:scale-105"
@@ -158,12 +204,11 @@ export function FeaturesSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Card 3: 3D Image — col-span-2 */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-2 h-full rounded-2xl bg-linear-to-tr from-slate-200/80 to-slate-100/40 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(3)}>
+          {/* <div className="col-span-12 md:col-span-6 lg:col-span-2 h-full rounded-2xl bg-linear-to-tr from-slate-200/80 to-slate-100/40 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(3)}>
             <div className="bg-[#F8F9FA] rounded-[15px] overflow-hidden relative h-full min-h-55 flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fb6415fd-bf4d-4ccf-8e9d-7ab445e99207_1600w.jpg"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -171,10 +216,10 @@ export function FeaturesSection() {
               />
               <div className="absolute inset-0 bg-linear-to-t from-slate-900/30 to-transparent transition-opacity duration-500 opacity-60 group-hover:opacity-40" />
             </div>
-          </div>
+          </div> */}
 
           {/* Card 4: Hero Gradient — col-span-4 row-span-2 */}
-          <div className="col-span-12 lg:col-span-4 lg:row-span-2 h-full rounded-2xl bg-linear-to-br from-[#FEBED9]/70 via-slate-200/40 to-[#8B5CF6]/50 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(4)}>
+          <div className="col-span-12 lg:col-span-4 lg:row-span-2 h-full rounded-2xl bg-linear-to-br from-[#FEBED9]/70 via-slate-200/40 to-[#8B5CF6]/50 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(4)}>
             <div className="bg-white rounded-[15px] overflow-hidden relative p-8 flex flex-col justify-between h-full min-h-115">
               <div className="flex justify-between items-center text-xs font-medium text-slate-500 relative z-20">
                 <div className="flex items-center gap-1 text-slate-900">
@@ -188,7 +233,6 @@ export function FeaturesSection() {
                 </div>
               </div>
               <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg"
                   className="w-full h-full object-cover opacity-60 transition-transform duration-1000 group-hover:scale-105 mix-blend-multiply"
@@ -207,9 +251,9 @@ export function FeaturesSection() {
                   <input
                     type="email"
                     placeholder="Email address"
-                    className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-slate-400 font-medium"
+                    className="flex-1 cursor-text bg-transparent px-3 text-sm outline-none placeholder:text-slate-400 font-medium"
                   />
-                  <button className="bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-1">
+                  <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-1">
                     Join{" "}
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </button>
@@ -233,7 +277,7 @@ export function FeaturesSection() {
           </div>
 
           {/* Card 5: Core Text — col-span-3 */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(5)}>
+          {/* <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(5)}>
             <div className="bg-white rounded-[15px] p-6 flex flex-col justify-between h-full relative">
               <div className="flex justify-between items-start text-xs text-slate-400 mb-8">
                 <span>Capability</span>
@@ -248,10 +292,10 @@ export function FeaturesSection() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Card 6: Typography — col-span-2 */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-2 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(6)}>
+          {/* <div className="col-span-12 md:col-span-6 lg:col-span-2 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(6)}>
             <div className="bg-white rounded-[15px] p-6 flex flex-col justify-center items-center relative overflow-hidden h-full">
               <div className="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <h3 className="reveal-text text-3xl font-medium tracking-tight text-slate-900 relative z-10 leading-none text-center">
@@ -268,10 +312,10 @@ export function FeaturesSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Card 7: Palette — col-span-3 */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-accent/60 to-[#f0abfc]/60 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(7)}>
+          <div className="col-span-12 md:col-span-6 lg:col-span-3 h-full rounded-2xl bg-linear-to-br from-accent/60 to-[#f0abfc]/60 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(7)}>
             <div className="bg-white rounded-[15px] overflow-hidden relative flex flex-col h-40 w-full">
               <div className="flex-1 bg-[#F3EDE1] p-4 flex items-start">
                 <span className="text-xs font-medium text-slate-900">#F3EDE1</span>
@@ -283,7 +327,7 @@ export function FeaturesSection() {
           </div>
 
           {/* Card 8: Discover — col-span-5 */}
-          <div className="col-span-12 lg:col-span-5 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(8)}>
+          <div className="col-span-12 lg:col-span-5 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(8)}>
             <div className="bg-white rounded-[15px] p-8 flex flex-col items-center justify-center text-center h-full w-full relative">
               <div className="flex items-center gap-2 mb-6">
                 <Layers size={20} strokeWidth={1.5} className="text-slate-900" />
@@ -295,7 +339,7 @@ export function FeaturesSection() {
               <p className="reveal-text text-sm text-slate-500 mb-6 mt-2">
                 Agent Squad, Open Agents, Workflows, Memory, and AI Workspace — built for enterprise operations.
               </p>
-              <button className="bg-(--color-button-primary-bg) text-white text-xs px-5 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-2 mt-2">
+              <button className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-5 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors flex items-center gap-2 mt-2">
                 Explore platform{" "}
                 <ArrowUpRight size={14} strokeWidth={1.5} />
               </button>
@@ -303,7 +347,7 @@ export function FeaturesSection() {
           </div>
 
           {/* Card 9: Logo — col-span-4 */}
-          <div className="col-span-12 lg:col-span-4 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => setSelectedCard(9)}>
+          <div className="col-span-12 lg:col-span-4 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(9)}>
             <div className="bg-white rounded-[15px] p-8 flex items-center justify-center h-full w-full relative">
               <div className="flex items-center gap-3 transition-transform duration-300 group-hover:scale-105">
                 <Package size={32} strokeWidth={1.5} className="text-slate-900" />
@@ -319,7 +363,8 @@ export function FeaturesSection() {
 
       <PreviewModal
         isOpen={selectedCard !== null}
-        onClose={() => setSelectedCard(null)}
+        onClose={handleCloseModal}
+        selectedCard={selectedCard}
       />
     </section>
   );

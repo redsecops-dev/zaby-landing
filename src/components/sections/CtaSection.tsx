@@ -25,14 +25,14 @@ export function CtaSection() {
 
             <div className="flex flex-wrap items-center justify-center gap-4">
               <a
-                href="#"
-                className="rounded-full bg-(--color-button-primary-bg) px-10 py-3.5 text-sm font-semibold text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-colors hover:bg-(--color-button-primary-hover)"
+                href="https://platform.zaby.io/tenant/signup"
+                className="rounded-full bg-(--color-button-primary-bg) px-10 py-3.5 text-sm font-semibold text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-colors hover:bg-(--color-button-primary-hover) cursor-pointer"
               >
                 Start for free
               </a>
               <a
-                href="#"
-                className="rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-3.5 text-sm font-semibold text-(--color-button-secondary-text) transition-colors hover:bg-white"
+                href="https://platform.zaby.io/tenant/signup"
+                className="rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-3.5 text-sm font-semibold text-(--color-button-secondary-text) transition-colors hover:bg-white cursor-pointer"
               >
                 Book a demo
               </a>

@@ -4,15 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Calendar,
-  Clock,
   Loader2,
   Search,
-  User,
   X,
 } from "lucide-react";
 
-const BLOGS_API_URL = "https://prod-api.zaby.io/api/v1/public/blogs";
+const BLOGS_API_URL = "https://prod-api.zaby.io/api/v1/public//blogs";
 const PAGE_SIZE = 9;
 const FALLBACK_CATEGORY = "All";
 
@@ -288,26 +285,28 @@ function FeaturedPost({ post }: { post: BlogPost }) {
   const category = getCategoryName(post);
   const accent = getAccent(category);
   const author = getAuthorName(post);
-  const href = `/blog/${post.slug || post.id}`;
+  const href = `/blog/${post.id}`;
 
   return (
-    <article className="grid lg:grid-cols-2 gap-10 items-center border-b border-neutral-200 pb-14 mb-14">
-      <div>
+    <article className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center border-b border-neutral-200 pb-12 lg:pb-16 mb-12 lg:mb-16">
+      <div className="order-2 lg:order-1">
         <div className="flex flex-wrap items-center gap-3 mb-5">
           <CategoryBadge category={category} accent={accent} />
           <span className="text-neutral-400 text-sm">.</span>
           <time dateTime={post.publishedAt || post.createdAt} className="text-sm text-neutral-400">
             {formatDate(post.publishedAt || post.createdAt)}
           </time>
-          <span className="text-neutral-400 text-sm">.</span>
-          <span className="text-sm text-neutral-400">{calculateReadingTime(post.content)}</span>
+          <span className="text-neutral-400 text-sm hidden sm:inline">.</span>
+          <span className="text-sm text-neutral-400 hidden sm:inline">{calculateReadingTime(post.content)}</span>
         </div>
 
-        <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight tracking-tight mb-5">
-          {post.title}
-        </h2>
+        <Link href={href} className="group cursor-pointer">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 leading-tight tracking-tight mb-5 group-hover:text-fuchsia-700 transition-colors">
+            {post.title}
+          </h2>
+        </Link>
 
-        <p className="text-neutral-600 text-[15px] leading-relaxed mb-8">
+        <p className="text-neutral-600 text-[15px] sm:text-[16px] leading-relaxed mb-8 line-clamp-3 sm:line-clamp-none">
           {getExcerpt(post)}
         </p>
 
@@ -319,7 +318,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
 
           <Link
             href={href}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link shrink-0"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link shrink-0 cursor-pointer"
           >
             Read more
             <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-0.5" />
@@ -327,7 +326,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
         </div>
       </div>
 
-      <Link href={href} className="group block">
+      <Link href={href} className="group block order-1 lg:order-2 cursor-pointer">
         <BlogImage post={post} accent={accent} featured />
       </Link>
     </article>
@@ -338,15 +337,15 @@ function PostCard({ post }: { post: BlogPost }) {
   const category = getCategoryName(post);
   const accent = getAccent(category);
   const author = getAuthorName(post);
-  const href = `/blog/${post.slug || post.id}`;
+  const href = `/blog/${post.id}`;
 
   return (
-    <article className="group flex flex-col bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-fuchsia-200 hover:shadow-lg hover:shadow-fuchsia-50 transition-all duration-300">
-      <Link href={href} aria-label={post.title}>
+    <article className="group flex flex-col bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-fuchsia-200 hover:shadow-lg hover:shadow-fuchsia-50 transition-all duration-300 h-full">
+      <Link href={href} aria-label={post.title} className="cursor-pointer">
         <BlogImage post={post} accent={accent} />
       </Link>
 
-      <div className="flex flex-col flex-1 p-5">
+      <div className="flex flex-col flex-1 p-5 lg:p-6">
         <div className="flex items-center gap-2 mb-3">
           <CategoryBadge category={category} accent={accent} />
           <span className="text-neutral-300">.</span>
@@ -355,24 +354,24 @@ function PostCard({ post }: { post: BlogPost }) {
           </time>
         </div>
 
-        <Link href={href}>
-          <h3 className="text-base font-bold text-neutral-900 leading-snug mb-3 group-hover:text-fuchsia-700 transition-colors line-clamp-2">
+        <Link href={href} className="cursor-pointer">
+          <h3 className="text-lg font-bold text-neutral-900 leading-snug mb-3 group-hover:text-fuchsia-700 transition-colors line-clamp-2">
             {post.title}
           </h3>
         </Link>
 
-        <p className="text-sm text-neutral-500 leading-relaxed line-clamp-3 flex-1 mb-5">
+        <p className="text-[14px] sm:text-[15px] text-neutral-500 leading-relaxed line-clamp-3 flex-1 mb-6">
           {getExcerpt(post)}
         </p>
 
-        <div className="flex items-center justify-between gap-4 pt-4 border-t border-neutral-100">
-          <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center justify-between gap-4 pt-5 border-t border-neutral-100">
+          <div className="flex items-center gap-2.5 min-w-0">
             <AuthorAvatar name={author} accent={accent} />
-            <span className="text-xs font-medium text-neutral-600 truncate">{author}</span>
+            <span className="text-[13px] font-medium text-neutral-600 truncate">{author}</span>
           </div>
           <Link
             href={href}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link shrink-0"
+            className="inline-flex items-center gap-1 text-[13px] font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link shrink-0 cursor-pointer"
           >
             Read more
             <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
@@ -467,6 +466,7 @@ export default function BlogPage() {
   }, [debouncedSearch, page]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadBlogs();
   }, [loadBlogs]);
 
@@ -478,30 +478,29 @@ export default function BlogPage() {
     return [FALLBACK_CATEGORY, ...names];
   }, [posts]);
 
+  const selectedCategory =
+    activeCategory !== FALLBACK_CATEGORY && !categories.includes(activeCategory)
+      ? FALLBACK_CATEGORY
+      : activeCategory;
+
   const filteredPosts = useMemo(() => {
-    if (activeCategory === FALLBACK_CATEGORY) return posts;
-    return posts.filter((post) => getCategoryName(post) === activeCategory);
-  }, [activeCategory, posts]);
+    if (selectedCategory === FALLBACK_CATEGORY) return posts;
+    return posts.filter((post) => getCategoryName(post) === selectedCategory);
+  }, [selectedCategory, posts]);
 
   const featured = filteredPosts[0];
   const remaining = filteredPosts.slice(1);
-
-  useEffect(() => {
-    if (activeCategory !== FALLBACK_CATEGORY && !categories.includes(activeCategory)) {
-      setActiveCategory(FALLBACK_CATEGORY);
-    }
-  }, [activeCategory, categories]);
 
   return (
     <>
       <section
         ref={sectionRef}
-        className="relative mt-30 flex items-center justify-center overflow-x-hidden px-4 text-(--foreground) antialiased selection:bg-white/30 selection:text-black"
+        className="relative mt-20 sm:mt-30 flex items-center justify-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black"
       >
-        <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-4 md:p-6 lg:p-8">
-          <div className="p-6 sm:p-10">
+        <div className="w-full max-w-7xl md:bg-white/40 md:backdrop-blur-3xl md:rounded-[2.5rem] md:border md:border-white/60 md:shadow-[0_8px_40px_rgb(0,0,0,0.04)]">
+          <div className="px-6 py-10 sm:p-10 lg:p-12">
             <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-8">
-              <Link href="/" className="hover:text-fuchsia-600 transition-colors">
+              <Link href="/" className="hover:text-fuchsia-600 transition-colors cursor-pointer">
                 Home
               </Link>
               <span>/</span>
@@ -532,14 +531,14 @@ export default function BlogPage() {
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder="Search articles"
-                    className="h-11 w-full rounded-full border border-neutral-200 bg-white/80 px-11 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none transition focus:border-fuchsia-300 focus:ring-2 focus:ring-fuchsia-100"
+                    className="h-11 w-full rounded-full border border-neutral-200 bg-white px-11 text-sm text-neutral-800 placeholder:text-neutral-400 outline-none transition focus:border-fuchsia-300 focus:ring-2 focus:ring-fuchsia-100"
                     aria-label="Search articles"
                   />
                   {search ? (
                     <button
                       type="button"
                       onClick={() => setSearch("")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:text-neutral-700"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:text-neutral-700 cursor-pointer"
                       aria-label="Clear search"
                     >
                       <X className="h-4 w-4" />
@@ -548,27 +547,28 @@ export default function BlogPage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => setActiveCategory(category)}
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                      activeCategory === category
-                        ? "bg-fuchsia-600 text-white border-fuchsia-600 shadow-sm shadow-fuchsia-200"
-                        : "bg-white text-neutral-600 border-neutral-200 hover:border-fuchsia-300 hover:text-fuchsia-600"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
+              <div className="flex flex-col gap-2">
+                <div className="flex overflow-x-auto pb-2 -mx-6 px-6 sm:mx-0 sm:px-0 sm:flex-wrap gap-2 scrollbar-hide">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => setActiveCategory(category)}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border shrink-0 cursor-pointer ${
+                        selectedCategory === category
+                          ? "bg-fuchsia-600 text-white border-fuchsia-600 shadow-sm shadow-fuchsia-200"
+                          : "bg-white text-neutral-600 border-neutral-200 hover:border-fuchsia-300 hover:text-fuchsia-600"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
         {debouncedSearch ? (
           <div className="mb-10 text-sm text-neutral-500">
@@ -579,14 +579,14 @@ export default function BlogPage() {
               </span>
             ) : (
               <span>
-                {totalResults} article{totalResults === 1 ? "" : "s"} found for "{debouncedSearch}"
+                {totalResults} article{totalResults === 1 ? "" : "s"} found for &quot;{debouncedSearch}&quot;
               </span>
             )}
           </div>
         ) : null}
 
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {Array.from({ length: 6 }).map((_, index) => (
               <PostSkeleton key={index} />
             ))}
@@ -601,7 +601,7 @@ export default function BlogPage() {
             <button
               type="button"
               onClick={() => void loadBlogs()}
-              className="mt-6 rounded-full bg-fuchsia-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-fuchsia-700"
+              className="mt-6 rounded-full bg-fuchsia-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-fuchsia-700 cursor-pointer"
             >
               Try again
             </button>
@@ -611,20 +611,20 @@ export default function BlogPage() {
             {featured ? <FeaturedPost post={featured} /> : null}
 
             {remaining.length > 0 ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                 {remaining.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
               </div>
             ) : null}
 
-            {hasMore && activeCategory === FALLBACK_CATEGORY ? (
-              <div className="mt-14 flex justify-center">
+            {hasMore && selectedCategory === FALLBACK_CATEGORY ? (
+              <div className="mt-16 flex justify-center">
                 <button
                   type="button"
                   onClick={() => setPage((currentPage) => currentPage + 1)}
                   disabled={loadingMore}
-                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-2.5 text-sm font-semibold text-neutral-700 transition-all hover:border-fuchsia-300 hover:text-fuchsia-600 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-8 py-3 text-sm font-semibold text-neutral-700 transition-all hover:border-fuchsia-300 hover:text-fuchsia-600 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
                 >
                   {loadingMore ? (
                     <>
@@ -649,27 +649,27 @@ export default function BlogPage() {
           </div>
         )}
 
-        <section className="relative mt-30 flex items-center justify-center text-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
-          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-8 md:p-10 lg:p-12">
-            <div className="inline-flex items-center gap-2 bg-white border border-fuchsia-100 rounded-full px-3 py-1 mb-5 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-fuchsia-600">
+        <section className="relative mt-24 lg:mt-32 flex items-center justify-center text-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
+          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2rem] sm:rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.06)] p-8 sm:p-12 md:p-16 lg:p-20">
+            <div className="inline-flex items-center gap-2 bg-white/80 border border-fuchsia-100/50 rounded-full px-3.5 py-1.5 mb-6 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 shadow-[0_0_8px_rgba(217,70,239,0.8)]" />
+              <span className="text-[11px] font-bold uppercase tracking-widest text-fuchsia-700">
                 Stay Updated
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 mb-4 tracking-tight">
               Get the latest from Zaby
             </h2>
-            <p className="text-neutral-500 text-[15px] max-w-md mx-auto leading-relaxed mb-7">
+            <p className="text-neutral-600 text-[15px] sm:text-base max-w-md mx-auto leading-relaxed mb-10">
               Insights on operational AI, assessments, automation, and enterprise infrastructure delivered to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="you@company.com"
-                className="flex-1 px-4 py-2.5 rounded-full border border-neutral-200 bg-white text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:border-fuchsia-400 focus:ring-2 focus:ring-fuchsia-100 transition"
+                className="flex-1 px-6 py-3.5 rounded-full border border-white/60 bg-white/60 text-[15px] text-neutral-800 placeholder:text-neutral-500 focus:outline-none focus:border-fuchsia-400 focus:ring-4 focus:ring-fuchsia-100/50 focus:bg-white transition-all w-full"
               />
-              <button className="px-6 py-2.5 rounded-full bg-fuchsia-600 text-white text-sm font-semibold hover:bg-fuchsia-700 transition-colors whitespace-nowrap">
+              <button className="px-8 py-3.5 rounded-full bg-fuchsia-600 text-white text-[15px] font-semibold hover:bg-fuchsia-700 hover:shadow-lg hover:shadow-fuchsia-200 transition-all whitespace-nowrap cursor-pointer w-full sm:w-auto">
                 Subscribe
               </button>
             </div>

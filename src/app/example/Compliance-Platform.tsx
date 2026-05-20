@@ -64,6 +64,9 @@ export default function CompliancePlatform() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      const scopedNode = canvasRef.current ?? featuresRef.current;
+      const scrollerEl = scopedNode?.closest("[data-preview-scroller='true']") as HTMLElement | null;
+
       // Seamless marquee loop — moves by -50% of total width (2 sets = seamless)
       if (marqueeRef.current) {
         gsap.to(marqueeRef.current, {
@@ -84,7 +87,9 @@ export default function CompliancePlatform() {
         delay: 0.2,
         scrollTrigger: {
           trigger: canvasRef.current,
-          start: "top 80%",
+          scroller: scrollerEl ?? undefined,
+          start: "top 85%",
+          once: true,
         },
       });
 
@@ -97,9 +102,13 @@ export default function CompliancePlatform() {
         stagger: 0.08,
         scrollTrigger: {
           trigger: featuresRef.current,
-          start: "top 85%",
+          scroller: scrollerEl ?? undefined,
+          start: "top 92%",
+          once: true,
         },
       });
+
+      ScrollTrigger.refresh();
     });
 
     return () => ctx.revert();

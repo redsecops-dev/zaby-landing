@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 
 // Color constants
 const COLORS = {
@@ -71,6 +72,7 @@ function ClockComponent() {
     let angleOrange = 180;
     const speedBlue = 1.2;
     const speedOrange = 0.3;
+    let animationFrame = 0;
 
     function animateClock() {
       angleBlue = (angleBlue + speedBlue) % 360;
@@ -79,13 +81,18 @@ function ClockComponent() {
       if (sysBlueRef.current) sysBlueRef.current.style.transform = `rotate(${angleBlue}deg)`;
       if (sysOrangeRef.current) sysOrangeRef.current.style.transform = `rotate(${angleOrange}deg)`;
 
-      requestAnimationFrame(animateClock);
+      animationFrame = requestAnimationFrame(animateClock);
     }
-    requestAnimationFrame(animateClock);
+
+    animationFrame = requestAnimationFrame(animateClock);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
   }, []);
 
   return (
-    <div className="flex justify-center lg:justify-start items-center relative perspective-[1000px]">
+    <div className="relative flex items-center justify-center perspective-[1000px]">
       {/* Silver Ring Border */}
       <div 
         className="absolute -inset-6 rounded-full pointer-events-none z-0"
@@ -96,7 +103,7 @@ function ClockComponent() {
       />
       
       <div 
-        className="relative w-85 h-85 sm:w-105 sm:h-105 rounded-full p-0.75 group z-10"
+        className="group relative z-10 h-72 w-72 rounded-full p-0.75 sm:h-80 sm:w-80 md:h-88 md:w-88"
         style={{
           background: CLOCK_STYLES.outerRingGradient,
           boxShadow: "0 30px 60px -15px rgba(0,0,0,1)"
@@ -173,6 +180,8 @@ function ClockComponent() {
 
 function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement | null> }) {
   useEffect(() => {
+    let frame = 0;
+
     const initAnimations = async () => {
       const section = scopeRef.current;
       if (!section) return;
@@ -184,6 +193,8 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
         ]);
 
         gsap.registerPlugin(ScrollTrigger);
+        const modalScroller = section.closest("[data-preview-scroller='true']") as HTMLElement | null;
+        const isInModal = Boolean(modalScroller);
 
         const context = gsap.context(() => {
           const revealElements = section.querySelectorAll(".jtm-reveal");
@@ -191,56 +202,95 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
           revealElements.forEach((el: Element) => {
             const htmlEl = el as HTMLElement;
             if (htmlEl.tagName === "H1" || htmlEl.tagName === "P") {
-              const text = htmlEl.innerHTML;
-              const words = text.replace(/<br\s*\/?>/gi, " <br> ").split(/\s+/);
+              const lineSource = htmlEl.dataset.revealLines;
+              const textSource = htmlEl.dataset.revealText;
+              const lines = lineSource
+                ? lineSource.split("|")
+                : [textSource || htmlEl.textContent || ""];
+
               htmlEl.innerHTML = "";
 
-              words.forEach((word) => {
-                if (word === "<br>") {
+              lines.forEach((line, lineIndex) => {
+                line
+                  .trim()
+                  .split(/\s+/)
+                  .filter(Boolean)
+                  .forEach((word) => {
+                    const wordWrapper = document.createElement("span");
+                    wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom mr-[0.25em]";
+
+                    const innerSpan = document.createElement("span");
+                    innerSpan.className = "inline-block translate-y-[120%] opacity-0 will-change-transform";
+                    innerSpan.textContent = word;
+
+                    wordWrapper.appendChild(innerSpan);
+                    htmlEl.appendChild(wordWrapper);
+                  });
+
+                if (lineIndex < lines.length - 1) {
                   htmlEl.appendChild(document.createElement("br"));
-                } else if (word.trim() !== "") {
-                  const wordWrapper = document.createElement("span");
-                  wordWrapper.className = "inline-block overflow-hidden pb-1 -mb-1 align-bottom";
-
-                  const innerSpan = document.createElement("span");
-                  innerSpan.className = "inline-block translate-y-[120%] opacity-0 will-change-transform";
-                  innerSpan.innerHTML = word + "&nbsp;";
-
-                  wordWrapper.appendChild(innerSpan);
-                  htmlEl.appendChild(wordWrapper);
                 }
               });
 
-              gsap.to(htmlEl.querySelectorAll("span > span"), {
-                y: "0%",
-                opacity: 1,
-                duration: 1.2,
-                stagger: 0.04,
-                ease: "power4.out",
-                scrollTrigger: {
-                  trigger: htmlEl,
-                  start: "top 85%",
-                  toggleActions: "play none none none"
-                }
-              });
-            } else {
-              gsap.fromTo(
-                htmlEl,
-                { y: 30, opacity: 0 },
-                {
-                  y: 0,
+              if (isInModal) {
+                gsap.to(htmlEl.querySelectorAll("span > span"), {
+                  y: "0%",
                   opacity: 1,
-                  duration: 1,
+                  duration: 1.1,
+                  stagger: 0.03,
+                  delay: 0.15,
                   ease: "power3.out",
-                  delay: 0.5,
+                });
+              } else {
+                gsap.to(htmlEl.querySelectorAll("span > span"), {
+                  y: "0%",
+                  opacity: 1,
+                  duration: 1.2,
+                  stagger: 0.04,
+                  ease: "power4.out",
                   scrollTrigger: {
                     trigger: htmlEl,
-                    start: "top 90%"
+                    scroller: modalScroller ?? undefined,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
                   }
-                }
-              );
+                });
+              }
+            } else {
+              if (isInModal) {
+                gsap.fromTo(
+                  htmlEl,
+                  { y: 24, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    delay: 0.25,
+                  }
+                );
+              } else {
+                gsap.fromTo(
+                  htmlEl,
+                  { y: 30, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    delay: 0.5,
+                    scrollTrigger: {
+                      trigger: htmlEl,
+                      scroller: modalScroller ?? undefined,
+                      start: "top 90%"
+                    }
+                  }
+                );
+              }
             }
           });
+
+          ScrollTrigger.refresh();
         }, section);
 
         return () => context.revert();
@@ -249,8 +299,14 @@ function AnimationsManager({ scopeRef }: { scopeRef: React.RefObject<HTMLElement
       }
     };
 
-    const cleanup = initAnimations();
+    const cleanup = new Promise<(() => void) | void>((resolve) => {
+      frame = window.requestAnimationFrame(() => {
+        void initAnimations().then(resolve);
+      });
+    });
+
     return () => {
+      window.cancelAnimationFrame(frame);
       cleanup.then((fn) => fn?.());
     };
   }, [scopeRef]);
@@ -264,7 +320,7 @@ export function JoinTheMovementSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-24"
+      className="relative flex w-full min-h-[70vh] flex-col items-center justify-center px-4 py-8 sm:px-6 sm:py-12 md:min-h-[78vh] md:px-8 md:py-16"
     >
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -276,34 +332,37 @@ export function JoinTheMovementSection() {
       <AnimationsManager scopeRef={sectionRef} />
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+      <div className="relative z-10 mx-auto w-full max-w-5xl">
+        <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8 lg:gap-12">
           {/* Left: Clock Component */}
-          <div className="flex justify-center md:justify-start order-2 md:order-1">
-            <div className="scale-75 sm:scale-90 md:scale-100 origin-center">
+          <div className="order-2 flex justify-center pt-1 md:order-1 md:justify-center sm:pt-0">
+            <div className="origin-center scale-[0.84] sm:scale-90 md:scale-95">
               <ClockComponent />
             </div>
           </div>
 
           {/* Right: Typography & Actions */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2 space-y-4 sm:space-y-6">
+          <div className="order-1 flex flex-col items-center space-y-4 px-1 text-center md:order-2 md:items-start md:space-y-5 md:px-0 md:text-left">
             <h1 
-              className="jtm-reveal text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
+              className="jtm-reveal text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-[3.4rem]"
+              data-reveal-lines="Join the|Movement"
               style={{ color: COLORS.black }}
             >
               Join the<br />Movement
             </h1>
 
             <p 
-              className="jtm-reveal text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
+              className="jtm-reveal max-w-[38ch] text-base font-normal leading-relaxed text-slate-600 sm:max-w-[40ch] md:text-lg"
+              data-reveal-text="Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here."
               style={{ color: COLORS.textSecondary }}
             >
               Unlock the future of operational AI with Zaby. Your AI workforce infrastructure starts here.
             </p>
 
-            <div className="flex gap-3 w-full sm:w-auto jtm-reveal pt-2 sm:pt-4">
-              <button 
-                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+            <div className="jtm-reveal flex w-full flex-col gap-3 pt-2 sm:w-auto sm:flex-row sm:pt-3">
+              <Link
+                href="https://platform.zaby.io/tenant/signup"
+                className="relative flex w-full cursor-pointer touch-manipulation items-center justify-center rounded-lg px-6 py-2.5 text-sm font-medium tracking-normal transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:rounded-full sm:px-8 sm:py-3"
                 style={{
                   background: "linear-gradient(135deg, #e879f9 0%, #d946ef 100%)",
                   color: COLORS.white,
@@ -311,10 +370,10 @@ export function JoinTheMovementSection() {
                 }}
               >
                 <span className="relative z-10">See in action</span>
-              </button>
+              </Link>
 
               <button 
-                className="relative group px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 w-full sm:w-auto"
+                className="relative w-full cursor-pointer touch-manipulation rounded-lg px-6 py-2.5 text-sm font-medium tracking-normal transition-all duration-300 sm:w-auto sm:rounded-full sm:px-8 sm:py-3"
                 style={{
                   background: "rgba(255,255,255,0.1)",
                   color: COLORS.black,
