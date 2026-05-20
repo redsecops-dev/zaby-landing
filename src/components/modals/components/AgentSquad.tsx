@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { AgentInfoPanel, type AgentCardData } from "./AgentInfoPanel";
 
 const agentData: AgentCardData[] = [
@@ -133,14 +133,29 @@ const agentData: AgentCardData[] = [
     },
 ];
 
-const cardTransforms = [
-    { x: -120, y: 0, z: 100, rotY: 10, scale: 1 },
-    { x: 40, y: -10, z: -50, rotY: 14, scale: 0.95 },
-    { x: 180, y: -20, z: -180, rotY: 18, scale: 0.9 },
-    { x: 300, y: -30, z: -300, rotY: 22, scale: 0.85 },
-    { x: 400, y: -40, z: -400, rotY: 25, scale: 0.8 },
-    { x: 480, y: -50, z: -500, rotY: 28, scale: 0.75 },
+// Fixed transform preset for each slot in the card fan stack.
+// Every card shares the same base frame size; slot hierarchy now comes solely
+// from the wrapper transform preset below.
+const stackTransforms = [
+    { x:  -70, y:   0, z:  180, rotY:  8, scale: 1.00, opacity: 1.00, zIndex: 6 },
+    { x:   20, y:  -8, z:   40, rotY: 11, scale: 0.88, opacity: 0.92, zIndex: 5 },
+    { x:   70, y: -16, z:  -90, rotY: 14, scale: 0.74, opacity: 0.72, zIndex: 4 },
+    { x:  110, y: -24, z: -190, rotY: 17, scale: 0.60, opacity: 0.52, zIndex: 3 },
+    { x:  140, y: -32, z: -290, rotY: 20, scale: 0.48, opacity: 0.34, zIndex: 2 },
+    { x:  160, y: -40, z: -390, rotY: 23, scale: 0.36, opacity: 0.16, zIndex: 1 },
 ];
+
+const stackSceneStyle: CSSProperties = {
+    perspective: "1800px",
+    transformStyle: "preserve-3d",
+};
+
+const cardWrapperStyle: CSSProperties = {
+    marginLeft: "-170px",
+    marginTop: "-260px",
+    transformStyle: "preserve-3d",
+    willChange: "transform, opacity",
+};
 
 const brandItems = [
     { icon: "solar:planet-linear", label: "Aura Space" },
@@ -160,9 +175,9 @@ export default function AgentSquad() {
     const frameRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    // keep latest setter accessible inside GSAP closures without stale closure
-    const setActiveIndexRef = useRef(setActiveIndex);
-    setActiveIndexRef.current = setActiveIndex;
+    // Tracks which DOM card index sits at each logical stack slot (array rotation).
+    const cardOrderRef = useRef<number[]>([0, 1, 2, 3, 4, 5]);
+    const isAnimatingRef = useRef(false);
 
     useEffect(() => {
         let isDisposed = false;
@@ -179,10 +194,9 @@ export default function AgentSquad() {
                 return;
             }
 
-            const [{ gsap }, { ScrollTrigger }, { Draggable }, THREE] = await Promise.all([
+            const [{ gsap }, { ScrollTrigger }, THREE] = await Promise.all([
                 import("gsap"),
                 import("gsap/ScrollTrigger"),
-                import("gsap/Draggable"),
                 import("three"),
             ]);
 
@@ -190,7 +204,7 @@ export default function AgentSquad() {
                 return;
             }
 
-            gsap.registerPlugin(ScrollTrigger, Draggable);
+            gsap.registerPlugin(ScrollTrigger);
 
             const root = rootRef.current;
             const frame = frameRef.current;
@@ -313,84 +327,121 @@ export default function AgentSquad() {
                 renderer.dispose();
             };
 
-            const stateOffLeft = { x: -350, y: 10, z: 300, rotY: 0, scale: 1.1, opacity: 0 };
-            const stateOffRight = { x: 600, y: -60, z: -600, rotY: 30, scale: 0.7, opacity: 0 };
-            const shiftWidth = 240;
-
             const context = gsap.context(() => {
                 const cards = gsap.utils.toArray<HTMLElement>(".card-wrapper", root);
-                const carouselArea = root.querySelector<HTMLElement>("[data-carousel-area]");
                 const revealTitle = root.querySelector<HTMLElement>("[data-reveal-title]");
 
+                // Place all cards off-screen (right side) ready for the intro fly-in.
                 gsap.set(cards, {
-                    xPercent: -50,
-                    yPercent: -50,
                     x: 300,
                     z: -800,
                     rotationY: 45,
                     opacity: 0,
-                    transformOrigin: "center center -200px",
+                    transformOrigin: "center center",
                 });
 
-                const interpolate = (
-                    startState: { x: number; y: number; z: number; rotY: number; scale: number; opacity?: number },
-                    endState: { x: number; y: number; z: number; rotY: number; scale: number; opacity?: number },
-                    progress: number,
-                ) => {
-                    const startOpacity = startState.opacity ?? 1;
-                    const endOpacity = endState.opacity ?? 1;
-                    return {
-                        x: startState.x + (endState.x - startState.x) * progress,
-                        y: startState.y + (endState.y - startState.y) * progress,
-                        z: startState.z + (endState.z - startState.z) * progress,
-                        rotY: startState.rotY + (endState.rotY - startState.rotY) * progress,
-                        scale: startState.scale + (endState.scale - startState.scale) * progress,
-                        opacity: startOpacity + (endOpacity - startOpacity) * progress,
-                    };
-                };
+                // ── Array-rotation carousel ──────────────────────────────────────────
+                // On each advance the logical order array rotates: [0,1,2,3,4,5] →
+                // [1,2,3,4,5,0].  Each DOM card fully adopts the complete transform
+                // preset of its new slot — no inherited state from the previous slot.
+                const advanceCarousel = () => {
+                    if (isAnimatingRef.current) return;
+                    isAnimatingRef.current = true;
 
-                const updateCards = (progress: number) => {
-                    const maxIndex = cards.length - 1;
+                    const prevOrder = cardOrderRef.current;
+                    const exitingDomIdx = prevOrder[0];   // front card leaving
+                    const incomingDomIdx = prevOrder[1];  // next card taking ownership
+                    const newOrder = [...prevOrder.slice(1), prevOrder[0]];
+                    cardOrderRef.current = newOrder;
 
-                    cards.forEach((card, index) => {
-                        const virtualIndex = index - progress;
-                        let targetState:
-                            | { x: number; y: number; z: number; rotY: number; scale: number; opacity?: number }
-                            | undefined;
-
-                        if (virtualIndex <= -1) {
-                            targetState = stateOffLeft;
-                        } else if (virtualIndex < 0) {
-                            targetState = interpolate(stateOffLeft, cardTransforms[0], virtualIndex + 1);
-                        } else if (virtualIndex >= maxIndex) {
-                            targetState =
-                                virtualIndex > maxIndex + 1
-                                    ? stateOffRight
-                                    : interpolate(cardTransforms[maxIndex], stateOffRight, virtualIndex - maxIndex);
-                        } else {
-                            const currentIndex = Math.floor(virtualIndex);
-                            targetState = interpolate(cardTransforms[currentIndex], cardTransforms[currentIndex + 1], virtualIndex - currentIndex);
-                        }
-
-                        gsap.to(card, {
-                            x: targetState.x,
-                            y: targetState.y,
-                            z: targetState.z,
-                            rotationY: targetState.rotY,
-                            scale: targetState.scale,
-                            opacity: targetState.opacity ?? 1,
-                            zIndex: Math.round(100 - Math.abs(virtualIndex) * 10),
-                            duration: 0.25,
-                            ease: "power2.out",
-                            overwrite: true,
-                        });
+                    const tl = gsap.timeline({
+                        onComplete: () => {
+                            isAnimatingRef.current = false;
+                            // Panel updates only after the full transition is done.
+                            setActiveIndex(newOrder[0]);
+                        },
                     });
+
+                    const heroTarget = stackTransforms[0];
+                    const trailingTarget = stackTransforms[5];
+
+                    // Phase 1a (t=0): the old hero immediately loses ownership.
+                    // Shrink/fade starts at the same moment its zIndex drops.
+                    tl.to(cards[exitingDomIdx], {
+                        x: heroTarget.x - 20,
+                        z: 110,
+                        scale: 0.82,
+                        opacity: 0.45,
+                        rotationY: -10,
+                        duration: 0.25,
+                        ease: "power2.out",
+                        overwrite: true,
+                        onStart: () => {
+                            gsap.set(cards[exitingDomIdx], { zIndex: trailingTarget.zIndex });
+                        },
+                    });
+
+                    // Phase 1b (t=0): the incoming card claims hero status immediately.
+                    tl.to(cards[incomingDomIdx], {
+                        x: stackTransforms[1].x - 20,
+                        rotationY: 4,
+                        opacity: 1,
+                        scale: 1.06,
+                        z: heroTarget.z,
+                        duration: 0.35,
+                        ease: "power2.out",
+                        overwrite: true,
+                        onStart: () => {
+                            gsap.set(cards[incomingDomIdx], { zIndex: heroTarget.zIndex });
+                        },
+                    }, 0);
+
+                    // ── Slide phase starts once hierarchy transfer is already visible. ─
+                    tl.addLabel("slidePhase", 0.25);
+
+                    // Phase 2b: every other card hard-maps to its new slot preset.
+                    // zIndex is set via onStart (instant, not animated).
+                    // scale/opacity/transform are fully overwritten — zero inherited state.
+                    newOrder.forEach((domIdx, slot) => {
+                        if (domIdx === exitingDomIdx) return; // handled separately
+                        const target = stackTransforms[slot];
+                        tl.to(cards[domIdx], {
+                            x: target.x,
+                            y: target.y,
+                            z: target.z,
+                            rotationY: target.rotY,
+                            scale: target.scale,
+                            opacity: target.opacity,
+                            duration: 1.15,
+                            ease: "power3.inOut",
+                            overwrite: true,
+                            onStart: () => {
+                                gsap.set(cards[domIdx], { zIndex: target.zIndex });
+                            },
+                        }, "slidePhase");
+                    });
+
+                    // Phase 2c: exiting card completes its arc into the back slot.
+                    // Starts just after hierarchy transfer so the old hero feels small fast.
+                    const lastTarget = stackTransforms[5];
+                    tl.to(cards[exitingDomIdx], {
+                        x: lastTarget.x,
+                        y: lastTarget.y,
+                        z: lastTarget.z,
+                        rotationY: lastTarget.rotY,
+                        scale: lastTarget.scale,
+                        opacity: lastTarget.opacity,
+                        duration: 1,
+                        ease: "power3.inOut",
+                        overwrite: true,
+                    }, "slidePhase+=0.05");
                 };
 
+                // ── Intro fly-in ─────────────────────────────────────────────────────
                 const introTimeline = gsap.timeline({ delay: 0.2 });
 
                 cards.forEach((card, index) => {
-                    const target = cardTransforms[index];
+                    const target = stackTransforms[index];
                     introTimeline.to(
                         card,
                         {
@@ -400,23 +451,26 @@ export default function AgentSquad() {
                             z: target.z,
                             rotationY: target.rotY,
                             scale: target.scale,
-                            opacity: 1,
+                            opacity: target.opacity,
                             ease: "power3.out",
+                            onStart: () => {
+                                gsap.set(card, { zIndex: target.zIndex });
+                            },
                         },
                         index * 0.15,
                     );
                 });
 
+                // Subtle idle float on each card's inner face after intro.
                 introTimeline.add(() => {
                     cards.forEach((card) => {
-                        const innerElement = card.firstElementChild;
-                        if (!innerElement) {
-                            return;
-                        }
+                        const innerElement = card.querySelector<HTMLElement>(".card-content");
+                        if (!innerElement) return;
 
+                        // Only float on y-axis. Never touch scale, x, or z here
+                        // — those are owned by the outer wrapper's slot transforms.
                         gsap.to(innerElement, {
-                            y: `+=${Math.random() * 10 + 5}`,
-                            rotationY: `+=${Math.random() * 2 - 1}`,
+                            y: `+=${Math.random() * 6 + 4}`,
                             duration: 3 + Math.random() * 2,
                             yoyo: true,
                             repeat: -1,
@@ -426,51 +480,12 @@ export default function AgentSquad() {
                     });
                 });
 
+                // Start auto-advance after intro completes.
                 introTimeline.eventCallback("onComplete", () => {
-                    if (!carouselArea) {
-                        return;
-                    }
-
-                    const proxy = document.createElement("div");
-                    proxy.style.cssText = "position:absolute;pointer-events:none;visibility:hidden;";
-                    root.appendChild(proxy);
-
-                    const maxIndex = cards.length - 1;
-                    let currentAutoIndex = 0;
-                    const progressObj = { val: 0 };
-
-                    const draggableInstance = Draggable.create(proxy, {
-                        type: "x",
-                        trigger: carouselArea,
-                        bounds: { minX: -maxIndex * shiftWidth, maxX: 0 },
-                        onDrag() {
-                            progressObj.val = -this.x / shiftWidth;
-                            currentAutoIndex = Math.min(maxIndex, Math.max(0, Math.round(progressObj.val)));
-                            updateCards(progressObj.val);
-                            setActiveIndexRef.current(currentAutoIndex);
-                        },
-                    });
-
-                    // Auto-scroll carousel every 2 seconds
                     const autoScrollInterval = setInterval(() => {
-                        currentAutoIndex = (currentAutoIndex + 1) % cards.length;
+                        advanceCarousel();
+                    }, 5000);
 
-                        gsap.to(progressObj, {
-                            val: currentAutoIndex,
-                            duration: 0.6,
-                            ease: "power2.inOut",
-                            onUpdate() {
-                                updateCards(progressObj.val);
-                                gsap.set(proxy, { x: -progressObj.val * shiftWidth });
-                                setActiveIndexRef.current(Math.min(maxIndex, Math.max(0, Math.round(progressObj.val))));
-                            },
-                            onComplete() {
-                                draggableInstance[0]?.update();
-                            },
-                        });
-                    }, 2000);
-
-                    // Store interval for cleanup
                     context._autoScrollInterval = autoScrollInterval;
                 });
 
@@ -543,9 +558,9 @@ export default function AgentSquad() {
                 <main data-carousel-area className="relative z-10 flex h-full w-full cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y" }}>
                     {/* ── Left: card fan ────────────────────────────────── */}
                     <div className="flex h-full w-full items-center justify-center md:w-[58%]">
-                    <div className="pointer-events-none relative h-[600px] w-full max-w-xl scale-75 sm:scale-100" style={{ perspective: "1200px", transformStyle: "preserve-3d" }}>
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[60] h-[520px] w-[340px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-blue-300 via-slate-100 to-slate-300 p-[1px] shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                    <div className="pointer-events-none relative h-[600px] w-full max-w-xl" style={stackSceneStyle}>
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-blue-300 via-slate-100 to-slate-300 p-[1px] shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
                                 <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[23px] bg-[#0ea5e9] p-8">
                                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/eca707cc-a5b7-439a-b4fd-247f6106c2e1_1600w.jpg" alt="Portrait" className="absolute inset-0 -top-10 h-[120%] w-full object-cover object-top opacity-90 mix-blend-multiply grayscale contrast-125" />
                                     <div className="relative z-10 flex items-center gap-1 text-white">
@@ -563,8 +578,8 @@ export default function AgentSquad() {
                             </div>
                         </div>
 
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[50] h-[480px] w-[320px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-blue-200 via-slate-100 to-slate-200 p-[1px] shadow-[0_20px_40px_rgba(0,0,0,0.1)]">
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-blue-200 via-slate-100 to-slate-200 p-[1px] shadow-[0_20px_40px_rgba(0,0,0,0.1)]">
                                 <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[23px] bg-[#3b82f6] p-8">
                                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e534354d-c5f2-4399-a1d9-2f50338e8c47_1600w.jpg" alt="Protocols abstract background" className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-overlay" />
                                     <div className="relative z-10">
@@ -578,8 +593,8 @@ export default function AgentSquad() {
                             </div>
                         </div>
 
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[40] h-[440px] w-[300px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-sky-100 via-white to-slate-200 p-[1px] shadow-[0_15px_30px_rgba(0,0,0,0.08)]">
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-sky-100 via-white to-slate-200 p-[1px] shadow-[0_15px_30px_rgba(0,0,0,0.08)]">
                                 <div className="relative flex h-full w-full flex-col justify-center overflow-hidden rounded-[23px] bg-white p-8">
                                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7f78131e-65e9-49b2-aa1f-ccc33e28df9f_1600w.webp" alt="Latency card texture" className="absolute inset-0 h-full w-full object-cover opacity-10 grayscale mix-blend-luminosity" />
                                     <div className="absolute -bottom-10 -right-10 h-64 w-64 rotate-12 rounded-3xl bg-slate-200 opacity-50 blur-sm mix-blend-multiply" />
@@ -592,16 +607,16 @@ export default function AgentSquad() {
                             </div>
                         </div>
 
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[30] h-[400px] w-[280px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-indigo-200 via-slate-100 to-slate-300 p-[1px] shadow-xl">
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-indigo-200 via-slate-100 to-slate-300 p-[1px] shadow-xl">
                                 <div className="relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[23px] bg-[#1e3a8a] p-8">
                                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5ee0a38a-b5d3-4531-8793-98beed4af162_1600w.jpg" alt="Architecture deep blue texture" className="absolute inset-0 h-full w-full object-cover opacity-50 mix-blend-overlay" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[20] h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-slate-200 via-white to-slate-300 p-[1px] shadow-lg">
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-slate-200 via-white to-slate-300 p-[1px] shadow-lg">
                                 <div className="relative flex h-full w-full flex-col justify-center overflow-hidden rounded-[23px] bg-gradient-to-br from-slate-50 to-slate-200 p-6">
                                     <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: noiseTexture }} />
                                     <div className="relative z-10 space-y-4">
@@ -615,8 +630,8 @@ export default function AgentSquad() {
                             </div>
                         </div>
 
-                        <div className="card-wrapper absolute left-1/2 top-1/2 z-[10] h-[320px] w-[240px] -translate-x-1/2 -translate-y-1/2" style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
-                            <div className="pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-slate-100 to-slate-200 p-[1px] shadow-md">
+                        <div className="card-wrapper absolute left-1/2 top-1/2 h-[520px] w-[340px]" style={cardWrapperStyle}>
+                            <div className="card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-slate-100 to-slate-200 p-[1px] shadow-md">
                                 <div className="relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[23px] bg-slate-50 p-6">
                                     <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bfef5098-c30f-4cd9-b4ac-04b2673ab943_1600w.jpg" alt="System boot texture" className="absolute inset-0 h-full w-full object-cover opacity-10 grayscale mix-blend-multiply" />
                                     <div className="relative z-10 text-xl font-light leading-none tracking-tight text-slate-700">
