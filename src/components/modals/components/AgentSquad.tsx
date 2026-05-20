@@ -265,7 +265,7 @@ export default function AgentSquad() {
 
             let mouseX = 0;
             let mouseY = 0;
-            const clock = new THREE.Clock();
+            const clock = new THREE.Timer();
 
             const setCanvasSize = () => {
                 const bounds = frame.getBoundingClientRect();
@@ -294,7 +294,7 @@ export default function AgentSquad() {
             setCanvasSize();
 
             const render = () => {
-                material.uniforms.uTime.value = clock.getElapsedTime();
+                material.uniforms.uTime.value = clock.getElapsed();
                 camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.05;
                 camera.position.y += (-mouseY * 0.2 - camera.position.y) * 0.05;
                 camera.lookAt(scene.position);
@@ -432,18 +432,46 @@ export default function AgentSquad() {
                     }
 
                     const proxy = document.createElement("div");
-                    const maxIndex = cards.length - 1;
+                    proxy.style.cssText = "position:absolute;pointer-events:none;visibility:hidden;";
+                    root.appendChild(proxy);
 
-                    Draggable.create(proxy, {
+                    const maxIndex = cards.length - 1;
+                    let currentAutoIndex = 0;
+                    const progressObj = { val: 0 };
+
+                    const draggableInstance = Draggable.create(proxy, {
                         type: "x",
                         trigger: carouselArea,
                         bounds: { minX: -maxIndex * shiftWidth, maxX: 0 },
                         onDrag() {
-                            const progress = -this.x / shiftWidth;
-                            updateCards(progress);
-                            setActiveIndexRef.current(Math.min(maxIndex, Math.max(0, Math.round(progress))));
+                            progressObj.val = -this.x / shiftWidth;
+                            currentAutoIndex = Math.min(maxIndex, Math.max(0, Math.round(progressObj.val)));
+                            updateCards(progressObj.val);
+                            setActiveIndexRef.current(currentAutoIndex);
                         },
                     });
+
+                    // Auto-scroll carousel every 2 seconds
+                    const autoScrollInterval = setInterval(() => {
+                        currentAutoIndex = (currentAutoIndex + 1) % cards.length;
+
+                        gsap.to(progressObj, {
+                            val: currentAutoIndex,
+                            duration: 0.6,
+                            ease: "power2.inOut",
+                            onUpdate() {
+                                updateCards(progressObj.val);
+                                gsap.set(proxy, { x: -progressObj.val * shiftWidth });
+                                setActiveIndexRef.current(Math.min(maxIndex, Math.max(0, Math.round(progressObj.val))));
+                            },
+                            onComplete() {
+                                draggableInstance[0]?.update();
+                            },
+                        });
+                    }, 2000);
+
+                    // Store interval for cleanup
+                    context._autoScrollInterval = autoScrollInterval;
                 });
 
                 if (revealTitle) {
@@ -468,6 +496,9 @@ export default function AgentSquad() {
             }, root);
 
             cleanupGsap = () => {
+                if (context._autoScrollInterval) {
+                    clearInterval(context._autoScrollInterval);
+                }
                 context.revert();
             };
         };
@@ -507,19 +538,6 @@ export default function AgentSquad() {
                             backgroundSize: "64px 64px",
                         }}
                     />
-                    <div className="absolute inset-x-0 top-0 flex items-start justify-between px-0">
-                        <div className="h-4 w-4 border-l border-t border-slate-900/20" />
-                        <div className="text-xs font-light uppercase tracking-widest text-slate-400">Telemetry Grid Engaged</div>
-                        <div className="h-4 w-4 border-r border-t border-slate-900/20" />
-                    </div>
-                    <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-0">
-                        <div className="h-4 w-4 border-b border-l border-slate-900/20" />
-                        <div className="flex gap-4">
-                            <div className="text-xs font-light uppercase tracking-widest text-slate-400">X-12</div>
-                            <div className="text-xs font-light uppercase tracking-widest text-slate-400">C-88</div>
-                        </div>
-                        <div className="h-4 w-4 border-b border-r border-slate-900/20" />
-                    </div>
                 </div>
 
                 <main data-carousel-area className="relative z-10 flex h-full w-full cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y" }}>

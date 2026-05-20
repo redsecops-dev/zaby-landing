@@ -168,11 +168,11 @@ function WebGLBackground() {
 
         document.addEventListener("mousemove", handleMouseMove);
 
-        const clock = new THREE.Clock();
+        const clock = new THREE.Timer();
 
         const animate = () => {
           animationFrameId = requestAnimationFrame(animate);
-          const elapsedTime = clock.getElapsedTime();
+          const elapsedTime = clock.getElapsed();
 
           targetX = mouseX * 0.001;
           targetY = mouseY * 0.001;

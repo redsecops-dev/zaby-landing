@@ -40,21 +40,7 @@ const fadeIn = (delay = 0) => ({
   transition: { duration: 0.35, ease, delay },
 });
 
-// ─── Progress line ───────────────────────────────────────────────────────────
-function ProgressLine({ index, total }: { index: number; total: number }) {
-  const pct = ((index + 1) / total) * 100;
-  return (
-    <div className="absolute left-0 top-8 bottom-8 w-0.5 rounded-full overflow-hidden bg-slate-100">
-      <motion.div
-        className="w-full rounded-full origin-top"
-        style={{ height: `${pct}%`, background: "linear-gradient(to bottom, #0ea5e9, #6366f1)" }}
-        initial={false}
-        animate={{ height: `${pct}%` }}
-        transition={{ duration: 0.65, ease }}
-      />
-    </div>
-  );
-}
+
 
 // ─── Status badge ────────────────────────────────────────────────────────────
 function StatusBadge({ label, color }: { label: string; color: string }) {
@@ -159,23 +145,20 @@ export function AgentInfoPanel({ data, index, total }: Props) {
     <div className="relative flex h-full w-full items-center justify-center py-6 pl-4 pr-4 md:pr-0">
       {/* ambient glow */}
       <motion.div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 blur-[80px]"
         animate={{ opacity: [0.12, 0.22, 0.12] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         style={{ background: color }}
       />
 
-      {/* progress line */}
-      <ProgressLine index={index} total={total} />
-
       {/* glass card */}
       <div
-        className="relative ml-4 w-full max-w-sm overflow-hidden rounded-2xl border bg-white/70 shadow-xl backdrop-blur-sm"
+        className="relative ml-4 w-full max-w-sm overflow-hidden rounded-2xl backdrop-blur-sm"
         style={{ borderColor: `${color}18` }}
       >
         {/* gradient top border strip */}
         <div
-          className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl"
+          className="absolute top-0 h-0.5"
           style={{ background: `linear-gradient(to right, transparent, ${color}, transparent)` }}
         />
 
