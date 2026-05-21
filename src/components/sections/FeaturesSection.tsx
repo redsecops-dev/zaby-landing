@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
@@ -11,6 +12,7 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PreviewModal } from "@/components/shared/PreviewModal";
+import { Icon } from "@iconify/react";
 
 function wrapWordsForGSAP(node: ChildNode) {
   if (node.nodeType === Node.TEXT_NODE) {
@@ -127,35 +129,67 @@ export function FeaturesSection() {
         <div className="grid grid-cols-12 gap-4 lg:gap-5">
 
           {/* Card 1: UI Stack — col-span-3 row-span-2 */}
-          <div className="col-span-12 lg:col-span-8 lg:row-span-2 h-full rounded-2xl bg-linear-to-br from-[#EAE2F8]/80 via-white/40 to-[#FADDF0]/60 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(1)}>
+          <div className="col-span-12 lg:col-span-8 lg:row-span-2 h-full rounded-2xl p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-all duration-300 hover:shadow-[0_10px_15px_-3px_rgb(0,0,0,0.1),0_4px_6px_-4px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(1)}>
             <div className="bg-white rounded-[15px] overflow-hidden relative flex flex-col h-full w-full">
-              <div className="flex-1 bg-linear-to-br from-[#EAE2F8] to-[#F3E8FF] p-6 relative overflow-hidden">
-                <div className="flex items-center justify-between mb-8 relative z-10">
+              <div className="flex-1 p-6 relative overflow-hidden">
+                <div className="flex items-center justify-between mb-8 relative z-20">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-slate-900" />
-                    <span className="text-xs font-medium tracking-tight">Zaby</span>
-                  </div>
-                  <div className="flex gap-3 text-xs text-slate-500 font-medium">
-                    <span>Overview</span>
-                    <span>Plans</span>
+                    <span className="text-xs font-medium tracking-tight">Phantom Squad</span>
                   </div>
                 </div>
-                <div className="relative z-10 max-w-[85%]">
+                <div className="relative z-20 max-w-[85%] md:max-w-[56%] lg:max-w-[58%]">
                   <h2 className="reveal-text text-2xl font-medium tracking-tight leading-tight mb-2">
                     Deploy AI that executes, not just responds.
                   </h2>
                   <p className="reveal-text text-xs text-slate-500 mb-6 mt-2">
                     Autonomous agents operate continuously, completing real tasks across your entire business.
+                    Integrate seamlessly with your workflows, automate complex processes, and scale operations with intelligent autonomy.<br/>
+                    Experience 24/7 execution, adaptive learning, and reliable results—no manual intervention required.
                   </p>
-                  <Link href="https://platform.zaby.io/tenant/signup" className="cursor-pointer bg-(--color-button-primary-bg) text-white text-xs px-4 py-3.5 rounded-full font-medium hover:bg-(--color-button-primary-hover) transition-colors inline-block">
-                    Get Started
-                  </Link>
+                 
                 </div>
-                <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full border-16 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute -top-12 -right-4 w-32 h-32 rounded-full border-12 border-slate-900 opacity-90 group-hover:scale-105 transition-transform duration-500 delay-75" />
+
+                {/* Central cube — absolute positioned */}
+                <div className="pointer-events-none absolute left-10 -bottom-70 z-10 hidden -translate-x-1/2 -translate-y-1/2 transform md:flex">
+                  <div className="relative flex h-100 w-100 items-center justify-center" style={{ animation: "pulse 4s ease-in-out infinite" }}>
+                    <div className="absolute inset-0 scale-150 rounded-full bg-blue-500/20 blur-[50px] mix-blend-screen" />
+                    <svg viewBox="0 0 100 100" className="h-full w-full drop-shadow-[0_0_25px_rgba(59,130,246,0.7)] transition-transform duration-1000 hover:scale-105" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="feat-topFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#60a5fa" />
+                          <stop offset="100%" stopColor="#2563eb" />
+                        </linearGradient>
+                        <linearGradient id="feat-leftFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#93c5fd" />
+                          <stop offset="100%" stopColor="#3b82f6" />
+                        </linearGradient>
+                        <linearGradient id="feat-rightFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#60a5fa" />
+                          <stop offset="100%" stopColor="#1d4ed8" />
+                        </linearGradient>
+                      </defs>
+                      <polygon points="50,20 90,40 50,60 10,40" fill="url(#feat-topFace)" stroke="#93c5fd" strokeWidth="0.5" strokeLinejoin="round" />
+                      <polygon points="10,40 50,60 50,90 10,70" fill="url(#feat-leftFace)" stroke="#bfdbfe" strokeWidth="0.5" strokeLinejoin="round" />
+                      <polygon points="90,40 90,70 50,90 50,60" fill="url(#feat-rightFace)" stroke="#2563eb" strokeWidth="0.5" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Agent figure — right side */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[38%] items-end justify-center md:flex">
+                  <div className="relative h-[100%] w-full max-w-100 translate-x-6 translate-y-2 transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.04]">
+                    <Image
+                      src="/models/agent.png"
+                      alt="Glowing agent figure"
+                      fill
+                      priority
+                      className="object-contain object-center drop-shadow-[0_24px_40px_rgba(59,130,246,0.28)] h-100"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="h-32 relative border-t border-slate-100 p-6 flex flex-col justify-end overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* <div className="h-32 relative border-t border-slate-100 p-6 flex flex-col justify-end overflow-hidden">
                 <img
                   src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e534354d-c5f2-4399-a1d9-2f50338e8c47_1600w.jpg"
                   className="absolute inset-0 w-full h-full object-cover opacity-20 transition-transform duration-700 group-hover:scale-110"
@@ -166,7 +200,7 @@ export function FeaturesSection() {
                 <span className="reveal-text text-lg font-medium tracking-tight relative z-10">
                   Scale operations.
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -346,13 +380,16 @@ export function FeaturesSection() {
             </div>
           </div>
 
-          {/* Card 9: Logo — col-span-4 */}
-          <div className="col-span-12 lg:col-span-4 h-full rounded-2xl bg-linear-to-br from-slate-200/80 to-slate-100/30 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(9)}>
-            <div className="bg-white rounded-[15px] p-8 flex items-center justify-center h-full w-full relative">
-              <div className="flex items-center gap-3 transition-transform duration-300 group-hover:scale-105">
-                <Package size={32} strokeWidth={1.5} className="text-slate-900" />
-                <span className="text-2xl font-medium tracking-tighter text-slate-900">
-                  Zaby
+          {/* Card 9: Conversational AI — col-span-4 */}
+          <div className="col-span-12 lg:col-span-4 h-full rounded-2xl bg-linear-to-br from-[#E0F2FE]/80 via-slate-100/50 to-[#FCE7F3]/80 p-px group cursor-pointer shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1),0_2px_4px_-2px_rgb(0,0,0,0.1)]" onClick={() => handleCardClick(9)}>
+            <div className="bg-white rounded-[15px] p-8 flex items-center justify-center h-full w-full relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="flex items-center gap-3 transition-transform duration-300 group-hover:scale-105 relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+                  <Icon icon="solar:chat-round-line-linear" className="text-2xl text-accent" />
+                </div>
+                <span className="text-xl font-medium tracking-tight text-slate-900">
+                  Conversational AI
                 </span>
               </div>
             </div>
