@@ -239,6 +239,7 @@ export function AgentInfoPanel({ data, index, total }: Props) {
             >
               {/* primary CTA */}
               <motion.button
+                suppressHydrationWarning
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl px-5 py-3 text-sm font-semibold text-white transition-shadow duration-300 hover:shadow-lg"
@@ -254,7 +255,7 @@ export function AgentInfoPanel({ data, index, total }: Props) {
                 </motion.span>
                 {/* shimmer sweep */}
                 <motion.span
-                  className="pointer-events-none absolute inset-0 -skew-x-12 -translate-x-full bg-white/20"
+                  className="pointer-events-none absolute inset-0 -skew-x-12 -translate-y-full bg-white/20"
                   animate={{ translateX: ["−100%", "200%"] }}
                   transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.8 }}
                 />
@@ -262,6 +263,7 @@ export function AgentInfoPanel({ data, index, total }: Props) {
 
               {/* secondary micro action */}
               <motion.button
+                suppressHydrationWarning
                 whileHover={{ x: 2 }}
                 className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-100 px-5 py-2.5 text-[0.78rem] font-medium text-slate-500 transition-colors hover:border-slate-200 hover:text-slate-700"
               >

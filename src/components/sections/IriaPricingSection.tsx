@@ -567,6 +567,7 @@ export function IriaPricingSection() {
               type="button"
               aria-pressed={billingCycle === "monthly"}
               onClick={() => setBillingCycle("monthly")}
+              suppressHydrationWarning={true}
               className={`relative flex items-center gap-2 rounded-full px-6 py-2.5 text-sm transition-all ${
                 billingCycle === "monthly"
                   ? "bg-white text-(--foreground) shadow-[0_2px_8px_-2px_rgba(0,0,0,0.08)]"
@@ -579,6 +580,7 @@ export function IriaPricingSection() {
               type="button"
               aria-pressed={billingCycle === "annually"}
               onClick={() => setBillingCycle("annually")}
+              suppressHydrationWarning={true}
               className={`relative flex items-center gap-2 rounded-full px-6 py-2.5 text-sm transition-all ${
                 billingCycle === "annually"
                   ? "bg-white text-(--foreground) shadow-[0_2px_8px_-2px_rgba(0,0,0,0.08)]"
