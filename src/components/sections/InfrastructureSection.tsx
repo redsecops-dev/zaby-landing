@@ -13,7 +13,7 @@ interface InfrastructureCard {
   subtitle: string;
   description: string;
   status: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   accent: "fuchsia" | "blue" | "teal";
   metrics?: { label: string; value: string }[];
 }

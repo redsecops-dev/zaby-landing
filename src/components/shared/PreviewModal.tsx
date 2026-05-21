@@ -48,7 +48,7 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
 
           {/* Scroll container — fixed overlay that scrolls its content */}
           <div
-            className="fixed inset-0 z-200 overflow-y-auto overscroll-contain flex min-h-full items-stretch justify-center p-0 sm:items-start sm:px-6 sm:py-14"
+            className="fixed inset-0 z-200 overflow-y-auto overscroll-contain flex min-h-full items-stretch justify-center p-0 sm:items-start sm:px-6 sm:pt-14 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             data-preview-scroller="true"
             role="dialog"
             aria-modal="true"
@@ -65,7 +65,7 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
                 stiffness: 300,
                 damping: 30,
               }}
-              className="relative min-h-dvh h-auto w-full max-w-none rounded-none bg-white shadow-none sm:my-6 sm:max-h-[calc(100dvh-3rem)] sm:min-h-0 sm:max-w-7xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)]"
+              className="relative min-h-dvh h-auto w-full max-w-none rounded-none bg-white shadow-none flex flex-col sm:mt-6 sm:mb-0 sm:max-h-[calc(100dvh-1.5rem)] sm:min-h-0 sm:max-w-7xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Floating close button */}
@@ -78,7 +78,7 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
               </button>
 
               {/* Content */}
-              <div className="h-full overflow-y-auto overflow-x-hidden rounded-none sm:rounded-2xl">
+              <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-none sm:rounded-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {selectedCard === 1 && <AgentSquadPreview />}
                 {selectedCard === 4 && <OpenAgentsPreview />}
                 {selectedCard === 7 && <AiMemoryPreview />}

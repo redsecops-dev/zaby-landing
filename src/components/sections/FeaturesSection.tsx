@@ -48,7 +48,7 @@ function wrapWordsForGSAP(node: ChildNode) {
 
 const CARD_HASH_MAP: Record<number, string> = {
   1: "agent-squad",
-  4: "open-agents",
+  4: "ai-infra",
   7: "ai-memory",
   8: "agentic-workflow",
   9: "conversational-ai",
@@ -56,7 +56,7 @@ const CARD_HASH_MAP: Record<number, string> = {
 
 const HASH_CARD_MAP: Record<string, number> = {
   "agent-squad": 1,
-  "open-agents": 4,
+  "ai-infra": 4,
   "ai-memory": 7,
   "agentic-workflow": 8,
   "conversational-ai": 9,

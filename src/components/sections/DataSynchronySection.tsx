@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -323,21 +323,27 @@ function CoreEngineCard() {
       </div>
 
       <div className="flex gap-3 relative z-10">
-        <button className={cn(
-          "flex-1 text-slate-700 text-xs font-bold py-3.5 rounded-2xl transition-all",
-          "bg-white/70 hover:bg-white/90 active:scale-95",
-          "border border-slate-200/60 backdrop-blur-sm",
-          "shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.3)]"
-        )}>
+        <button 
+          suppressHydrationWarning
+          className={cn(
+            "flex-1 text-slate-700 text-xs font-bold py-3.5 rounded-2xl transition-all",
+            "bg-white/70 hover:bg-white/90 active:scale-95",
+            "border border-slate-200/60 backdrop-blur-sm",
+            "shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+          )}
+        >
           Inspect
         </button>
-        <button className={cn(
-          "flex-1 bg-linear-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-3.5 rounded-2xl",
-          "transition-all active:scale-95",
-          "hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-300/50",
-          "shadow-[0_8px_24px_rgba(59,130,246,0.3)]",
-          "border border-blue-500/30"
-        )}>
+        <button 
+          suppressHydrationWarning
+          className={cn(
+            "flex-1 bg-linear-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-3.5 rounded-2xl",
+            "transition-all active:scale-95",
+            "hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-300/50",
+            "shadow-[0_8px_24px_rgba(59,130,246,0.3)]",
+            "border border-blue-500/30"
+          )}
+        >
           Deploy
         </button>
       </div>
@@ -600,12 +606,15 @@ export function DataSynchronySection() {
                         )}>
                           <Icon icon="solar:settings-linear" width={24} />
                         </div>
-                        <button className={cn(
-                          "flex-1 text-white text-xs font-bold py-3 rounded-2xl transition-all",
-                          "bg-linear-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800",
-                          "shadow-[0_8px_20px_rgba(15,23,42,0.2)]",
-                          "active:scale-95"
-                        )}>
+                        <button 
+                          suppressHydrationWarning
+                          className={cn(
+                            "flex-1 text-white text-xs font-bold py-3 rounded-2xl transition-all",
+                            "bg-linear-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800",
+                            "shadow-[0_8px_20px_rgba(15,23,42,0.2)]",
+                            "active:scale-95"
+                          )}
+                        >
                           Retrieve
                         </button>
                       </div>
@@ -772,21 +781,27 @@ export function DataSynchronySection() {
                       </div>
 
                       <div className="flex gap-2.5 mt-auto pt-6 relative z-10">
-                        <button className={cn(
-                          "flex-1 text-slate-700 text-xs font-bold py-3 rounded-2xl transition-all",
-                          "bg-white/70 hover:bg-white/90 active:scale-95",
-                          "border border-slate-200/60 backdrop-blur-sm",
-                          "shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.3)]"
-                        )}>
+                        <button 
+                          suppressHydrationWarning
+                          className={cn(
+                            "flex-1 text-slate-700 text-xs font-bold py-3 rounded-2xl transition-all",
+                            "bg-white/70 hover:bg-white/90 active:scale-95",
+                            "border border-slate-200/60 backdrop-blur-sm",
+                            "shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.3)]"
+                          )}
+                        >
                           Monitor
                         </button>
-                        <button className={cn(
-                          "flex-1 bg-linear-to-r from-emerald-600 to-emerald-500 text-white text-xs font-bold py-3 rounded-2xl",
-                          "transition-all active:scale-95",
-                          "hover:from-emerald-500 hover:to-emerald-400 hover:shadow-lg hover:shadow-emerald-300/50",
-                          "shadow-[0_8px_24px_rgba(16,185,129,0.3)]",
-                          "border border-emerald-400/30"
-                        )}>
+                        <button 
+                          suppressHydrationWarning
+                          className={cn(
+                            "flex-1 bg-linear-to-r from-emerald-600 to-emerald-500 text-white text-xs font-bold py-3 rounded-2xl",
+                            "transition-all active:scale-95",
+                            "hover:from-emerald-500 hover:to-emerald-400 hover:shadow-lg hover:shadow-emerald-300/50",
+                            "shadow-[0_8px_24px_rgba(16,185,129,0.3)]",
+                            "border border-emerald-400/30"
+                          )}
+                        >
                           Deploy
                         </button>
                       </div>
