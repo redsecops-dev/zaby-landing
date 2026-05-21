@@ -714,15 +714,15 @@ export function AgenticWorkflowPreview() {
                 repeatDelay={3.5}
                 gradientStartColor="#d946ef"
                 gradientStopColor="#10b981"
-                endYOffset={5}
               />
 
               {/* Purple/Red Retry Connections (Fires in sync with main flow) */}
+              {/* Retry → Store Evidence (arcs upward) */}
               <AnimatedBeam
                 containerRef={containerRef}
                 fromRef={retryRef}
                 toRef={storeRef}
-                curvature={-40}
+                curvature={-50}
                 reverse
                 duration={4.5}
                 delay={0}
@@ -730,11 +730,12 @@ export function AgenticWorkflowPreview() {
                 gradientStartColor="#ef4444"
                 gradientStopColor="#f97316"
               />
+              {/* Retry → Review & Approve (straight horizontal) */}
               <AnimatedBeam
                 containerRef={containerRef}
                 fromRef={retryRef}
                 toRef={reviewRef}
-                curvature={-20}
+                curvature={0}
                 reverse
                 duration={4.5}
                 delay={0}
@@ -742,11 +743,12 @@ export function AgenticWorkflowPreview() {
                 gradientStartColor="#ef4444"
                 gradientStopColor="#f97316"
               />
+              {/* Retry → Publish Audit Report (arcs downward) */}
               <AnimatedBeam
                 containerRef={containerRef}
                 fromRef={retryRef}
                 toRef={publishRef}
-                curvature={-60}
+                curvature={50}
                 reverse
                 duration={4.5}
                 delay={0}
@@ -786,7 +788,7 @@ export function AgenticWorkflowPreview() {
               {/* NODE 2: Retry Policy detail box */}
               <div
                 ref={retryRef}
-                style={{ left: '40px', top: '320px', width: '240px', height: '215px' }}
+                style={{ left: '40px', top: '273px', width: '240px', height: '215px' }}
                 className="absolute bg-[#fafbfe] border border-slate-200 text-left overflow-hidden p-5 z-10 rounded-2xl"
               >
                 <div className="absolute -right-12 -top-12 w-24 h-24 rounded-full bg-indigo-500/5 blur-xl pointer-events-none" />
