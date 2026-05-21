@@ -201,27 +201,27 @@ export default function Capabilities() {
           {/* Cell 2: Central cube (row-span-2) */}
           <div data-cap-cell className="relative flex h-72 flex-col items-center justify-center overflow-hidden p-6 lg:row-span-2 lg:h-auto" style={cellBorder}>
             <div className="absolute inset-0 z-10">
-              <Canvas camera={{ position: [0, 0.15, 8], fov: 42 }} dpr={[1, 2]}>
+              {/* <Canvas camera={{ position: [0, 0.15, 8], fov: 42 }} dpr={[1, 2]}>
                 <HeroHologram />
                 <OrbitControls
                   target={[0, -0.1, 0]}
                   enableZoom={false}
-                  enablePan={false}
+                enablePan={false}
                   minPolarAngle={Math.PI / 2.4}
                   maxPolarAngle={Math.PI / 1.7}
                 />
-              </Canvas>
+              </Canvas> */}
             </div>
             <CornerDot />
-            {/* <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-15">
+            <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-15">
               <svg width="280" height="280" viewBox="0 0 100 100" aria-hidden="true" className="animate-[spin_60s_linear_infinite]">
                 <circle cx="50" cy="50" r="20" fill="none" stroke="#1e3a8a" strokeWidth="0.2" strokeDasharray="1 2" />
                 <circle cx="50" cy="50" r="30" fill="none" stroke="#1e3a8a" strokeWidth="0.2" strokeDasharray="1 3" />
                 <circle cx="50" cy="50" r="40" fill="none" stroke="#1e3a8a" strokeWidth="0.2" strokeDasharray="2 4" />
                 <circle cx="50" cy="50" r="55" fill="none" stroke="#1e3a8a" strokeWidth="0.1" strokeDasharray="1 5" />
               </svg>
-            </div> */}
-            {/* <div className="relative z-10 flex h-40 w-40 items-center justify-center" style={{ animation: "pulse 4s ease-in-out infinite" }}>
+            </div>
+            <div className="relative z-10 flex h-40 w-40 items-center justify-center" style={{ animation: "pulse 4s ease-in-out infinite" }}>
               <div className="absolute inset-0 scale-150 rounded-full bg-blue-500/20 blur-[50px] mix-blend-screen" />
               <svg viewBox="0 0 100 100" className="h-full w-full drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] transition-transform duration-1000 hover:scale-105" aria-hidden="true">
                 <defs>
@@ -242,7 +242,7 @@ export default function Capabilities() {
                 <polygon points="10,40 50,60 50,90 10,70" fill="url(#cap-leftFace)" stroke="#bfdbfe" strokeWidth="0.5" strokeLinejoin="round" />
                 <polygon points="90,40 90,70 50,90 50,60" fill="url(#cap-rightFace)" stroke="#2563eb" strokeWidth="0.5" strokeLinejoin="round" />
               </svg>
-            </div> */}
+            </div>
           </div>
 
           {/* Cell 3: Cryptographic security */}
@@ -312,8 +312,8 @@ Engineered with military-grade encryption and isolated access architecture, Digi
               </svg>
             </div>
             <div className="absolute bottom-6 left-6 right-6">
-              <h3 className="mb-1.5 text-xs font-normal tracking-tight text-slate-800">Dynamic pathing</h3>
-              <p className="text-[11px] leading-relaxed text-slate-500">Traffic routed via optimal vectors to the fastest available computation nodes.</p>
+              <h3 className="mb-1.5 text-xs font-normal tracking-tight text-slate-800">Adaptive Phantom Intelligence</h3>
+              <p className="text-[11px] leading-relaxed text-slate-500">Phantom Squad adapts through runtime experience with human-like intelligence.</p>
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import { AgentSquadPreview } from "@/components/modals/AgentSquadPreview";
 import { OpenAgentsPreview } from "@/components/modals/OpenAgentsPreview";
 import { AiMemoryPreview } from "@/components/modals/AiMemoryPreview";
 import { AgenticWorkflowPreview } from "@/components/modals/AgenticWorkflowPreview";
+import ConversationalAI from "@/components/modals/components/ConversationalAI";
 
 interface PreviewModalProps {
   isOpen: boolean;
@@ -83,8 +84,9 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
                 {selectedCard === 4 && <OpenAgentsPreview />}
                 {selectedCard === 7 && <AiMemoryPreview />}
                 {selectedCard === 8 && <AgenticWorkflowPreview />}
+                {selectedCard === 9 && <ConversationalAI />}
                 {!selectedCard && <CompliancePlatform />}
-                {selectedCard && ![1, 4, 7, 8].includes(selectedCard) && <CompliancePlatform />}
+                {selectedCard && ![1, 4, 7, 8, 9].includes(selectedCard) && <CompliancePlatform />}
               </div>
             </motion.div>
           </div>

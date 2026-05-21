@@ -65,9 +65,9 @@ export function AgentSquadPreview() {
     };
   }, []);
   return (
-    <div className="bg-linear-to-br from-slate-50 to-slate-100 p-8 flex flex-col gap-8 ">
+    <div className="bg-white p-8 flex flex-col gap-8 ">
       {/* Header */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center">
             <Zap size={24} className="text-white" strokeWidth={1.5} />
@@ -75,7 +75,7 @@ export function AgentSquadPreview() {
           <h1 className="text-3xl font-medium tracking-tight">Phantom Squad</h1>
         </div>
         <p className="text-slate-600 text-lg">Deploy teams of AI agents that work together autonomously.</p>
-      </div>
+      </div> */}
 
       {/* Section 1: Hero */}
       <section ref={heroRef} className="relative h-screen w-full flex items-center justify-center overflow-hidden">
@@ -198,7 +198,7 @@ export function AgentSquadPreview() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
-              className="cinematic-title glass-text"
+              className="cinematic-title text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text"
             >
               Round the clock
             </motion.h2>
@@ -207,7 +207,8 @@ export function AgentSquadPreview() {
             </p>
           </div>
         </div>
-      </section>
+    </section>
+      
 
       {/* Section 3: Global Network */}
       <section className={`relative h-screen w-full flex items-center px-10 md:px-20 transition-colors duration-500 bg-slate-50/60`}>
@@ -218,7 +219,7 @@ export function AgentSquadPreview() {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1 }}
-                className="cinematic-title glass-text"
+                className="cinematic-title glass-text text-4xl md:text-5xl font-light tracking-tight leading-tight"
               >
                 Around the Globe
               </motion.h2>
@@ -236,8 +237,9 @@ export function AgentSquadPreview() {
           </div>
         </div>
       </section>
-      <LiveAgentsSection />
+
       <AgentSquad />
+      <LiveAgentsSection />
       <Capabilities />
       {/* CTA */}
       {/* Section 5: CTA */}
@@ -275,7 +277,7 @@ export function AgentSquadPreview() {
           Deploy now
         </motion.button>
 
-        <div className={`absolute bottom-10 text-[10px] tracking-[1em] uppercase z-20 transition-colors text-slate-900/20`}>
+        <div className={`absolute bottom-10 text-[10px] tracking-[1em] uppercase z-20 transition-colors text-slate-900/70`}>
           PHANTOMS © ZABY WORKFORCE OS
         </div>
       </section>

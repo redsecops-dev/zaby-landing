@@ -194,10 +194,10 @@ export default function LiveAgentsSection() {
   };
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-linear-to-br from-white via-slate-50 to-slate-100/90 p-5 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.3)] sm:p-8">
+    <section className="relative overflow-hidden p-5 sm:p-8">
       {/* ambient blobs */}
-      <div className="pointer-events-none absolute -left-12 top-0 h-52 w-52 rounded-full bg-sky-200/40 blur-3xl" />
-      <div className="pointer-events-none absolute -right-12 bottom-0 h-52 w-52 rounded-full bg-violet-200/35 blur-3xl" />
+      {/* <div className="pointer-events-none absolute -left-12 top-0 h-52 w-52 rounded-full bg-sky-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -right-12 bottom-0 h-52 w-52 rounded-full bg-violet-200/35 blur-3xl" /> */}
 
       <div className="relative z-10 space-y-5">
         {/* ── Section header ─────────────────────────────────────────────── */}
@@ -242,7 +242,7 @@ export default function LiveAgentsSection() {
         </div>
 
         {/* ── ONE combined card ───────────────────────────────────────────── */}
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)]">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={agent.id}
@@ -250,11 +250,11 @@ export default function LiveAgentsSection() {
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
               transition={{ duration: 0.35, ease }}
-              className="grid lg:grid-cols-[280px_minmax(0,1fr)]"
+              className="grid lg:grid-cols-2"
             >
               {/* ── Left col: face only ─────────────────────────────────── */}
               <div
-                className="relative flex flex-col items-center justify-center overflow-hidden py-10 lg:min-h-110 lg:py-0"
+                className="relative flex flex-col items-center justify-center overflow-hidden py-10 lg:py-0"
                 style={{
                   background: `linear-gradient(160deg, ${agent.accentColor}18 0%, ${palette.backdrop} 100%)`,
                   borderRight: "1px solid rgba(226,232,240,0.7)",
@@ -316,7 +316,7 @@ export default function LiveAgentsSection() {
                 <p className="text-sm leading-7 text-slate-600">{agent.bio}</p>
 
                 {/* skill bars */}
-                <div className="space-y-3">
+                {/* <div className="space-y-3">
                   {agent.skills.map((skill, si) => (
                     <div key={skill.label} className="space-y-1">
                       <div className="flex items-center justify-between text-xs">
@@ -336,10 +336,10 @@ export default function LiveAgentsSection() {
                       </div>
                     </div>
                   ))}
-                </div>
+                </div> */}
 
                 {/* stats row */}
-                <div
+                {/* <div
                   className="grid grid-cols-3 gap-3 rounded-2xl border p-4 text-center"
                   style={{ borderColor: `${agent.accentColor}16`, background: `${agent.accentColor}06` }}
                 >
@@ -360,7 +360,7 @@ export default function LiveAgentsSection() {
                       </div>
                     </div>
                   ))}
-                </div>
+                </div> */}
 
                 {/* CTA buttons */}
                 <div className="flex flex-col gap-3 sm:flex-row">
