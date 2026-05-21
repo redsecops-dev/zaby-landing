@@ -16,33 +16,11 @@ import ClockHologram from "@/components/ClockHologram";
 
 
 import { useRef, useEffect } from "react";
-import { useMotionValue, useTransform } from "framer-motion";
 
 export function AgentSquadPreview() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const shouldPlayRef = useRef(true);
-
-  // Track scroll of the actual scroll container (modal's overflow-y-auto div),
-  // not window — which is frozen when a modal is open.
-  const rawScroll = useMotionValue(0);
-  const phantomOpacity = useTransform(rawScroll, [0, 300], [1, 0]);
-  const heroScale = useTransform(rawScroll, [0, 300], [1, 1.05]);
-
-  useEffect(() => {
-    // Find the nearest scrollable ancestor
-    let scrollEl: Element | null = heroRef.current?.parentElement ?? null;
-    while (scrollEl) {
-      const oy = getComputedStyle(scrollEl).overflowY;
-      if (oy === "auto" || oy === "scroll") break;
-      scrollEl = scrollEl.parentElement;
-    }
-    const target = scrollEl ?? document.documentElement;
-
-    const onScroll = () => rawScroll.set((target as Element).scrollTop);
-    target.addEventListener("scroll", onScroll, { passive: true });
-    return () => target.removeEventListener("scroll", onScroll);
-  }, [rawScroll]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -82,8 +60,6 @@ export function AgentSquadPreview() {
         {/* Hero Video */}
         <motion.div
           style={{
-            opacity: phantomOpacity,
-            scale: heroScale,
             WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
             maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
           }}

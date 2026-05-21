@@ -26,8 +26,8 @@ export interface NavGroup {
 }
 
 export const navLinks: NavItem[] = [
-  { 
-    label: "AI SaaS Tools", 
+  {
+    label: "AI SaaS Tools",
     href: "#ai-saas-tools",
     dropdown: true,
     sections: [
@@ -42,7 +42,7 @@ export const navLinks: NavItem[] = [
       {
         title: "Enterprise Solutions",
         items: [
-          { label: "LMS Integration", description: "Connect with your existing learning systems.", href: "/lms" },
+          { label: "Question Bank Generation", description: "Automated & Manual generation of diverse exam questions.", href: "/question-bank" },
           { label: "Talent Intelligence", description: "Map and optimize your workforce skills.", href: "/talent" },
           { label: "Compliance & Safety", description: "Enterprise-grade security and monitoring.", href: "/security" },
         ]
@@ -55,8 +55,8 @@ export const navLinks: NavItem[] = [
       ctaLabel: "Request a Demo"
     }
   },
-  { 
-    label: "AI Native", 
+  {
+    label: "AI Native",
     href: "#ai-native",
     dropdown: true,
     sections: [
