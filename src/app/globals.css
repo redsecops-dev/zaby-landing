@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @import "../styles/utilities.css";
 
 /* ─────────────────────────────────────────────
@@ -57,9 +57,9 @@
   /* button palette inspired by Iria reference */
   --color-button-primary-bg: #2f1362;
   --color-button-primary-hover: #3a1a75;
-  --color-button-secondary-bg: rgba(255, 255, 255, 0.7);
+  --color-button-secondary-bg: #f3e8ff;
   --color-button-secondary-border: #e9c8fb;
-  --color-button-secondary-text: #3f3f46;
+  --color-button-secondary-text: #2f1362;
 
   /* ── Gradient Palette ── */
   --color-gradient-purple-from: #e879f9;

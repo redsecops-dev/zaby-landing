@@ -32,7 +32,7 @@ export function CtaSection() {
               </a>
               <a
                 href="https://platform.zaby.io/tenant/signup"
-                className="rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-3.5 text-sm font-semibold text-(--color-button-secondary-text) transition-colors hover:bg-white cursor-pointer"
+                className="rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-3.5 text-sm font-semibold text-(--color-button-secondary-text) transition-colors hover:bg-[#e9d5ff] cursor-pointer"
               >
                 Book a demo
               </a>
