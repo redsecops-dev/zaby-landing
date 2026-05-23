@@ -145,7 +145,7 @@ export function CareersHeroSection() {
               </a>
               <Link
                 href="mailto:careers@zaby.ai"
-                className="flex items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-6 py-3.5 text-sm font-medium text-(--color-button-secondary-text) backdrop-blur-md transition-all hover:bg-white"
+                className="flex items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-6 py-3.5 text-sm font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff]"
               >
                 General Inquiry
                 <ExternalLink className="w-3.5 h-3.5 opacity-60" />

@@ -8,7 +8,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
   MessageSquare, 
   Phone, 
-  Slack, 
   Mail, 
   Database, 
   Cpu, 
