@@ -1,31 +1,25 @@
-import AgentSquad from "@/components/modals/components/AgentSquad";
 import {
   HeroSection,
   FeaturesSection,
-  DataSynchronySection,
-  FutureWorkspacesSection,
   IriaPricingSection,
   DesignInspirationSection,
-  JoinTheMovementSection,
-  InfrastructureSection,
+  AiSaasShowcase,
+  UseCasesSection,
+  TrustStripSection,
 } from "@/components/sections";
+import Cta from "@/components/sections/cta/Cta";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
+      <TrustStripSection />
       <FeaturesSection />
-      <DataSynchronySection />
-      <FutureWorkspacesSection />
+      <AiSaasShowcase />
+      <UseCasesSection />
       <IriaPricingSection />
-      {/* <InfrastructureSection /> */}
-      {/* <JoinTheMovementSection /> */}
       <DesignInspirationSection />
-      <AgentSquad/>
-      {/* <PricingSection /> */}
-      {/* <TestimonialsSection /> */}
-      {/* <FaqSection /> */}
-      {/* <CtaSection /> */}
+      <Cta/>
     </>
   );
 }

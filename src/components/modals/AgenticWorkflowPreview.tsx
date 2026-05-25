@@ -3,6 +3,18 @@
 import React, { useState, useEffect, useRef, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
+import {
+  HeroLiquidMetalRoot,
+  HeroLiquidMetalContainer,
+  HeroLiquidMetalContent,
+  HeroLiquidMetalHeading,
+  HeroLiquidMetalDescription,
+  HeroLiquidMetalVisual,
+  HeroLiquidMetalMobileVisual,
+} from "@/components/ui/hero-liquid-metal";
+
+// import { useRouter } from "next/router";
 
 // Premium Magic UI AnimatedBeam Component (Supports curvature, gradients, offsets, and reverse flows)
 export interface AnimatedBeamProps {
@@ -154,14 +166,13 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
 };
 
 export function AgenticWorkflowPreview() {
+  // const router= useRouter()
   const [activeTab, setActiveTab] = useState("monthly"); // For scheduling triggers
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [retrySimState, setRetrySimState] = useState("idle"); // idle, running, success
 
   // Ref for Hero Canvas animation
   const heroCanvasRef = useRef<HTMLCanvasElement>(null);
-  // Ref for CTA Canvas animation
-  const ctaCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Refs for Monthly Audit AnimatedBeam connections
   const containerRef = useRef<HTMLDivElement>(null);
@@ -204,7 +215,7 @@ export function AgenticWorkflowPreview() {
         vx: (Math.random() - 0.5) * 0.8,
         vy: (Math.random() - 0.5) * 0.8,
         radius: Math.random() * 2 + 1,
-        color: i % 2 === 0 ? "rgba(232, 121, 249, 0.4)" : "rgba(99, 102, 241, 0.3)",
+        color: i % 2 === 0 ? "rgba(59, 130, 246, 0.4)" : "rgba(99, 102, 241, 0.3)",
         pulseSpeed: Math.random() * 0.02 + 0.01,
         phase: Math.random() * Math.PI
       });
@@ -245,7 +256,7 @@ export function AgenticWorkflowPreview() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 100) {
-            ctx.strokeStyle = `rgba(232, 121, 249, ${0.15 * (1 - dist / 100)})`;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.15 * (1 - dist / 100)})`;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -261,7 +272,7 @@ export function AgenticWorkflowPreview() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.shadowColor = "rgba(232, 121, 249, 0.5)";
+        ctx.shadowColor = "rgba(59, 130, 246, 0.5)";
         ctx.shadowBlur = 6;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -284,92 +295,11 @@ export function AgenticWorkflowPreview() {
     };
   }, []);
 
-  // 2. CTA Canvas Interactive Plexus Animation
-  useEffect(() => {
-    const canvas = ctaCanvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationId: number;
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
-
-    const nodes: Array<{
-      x: number;
-      y: number;
-      targetX: number;
-      targetY: number;
-      speed: number;
-      radius: number;
-    }> = [];
-
-    for (let i = 0; i < 30; i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        targetX: Math.random() * width,
-        targetY: Math.random() * height,
-        speed: Math.random() * 0.005 + 0.002,
-        radius: Math.random() * 2 + 1.5
-      });
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // Draw connection lines
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 120) {
-            ctx.strokeStyle = `rgba(139, 92, 246, ${0.2 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.8;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Update & Draw nodes
-      nodes.forEach((n) => {
-        n.x += (n.targetX - n.x) * n.speed;
-        n.y += (n.targetY - n.y) * n.speed;
-
-        if (Math.abs(n.x - n.targetX) < 5 && Math.abs(n.y - n.targetY) < 5) {
-          n.targetX = Math.random() * width;
-          n.targetY = Math.random() * height;
-        }
-
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(232, 121, 249, 0.6)";
-        ctx.shadowColor = "rgba(232, 121, 249, 0.4)";
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      });
-
-      animationId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationId);
-    };
-  }, []);
-
   return (
     <div
-      className="w-full min-h-screen h-auto bg-[#fafbfe] text-slate-800 font-sans antialiased selection:bg-fuchsia-500/10 p-6 md:p-12 lg:p-16 flex flex-col gap-16 relative overflow-x-hidden"
+      className="w-full min-h-screen h-auto bg-white text-slate-800 font-sans antialiased selection:bg-blue-500/10 p-6 md:p-12 lg:p-16 flex flex-col gap-16 relative overflow-x-hidden"
       style={{
-        backgroundImage: "radial-gradient(circle at 80% 10%, rgba(232, 121, 249, 0.04) 0%, transparent 50%), radial-gradient(circle at 10% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)"
+        backgroundImage: "radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.04) 0%, transparent 50%), radial-gradient(circle at 10% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)"
       }}
     >
       <style dangerouslySetInnerHTML={{
@@ -399,191 +329,82 @@ export function AgenticWorkflowPreview() {
         }
       ` }} />
       {/* -------------------- SECTION 1: HERO WITH EXTENDED ANIMATION -------------------- */}
-      <section className="relative w-full rounded-3xl border border-slate-200/60 bg-white/50 p-8 md:p-12 overflow-hidden flex flex-col gap-8 min-h-[75vh]">
+      <section className="relative w-full rounded-3xl overflow-hidden flex flex-col gap-8">
         {/* Network Nodes Canvas background extended behind everything in Section 1 */}
-        <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+        {/* <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" /> */}
 
         {/* Top Edge Blur Animation to avoid abrupt edges */}
-        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#fafbfe] via-[#fafbfe]/40 to-transparent pointer-events-none z-10 edge-blur-animated" />
-
-        {/* Headspace at the top edge to keep a small description about what is a workflow */}
-        <div className="relative z-10 w-full rounded-2xl border border-white/50 bg-[#fafbfe]/40 backdrop-blur-[8px] p-6 md:p-8">
-          <div className="max-w-3xl text-left">
-            <h3 className="text-4xl sm:text-5xl font-extrabold tracking-tighter mb-2">
-              <span className="bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Agentic Workflows
-              </span>
-            </h3>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium leading-relaxed max-w-2xl">
+        {/* <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#fafbfe] via-[#fafbfe]/40 to-transparent pointer-events-none z-10 edge-blur-animated" /> */}
+          <div className="flex justify-between items-center">
+          {/* Left Column - Content & Buttons */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left">
+            <h1 className="reveal-text text-3xl sm:text-4xl md:text-5xl font-light tracking-tight leading-tight text-slate-900 max-w-2xl mb-6">
+               Agentic Workflows 
+            </h1>
+            
+            <p className="reveal-text text-sm sm:text-base text-slate-500 leading-relaxed font-light mb-8 max-w-xl">
               A stateful execution framework for orchestrating intelligent agents, scheduled operations, retry logic, and compliance-critical workflows at scale.
             </p>
+
+            <div className="flex flex-wrap items-center gap-4 gsap-reveal-item">
+              <Link 
+                href="https://platform.zaby.io" 
+                className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-10 py-6 text-sm font-medium tracking-wide text-white transition-all hover:bg-(--color-button-primary-hover) sm:w-auto h-auto"
+              >
+                <Icon icon="solar:bolt-linear" width={20} height={20} />
+                Build AI Workflow
+              </Link>
+              <Link 
+                href="https://platform.zaby.io/docs" 
+                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-6 text-sm font-medium text-(--color-button-secondary-text) backdrop-blur-md transition-all hover:bg-white sm:w-auto h-auto"
+              >
+                <Icon icon="solar:document-linear" width={20} height={20} />
+                View Templates
+              </Link>
+            </div>
           </div>
-        </div>
+
+          {/* Right Column - Checklist */}
+          <div className="lg:col-span-5 flex flex-col gap-6 pl-0 lg:pl-12 border-l border-slate-100/80 mt-8 lg:mt-0 text-left">
+            {[
+              {
+                title: "Adaptive Logic Flow",
+                desc: "Orchestrate complex task sequences with autonomous decision-making at every node."
+              },
+              {
+                title: "Context-Aware Routing",
+                desc: "Automatically inject relevant organizational data into every workflow step."
+              },
+              {
+                title: "Autonomous Recovery",
+                desc: "Self-healing execution with intelligent error detection and automated retry logic."
+              },
+              {
+                title: "Stateful Model Chaining",
+                desc: "Maintain persistent execution state across complex, multi-stage AI sequences."
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="flex gap-4 items-start gsap-reveal-item">
+                <div className="w-5 h-5 rounded-full bg-violet-50 text-violet-500 border border-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Icon icon="solar:check-read-linear" className="text-xs" />
+                </div>
+                <div className="flex flex-col gap-1 text-left">
+                  <span className="text-sm font-semibold text-slate-900 leading-none">{item.title}</span>
+                  <span className="text-xs text-slate-500 leading-relaxed font-light">{item.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+     </div>
+            {/* <h3 className="text-4xl md:text-5xl font-light tracking-tight leading-tight  mb-2">
+              Agentic Workflows
+            </h3>
+            <p className="font-light text-base leading-relaxed text-slate-600 max-w-2xl">
+              A stateful execution framework for orchestrating intelligent agents, scheduled operations, retry logic, and compliance-critical workflows at scale.
+            </p> */}
 
         {/* Main Grid Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 flex-1">
-          {/* Left Side Pitch */}
-          <div className="lg:col-span-6 flex flex-col items-start text-left">
-            <h1 className="text-3xl sm:text-4xl font-light tracking-tight text-slate-900 leading-tight mb-6 font-geist">
-              See workflows <br />
-              <span className="font-semibold text-fuchsia-600 bg-gradient-to-r from-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">
-                in action.
-              </span>
-            </h1>
-
-            <p className="text-slate-500 text-base leading-relaxed max-w-xl mb-8">
-              Let's walk through a real-world use case and see how workflows bring order, intelligence, and reliability to every step.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200">
-                <Icon icon="solar:bolt-circle-bold" className="text-fuchsia-500" />
-                <span className="text-xs font-semibold text-slate-700">Scheduled Audits</span>
-              </div>
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200">
-                <Icon icon="solar:round-transfer-horizontal-bold" className="text-fuchsia-500" />
-                <span className="text-xs font-semibold text-slate-700">Intelligent Routing</span>
-              </div>
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-slate-200">
-                <Icon icon="solar:restart-bold" className="text-fuchsia-500" />
-                <span className="text-xs font-semibold text-slate-700">Auto-Retry Fallbacks</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side: Floating 3D Pyramid & Sphere (Directly overlaid on canvas, no card border/background) */}
-          <div className="lg:col-span-6 w-full min-h-[350px] relative flex items-center justify-center">
-            {/* Glowing central 3D Pyramid & Sphere Container (Adapted to Fuchsia/Indigo Zaby system) */}
-            <div className="relative w-full max-w-lg mx-auto h-72 flex flex-col items-center justify-center z-10">
-              <div className="absolute w-72 h-72 rounded-full bg-fuchsia-500/5 blur-[60px] -z-10 pointer-events-none" />
-
-              {/* The 3D Pyramid & Podium Container */}
-              <div className="relative w-72 h-72 flex flex-col items-center justify-center">
-                <div className="absolute inset-0 flex items-center justify-center [perspective:1200px] [transform-style:preserve-3d]">
-                  {/* Floating Animation Group */}
-                  <motion.div
-                    className="relative flex items-center justify-center [transform-style:preserve-3d]"
-                    style={{ width: "120px", height: "152px" }}
-                    animate={{
-                      y: [0, -14, 0],
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    {/* Glossy Core Sphere */}
-                    <div
-                      className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-fuchsia-400 via-fuchsia-500 to-indigo-700 shadow-[0_0_35px_rgba(217,70,239,0.6),inset_0_5px_12px_rgba(255,255,255,0.6),inset_0_-5px_12px_rgba(0,0,0,0.4)] border border-fuchsia-300/40 animate-pulse z-10 flex items-center justify-center overflow-hidden"
-                      style={{ transform: "translateY(20px)" }}
-                    >
-                      <div className="absolute top-1.5 left-2 w-5 h-3 rounded-full bg-white/60 rotate-[-15deg] blur-[0.5px]" />
-                    </div>
-
-                    {/* 3D Rotating Glass Pyramid */}
-                    <motion.div
-                      className="absolute [transform-style:preserve-3d]"
-                      style={{ width: "120px", height: "152px", top: "0px", left: "0px" }}
-                      animate={{
-                        rotateX: [15, 15],
-                        rotateY: [0, 360],
-                      }}
-                      transition={{
-                        duration: 18,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      {/* Front Face */}
-                      <div
-                        className="absolute bg-fuchsia-500/[0.06] border border-fuchsia-400/30 backdrop-blur-[1px]"
-                        style={{
-                          width: "120px",
-                          height: "152px",
-                          left: "0px",
-                          top: "0px",
-                          clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-                          transformOrigin: "50% 100%",
-                          transform: "translateZ(60px) rotateX(23deg)",
-                        }}
-                      />
-                      {/* Right Face */}
-                      <div
-                        className="absolute bg-fuchsia-500/[0.05] border border-fuchsia-400/30 backdrop-blur-[1px]"
-                        style={{
-                          width: "120px",
-                          height: "152px",
-                          left: "0px",
-                          top: "0px",
-                          clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-                          transformOrigin: "50% 100%",
-                          transform: "rotateY(90deg) translateZ(60px) rotateX(23deg)",
-                        }}
-                      />
-                      {/* Back Face */}
-                      <div
-                        className="absolute bg-fuchsia-500/[0.04] border border-fuchsia-400/30 backdrop-blur-[1px]"
-                        style={{
-                          width: "120px",
-                          height: "152px",
-                          left: "0px",
-                          top: "0px",
-                          clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-                          transformOrigin: "50% 100%",
-                          transform: "rotateY(180deg) translateZ(60px) rotateX(23deg)",
-                        }}
-                      />
-                      {/* Left Face */}
-                      <div
-                        className="absolute bg-fuchsia-500/[0.05] border border-fuchsia-400/30 backdrop-blur-[1px]"
-                        style={{
-                          width: "120px",
-                          height: "152px",
-                          left: "0px",
-                          top: "0px",
-                          clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-                          transformOrigin: "50% 100%",
-                          transform: "rotateY(270deg) translateZ(60px) rotateX(23deg)",
-                        }}
-                      />
-                      {/* Base Face */}
-                      <div
-                        className="absolute bg-fuchsia-500/[0.03] border border-fuchsia-400/20"
-                        style={{
-                          width: "120px",
-                          height: "120px",
-                          left: "0px",
-                          top: "0px",
-                          transformOrigin: "50% 100%",
-                          transform: "translate3d(0px, 32px, 60px) rotateX(90deg)",
-                        }}
-                      />
-                    </motion.div>
-                  </motion.div>
-                </div>
-
-                {/* Concentric Elevated Circular Podium */}
-                <div className="absolute bottom-4 flex items-center justify-center w-full h-16 pointer-events-none">
-                  <svg viewBox="0 0 200 60" className="w-48 h-full overflow-visible">
-                    <defs>
-                      <radialGradient id="podiumGlowFuchsia" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#d946ef" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#d946ef" stopOpacity="0" />
-                      </radialGradient>
-                    </defs>
-                    <ellipse cx="100" cy="30" rx="75" ry="15" fill="none" stroke="rgba(226, 232, 240, 0.7)" strokeWidth="1" />
-                    <ellipse cx="100" cy="30" rx="65" ry="12" fill="none" stroke="rgba(217, 70, 239, 0.15)" strokeWidth="1.5" />
-                    <line x1="50" y1="30" x2="150" y2="30" stroke="rgba(226, 232, 240, 0.4)" strokeWidth="0.75" />
-                    <line x1="100" y1="15" x2="100" y2="45" stroke="rgba(226, 232, 240, 0.4)" strokeWidth="0.75" />
-                    <ellipse cx="100" cy="30" rx="45" ry="9" fill="url(#podiumGlowFuchsia)" />
-                    <ellipse cx="100" cy="30" rx="35" ry="7" fill="none" stroke="#d946ef" strokeWidth="1" className="animate-pulse" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </section>
 
       {/* -------------------- SECTION 2: THE MONTHLY AUDIT WORKFLOW CANVAS -------------------- */}
@@ -592,11 +413,11 @@ export function AgenticWorkflowPreview() {
         {/* Left header context */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 text-left">
           <div>
-            <span className="text-xs font-bold text-fuchsia-600 uppercase tracking-widest block mb-2">Use Case</span>
-            <h2 className="text-3xl font-light text-slate-900 tracking-tight">
-              Monthly Audit: <span className="font-semibold text-slate-800">Workflows Orchestrate.</span>
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-2">Use Case</span>
+            <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text">
+              Monthly Audit: Workflows Orchestrate.
             </h2>
-            <p className="text-slate-500 text-sm mt-1 max-w-xl">
+            <p className="font-light text-base leading-relaxed transition-colors text-slate-500 mt-2 max-w-xl">
               Automatic daily, weekly, or monthly scheduler. Orchestrates compliance rules, executes tool integrations, and automatically triggers retry actions.
             </p>
           </div>
@@ -638,8 +459,8 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#d946ef"
-                gradientStopColor="#6366f1"
+                gradientStartColor="#3b82f6"
+                gradientStopColor="#4f46e5"
               />
               <AnimatedBeam
                 containerRef={containerRef}
@@ -648,8 +469,8 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#6366f1"
-                gradientStopColor="#8b5cf6"
+                gradientStartColor="#4f46e5"
+                gradientStopColor="#3b82f6"
               />
 
               {/* Vertical flow under Extract: Extract -> Store Evidence -> Review -> Publish */}
@@ -660,8 +481,8 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#d946ef"
-                gradientStopColor="#6366f1"
+                gradientStartColor="#3b82f6"
+                gradientStopColor="#4f46e5"
               />
               <AnimatedBeam
                 containerRef={containerRef}
@@ -670,8 +491,8 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#6366f1"
-                gradientStopColor="#d946ef"
+                gradientStartColor="#4f46e5"
+                gradientStopColor="#3b82f6"
               />
               <AnimatedBeam
                 containerRef={containerRef}
@@ -680,8 +501,8 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#d946ef"
-                gradientStopColor="#6366f1"
+                gradientStartColor="#3b82f6"
+                gradientStopColor="#4f46e5"
               />
 
               {/* Green Conditional Paths (Escalations) */}
@@ -692,7 +513,7 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#8b5cf6"
+                gradientStartColor="#3b82f6"
                 gradientStopColor="#22c55e"
               />
               <AnimatedBeam
@@ -712,7 +533,7 @@ export function AgenticWorkflowPreview() {
                 duration={4.5}
                 delay={0}
                 repeatDelay={3.5}
-                gradientStartColor="#d946ef"
+                gradientStartColor="#3b82f6"
                 gradientStopColor="#10b981"
               />
 
@@ -764,12 +585,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("collect")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "collect"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "collect" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -823,12 +644,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("extract")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "extract"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "extract" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -851,12 +672,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("store")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "store"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "store" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -879,12 +700,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("review")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "review"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "review" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -907,12 +728,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("publish")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "publish"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "publish" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -935,12 +756,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("evaluate")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "evaluate"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "evaluate" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-indigo-600">
@@ -984,12 +805,12 @@ export function AgenticWorkflowPreview() {
                 onMouseEnter={() => setHoveredNode("notify")}
                 onMouseLeave={() => setHoveredNode(null)}
                 className={`absolute bg-white border text-left transition-all duration-300 overflow-hidden flex items-center justify-between p-4 z-10 rounded-2xl ${hoveredNode === "notify"
-                  ? "border-fuchsia-500/40 scale-[1.02]"
+                  ? "border-blue-500/40 scale-[1.02]"
                   : "border-slate-200"
                   }`}
               >
                 {hoveredNode === "notify" && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent h-1/2 w-full animate-pulse top-0" style={{ animationDuration: '1.2s' }} />
                 )}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center">
@@ -1020,7 +841,7 @@ export function AgenticWorkflowPreview() {
             </div>
             <div>
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Execution Engine</span>
-              <p className="text-xs font-bold text-slate-800 mt-1 text-fuchsia-600">AI + Deterministic Flow</p>
+              <p className="text-xs font-bold text-slate-800 mt-1 text-blue-600">AI + Deterministic Flow</p>
             </div>
             <div>
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Orchestrator State</span>
@@ -1036,11 +857,11 @@ export function AgenticWorkflowPreview() {
       {/* -------------------- SECTION 3: WORKFLOW TEMPLATES -------------------- */}
       <section className="w-full relative z-10 border-t border-slate-200/60 pt-16">
         <div className="flex flex-col items-start text-left mb-8">
-          <span className="text-xs font-bold text-fuchsia-600 uppercase tracking-[0.2em] mb-3">Templates</span>
-          <h2 className="text-3xl font-light text-slate-900 tracking-tight leading-tight mb-2">
-            Readily available <span className="font-semibold">workflow templates.</span>
+          <span className="text-xs font-bold text-blue-600 uppercase tracking-[0.2em] mb-3">Templates</span>
+          <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text mb-2">
+            Readily available workflow templates.
           </h2>
-          <p className="text-slate-500 text-sm leading-relaxed max-w-xl">
+          <p className="font-light text-base leading-relaxed transition-colors text-slate-600 max-w-xl">
             Jumpstart compliance orchestration with pre-configured templates designed for fair evaluation, auditing gatekeepers, and systematic assessing procedures.
           </p>
         </div>
@@ -1079,10 +900,10 @@ export function AgenticWorkflowPreview() {
           ].map((item) => (
             <div
               key={item.title}
-              className="p-6 rounded-2xl border border-slate-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:border-fuchsia-500/30 hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-72 text-left"
+              className="p-6 rounded-2xl border border-slate-200 bg-white transition-all duration-300 flex flex-col justify-between h-72 text-left"
             >
               <div>
-                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-fuchsia-600 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-blue-600 mb-4">
                   <Icon icon={item.icon} className="text-xl" />
                 </div>
                 <h4 className="text-sm font-bold text-slate-800 mb-2">{item.title}</h4>
@@ -1094,7 +915,7 @@ export function AgenticWorkflowPreview() {
                   <span>Trigger: {item.trigger}</span>
                   <span>Roles: {item.roles}</span>
                 </div>
-                <button className="w-full bg-slate-50 hover:bg-fuchsia-500 hover:text-white border border-slate-200 text-slate-700 py-2 rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-1">
+                <button className="cursor-pointer w-full border border-slate-200 text-slate-700 py-2 rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-1">
                   Use Template
                   <Icon icon="solar:arrow-right-linear" />
                 </button>
@@ -1110,12 +931,12 @@ export function AgenticWorkflowPreview() {
 
           {/* Left Column Copy */}
           <div className="lg:col-span-4 flex flex-col items-start justify-center text-left">
-            <span className="text-xs font-bold text-fuchsia-600 uppercase tracking-[0.2em] mb-4">See It In Action</span>
-            <h2 className="text-3xl font-light text-slate-900 tracking-tight leading-tight mb-4 font-geist">
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">See It In Action</span>
+            <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text mb-4">
               Watch workflows <br />
-              <span className="font-semibold text-slate-800">in motion.</span>
+              in motion.
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed mb-6">
+            <p className="font-light text-base leading-relaxed transition-colors text-slate-600 mb-6">
               See how structured steps + cognitive intelligence ensure compliance, complete accuracy, and absolute fairness in real-world scenarios.
             </p>
           </div>
@@ -1138,13 +959,13 @@ export function AgenticWorkflowPreview() {
 
               {/* Title tag */}
               <div className="relative z-10 flex items-center justify-between">
-                <span className="text-[10px] font-mono text-fuchsia-400 font-bold tracking-wider">Audit &amp; Evaluation Workflow Demo</span>
-                <span className="text-[9px] font-mono bg-fuchsia-600/20 text-fuchsia-400 px-2 py-0.5 rounded border border-fuchsia-500/30">1080P PRO</span>
+                <span className="text-[10px] font-mono text-blue-400 font-bold tracking-wider">Audit &amp; Evaluation Workflow Demo</span>
+                <span className="text-[9px] font-mono bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30">1080P PRO</span>
               </div>
 
               {/* Glowing Play button center */}
               <div className="relative z-10 flex items-center justify-center my-8">
-                <div className="w-16 h-16 rounded-full bg-fuchsia-600 text-white flex items-center justify-center shadow-[0_0_30px_rgba(232,121,249,0.5)] hover:scale-105 hover:bg-fuchsia-500 transition-all cursor-pointer">
+                <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105 hover:bg-blue-500 transition-all cursor-pointer">
                   <Icon icon="solar:play-bold" className="text-2xl ml-1" />
                 </div>
               </div>
@@ -1156,7 +977,7 @@ export function AgenticWorkflowPreview() {
 
                 {/* Scrubber bar */}
                 <div className="flex-1 h-[3px] rounded bg-white/20 relative cursor-pointer">
-                  <div className="absolute top-0 bottom-0 left-0 w-3/5 bg-fuchsia-500 rounded" />
+                  <div className="absolute top-0 bottom-0 left-0 w-3/5 bg-blue-500 rounded" />
                   <div className="absolute top-1/2 left-3/5 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow" />
                 </div>
 
@@ -1175,7 +996,7 @@ export function AgenticWorkflowPreview() {
                 "Complete audit trail"
               ].map((text) => (
                 <div key={text} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center text-fuchsia-600 shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 shrink-0">
                     <Icon icon="solar:check-circle-bold" width={12} />
                   </div>
                   <span className="text-xs font-bold text-slate-800">{text}</span>
@@ -1190,58 +1011,59 @@ export function AgenticWorkflowPreview() {
 
 
 
-      {/* -------------------- SECTION 6: CTA BANNER WITH INTERACTIVE ANIMATION -------------------- */}
+      {/* -------------------- SECTION 6: CTA BANNER WITH INTERACTIVE SHADER -------------------- */}
       <footer className="w-full relative z-10 mt-6 flex flex-col gap-6">
-
-        {/* Extended CTA banner housing the gorgeous plexus canvas block */}
-        <div className="w-full rounded-2xl bg-gradient-to-br from-fuchsia-950 via-purple-950 to-indigo-950 text-white border border-white/10 relative overflow-hidden shadow-xl min-h-[350px] flex flex-col justify-between p-8 md:p-12">
-
-          {/* Active Interactive Plexus Grid Background overlay */}
-          <canvas ref={ctaCanvasRef} className="absolute inset-0 w-full h-full opacity-40 z-0" />
-
-          <div className="absolute inset-0 opacity-[0.08] mix-blend-screen pointer-events-none"
-            style={{
-              backgroundImage: "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg')",
-              backgroundSize: "cover"
-            }}
-          />
-
-          {/* Top Banner Content Area */}
-          <div className="relative z-10 max-w-2xl text-left flex flex-col gap-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold uppercase tracking-wider w-fit">
-              <Icon icon="solar:shield-check-bold" className="text-fuchsia-400" />
-              Enterprise Orchestration Engine
-            </div>
-
-            <h3 className="text-3xl sm:text-4.5xl font-light leading-tight tracking-tight">
-              Workflows ensure compliance. <br />
-              <span className="font-semibold text-fuchsia-300">Workflows build trust.</span>
-            </h3>
-
-            <p className="text-xs text-white/60 leading-relaxed max-w-lg">
-              Take absolute control over automated daily routines, cross-application connections, and multi-agent AI execution pipelines securely.
-            </p>
-          </div>
-
-          {/* Bottom Button Row */}
-          <div className="relative z-10 flex flex-wrap gap-4 pt-8 border-t border-white/10 mt-8 shrink-0">
-            <button className="bg-white text-slate-950 hover:bg-slate-100 px-8 py-3.5 rounded-full text-xs font-bold transition-all shadow-lg flex items-center gap-2">
-              Build a workflow
-              <Icon icon="solar:arrow-right-linear" />
-            </button>
-            <button className="bg-white/10 text-white hover:bg-white/15 border border-white/20 px-8 py-3.5 rounded-full text-xs font-medium transition-all">
-              Use a workflow
-            </button>
-          </div>
-
-        </div>
-
-        {/* Small bottom footer detail */}
-        <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400">
-          <Icon icon="solar:lock-keyhole-minimalistic-linear" className="text-slate-400" />
-          <span>Your data is secure and never used to train models.</span>
-        </div>
-
+        <HeroLiquidMetalRoot
+          title="Workflows ensure compliance."
+          subtitle="Workflows build trust."
+          description="Take absolute control over automated daily routines, cross-application connections, and multi-agent AI execution pipelines securely."
+          image="https://shaders.paper.design/images/logos/diamond.svg"
+          desktopShaderProps={{
+            scale: 0.8,
+            speed: 0.7,
+            repetition: 7,
+            softness: 0.9,
+            distortion: 0.3,
+            colorTint: "#7c3aed",
+          }}
+          mobileShaderProps={{
+            speed: 0.65,
+            scale: 0.78,
+            colorTint: "#a78bfa",
+          }}
+          className="w-full rounded-2xl bg-purple-500/5 backdrop-blur-lg text-white border border-purple-500/50 relative overflow-hidden shadow-2xl min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
+        >
+          <HeroLiquidMetalContainer className="relative z-10 grid gap-6 pb-0 sm:pb-0 lg:pb-0 sm:gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center lg:gap-8 w-full max-w-none px-0">
+            <HeroLiquidMetalContent className="p-0 sm:px-0 md:px-0 lg:pr-0 lg:pl-0 xl:pl-0 2xl:pl-0 text-left items-start gap-3">
+              <HeroLiquidMetalHeading 
+                className="text-left pt-0 sm:pt-0 lg:pt-0"
+                headingClassName="!text-black text-2xl md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-light leading-tight tracking-tight text-white text-left lg:text-left pt-0 sm:pt-0" 
+              />
+              <HeroLiquidMetalDescription 
+                className="text-left mx-0 max-w-none pb-0 sm:pb-0 lg:pb-0"
+                descriptionClassName="text-gray-500 text-xs md:text-sm leading-relaxed max-w-lg text-left lg:text-left" 
+              />
+              
+              <div className="relative z-10 flex flex-wrap gap-3 pt-4 border-t border-white/10 mt-2 w-full justify-start">
+                <Link 
+                  href="https://platform.zaby.io"
+                  className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+                >
+                  Build a workflow
+                  <Icon icon="solar:arrow-right-linear" />
+                </Link>
+                <Link 
+                  href="https://platform.zaby.io/docs"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-3.5 font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
+                >
+                  Use a workflow
+                </Link>
+              </div>
+            </HeroLiquidMetalContent>
+            <HeroLiquidMetalVisual className="h-[200px] lg:h-[240px] xl:h-[310px] relative" />
+          </HeroLiquidMetalContainer>
+          <HeroLiquidMetalMobileVisual />
+        </HeroLiquidMetalRoot>
       </footer>
 
     </div>

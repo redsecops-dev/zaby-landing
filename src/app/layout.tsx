@@ -4,6 +4,7 @@ import "./globals.css";
 import { PageShell } from "@/components/layout";
 import { BackgroundImage } from "@/components/shared/BackgroundImage";
 import { CookieConsent } from "@/components/shared/CookieConsent";
+import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 import { siteConfig } from "@/config/site";
 
 const inter = Inter({
@@ -42,7 +43,9 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <BackgroundImage />
-        <PageShell>{children}</PageShell>
+        <SmoothScrollProvider>
+          <PageShell>{children}</PageShell>
+        </SmoothScrollProvider>
         <CookieConsent />
       </body>
     </html>

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "../styles/utilities.css";
 
+@custom-variant dark (&:is(.dark *));
+
 /* ─────────────────────────────────────────────
    ZABY DESIGN TOKENS — Light Mode
    All values defined here, referenced via CSS vars everywhere else.
@@ -81,49 +83,62 @@
 
   /* ── Spacing Scale (4px base unit — KORTEX spec) ── */
   /* rhythm: 1px · 4px · 8px · 12px · 16px · 24px · 32px · 48px · 56px · 96px */
-  --spacing-xs: 0.0625rem; /* 1px */
-  --spacing-sm: 0.25rem;   /* 4px */
-  --spacing-md: 0.5rem;    /* 8px */
-  --spacing-lg: 0.75rem;   /* 12px */
-  --spacing-xl: 1rem;      /* 16px */
-  --spacing-2xl: 1.5rem;   /* 24px */
-  --spacing-3xl: 2rem;     /* 32px */
-  --spacing-4xl: 3rem;     /* 48px */
-  --spacing-5xl: 3.5rem;   /* 56px */
-  --spacing-6xl: 6rem;     /* 96px */
+  --spacing-xs: 0.0625rem;
+  /* 1px */
+  --spacing-sm: 0.25rem;
+  /* 4px */
+  --spacing-md: 0.5rem;
+  /* 8px */
+  --spacing-lg: 0.75rem;
+  /* 12px */
+  --spacing-xl: 1rem;
+  /* 16px */
+  --spacing-2xl: 1.5rem;
+  /* 24px */
+  --spacing-3xl: 2rem;
+  /* 32px */
+  --spacing-4xl: 3rem;
+  /* 48px */
+  --spacing-5xl: 3.5rem;
+  /* 56px */
+  --spacing-6xl: 6rem;
+  /* 96px */
   /* section padding steps */
-  --section-padding-sm: 1.5rem;  /* 24px */
-  --section-padding-md: 3.5rem;  /* 56px */
-  --section-padding-lg: 6rem;    /* 96px */
+  --section-padding-sm: 1.5rem;
+  /* 24px */
+  --section-padding-md: 3.5rem;
+  /* 56px */
+  --section-padding-lg: 6rem;
+  /* 96px */
 
   /* ── Border Radius (KORTEX: 8px for all controls, 9999px pills only) ── */
   --radius-none: 0;
-  --radius-sm: 0.5rem;   /* 8px */
-  --radius-md: 0.5rem;   /* 8px — collapsed from 16px */
-  --radius-lg: 0.5rem;   /* 8px — collapsed from 24px */
-  --radius-xl: 0.5rem;   /* 8px — collapsed from 40px */
-  --radius-full: 9999px; /* pill */
+  --radius-sm: 0.75rem;   /* 12px */
+  --radius-md: 1rem;      /* 16px */
+  --radius-lg: 1rem;      /* collapsed to 16px */
+  --radius-xl: 1rem;      /* collapsed to 16px */
+  --radius-full: 9999px;  /* pill */
 
   /* ── Shadows (KORTEX glass-depth elevation) ── */
   /* Three-layer formula: 2 transparent layers + 1 depth/glow layer */
   --shadow-none: none;
   --shadow-sm: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
   --shadow-md: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
   --shadow-lg: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-               rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.5) 0px 25px 50px -12px;
   /* accent glow — aligned to Iria accent (#e879f9) */
   --shadow-glow-accent: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-                        rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-                        rgba(232, 121, 249, 0.5) 0px 0px 40px -10px;
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(232, 121, 249, 0.5) 0px 0px 40px -10px;
   /* tight accent halo ring */
   --shadow-glow-primary: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-                         rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-                         rgba(232, 121, 249, 0.2) 0px 0px 10px 0px;
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(232, 121, 249, 0.2) 0px 0px 10px 0px;
 
   /* ── Z-Index Scale ── */
   --z-base: 0;
@@ -153,14 +168,20 @@
   --font-mono: "SFMono-Regular", "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
   --font-display: "Manrope", var(--font-inter), sans-serif;
   /* type scale anchors */
-  --text-display: 6rem;        /* 96px */
-  --text-display-lh: 1;        /* 96px / 96px */
+  --text-display: 6rem;
+  /* 96px */
+  --text-display-lh: 1;
+  /* 96px / 96px */
   --text-display-ls: -0.025em;
-  --text-body-mono: 0.625rem;  /* 10px */
-  --text-body-mono-lh: 1.5;    /* 15px / 10px */
+  --text-body-mono: 0.625rem;
+  /* 10px */
+  --text-body-mono-lh: 1.5;
+  /* 15px / 10px */
   --text-body-mono-ls: 0.1em;
-  --text-label: 1rem;          /* 16px */
-  --text-label-lh: 1.5;        /* 24px / 16px */
+  --text-label: 1rem;
+  /* 16px */
+  --text-label-lh: 1.5;
+  /* 24px / 16px */
   --text-label-ls: 0.025em;
 
   /* ── shadcn/ui ↔ Zaby aliases ──
@@ -231,6 +252,32 @@
   --color-gradient-purple-to: var(--color-gradient-purple-to);
   --color-gradient-orange-from: var(--color-gradient-orange-from);
   --color-gradient-orange-to: var(--color-gradient-orange-to);
+
+  --color-button-primary: var(--color-button-primary-bg);
+  --color-button-primary-hover: var(--color-button-primary-hover);
+  --color-button-secondary: var(--color-button-secondary-bg);
+  --color-button-secondary-border: var(--color-button-secondary-border);
+  --color-button-secondary-text: var(--color-button-secondary-text);
+  --animate-spotlight: spotlight 2s ease .75s 1 forwards;
+  @keyframes spotlight {
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%,-40%) scale(1);
+    }
+  }
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+  @keyframes orbit {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg) translateY(calc(var(--radius) * -1px)) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg) translateY(calc(var(--radius) * -1px)) rotate(-360deg);
+    }
+  }
 }
 
 /* ─────────────────────────────────────────────
@@ -253,3 +300,22 @@ body {
   box-sizing: border-box;
 }
 
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e879f9;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

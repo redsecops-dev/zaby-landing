@@ -3,6 +3,7 @@
 import { useEffect, useEffectEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Download } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 import { Button } from "@/components/ui/button";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -11,7 +12,7 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 type Skill = { label: string; level: number };
 
-type LiveAgent = {
+export type LiveAgent = {
   id: string;
   name: string;
   headline: string;
@@ -26,7 +27,7 @@ type LiveAgent = {
   skills: Skill[];
 };
 
-const liveAgents: LiveAgent[] = [
+export const liveAgents: LiveAgent[] = [
   {
     id: "maya",
     name: "Maya Chen",
@@ -44,6 +45,25 @@ const liveAgents: LiveAgent[] = [
       { label: "Brief synthesis", level: 91 },
       { label: "Channel strategy", level: 88 },
       { label: "Priority routing", level: 94 },
+    ],
+  },
+  {
+    id: "alex",
+    name: "Alex Rivera",
+    headline: "DevOps & Cloud Infrastructure Engineer",
+    specialization: "DevOps Engineering",
+    accentColor: "#10b981",
+    status: "On a task",
+    availability: "1 min provision",
+    timezone: "EST · UTC-5",
+    completedTasks: "2.4K",
+    responseTime: "1.5s avg",
+    bio: "Deploys cloud resources, orchestrates container workloads, and maintains continuous delivery pipelines with robust observability.",
+    skills: [
+      { label: "Infrastructure as Code", level: 95 },
+      { label: "Kubernetes orchestration", level: 93 },
+      { label: "CI/CD automation", level: 97 },
+      { label: "Observability setup", level: 90 },
     ],
   },
   {
@@ -103,11 +123,69 @@ const liveAgents: LiveAgent[] = [
       { label: "Final copy polish", level: 98 },
     ],
   },
+  {
+    id: "jin",
+    name: "Jin-Woo Kim",
+    headline: "QA & Resiliency Automation Engineer",
+    specialization: "QA & Testing",
+    accentColor: "#ec4899",
+    status: "Available",
+    availability: "Available now",
+    timezone: "KST · UTC+9",
+    completedTasks: "2.9K",
+    responseTime: "1.9s avg",
+    bio: "Automates end-to-end testing, executes performance stress tests, and builds resiliency validation frameworks for zero-downtime releases.",
+    skills: [
+      { label: "E2E testing automation", level: 96 },
+      { label: "Performance stress tests", level: 92 },
+      { label: "Resiliency validation", level: 94 },
+      { label: "Regression mapping", level: 91 },
+    ],
+  },
 ];
 
 // ─── Motion / helpers ─────────────────────────────────────────────────────────
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const spring = { type: "spring" as const, stiffness: 280, damping: 28 };
+
+
+const badgeVariants = {
+  initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.02 } },
+  exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.15 } }
+};
+
+const nameWordVariants = (wi: number) => ({
+  initial: { opacity: 0, y: 20, filter: "blur(6px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.08 + wi * 0.08 } },
+  exit: { opacity: 0, y: -12, filter: "blur(3px)", transition: { duration: 0.15 } }
+});
+
+const headlineVariants = {
+  initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.20 } },
+  exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.15 } }
+};
+
+const bioVariants = {
+  initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.26 } },
+  exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.15 } }
+};
+
+const telemetryVariants = {
+  initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.32 } },
+  exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.15 } }
+};
+
+const buttonsVariants = {
+  initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring, delay: 0.38 } },
+  exit: { opacity: 0, y: -10, filter: "blur(2px)", transition: { duration: 0.15 } }
+};
+
 
 const STATUS_COLORS: Record<string, string> = {
   Available: "#10b981",
@@ -128,13 +206,15 @@ type FacePalette = {
 
 const FACE_PALETTES: Record<string, FacePalette> = {
   maya: { skin: "#f4cdbf", hair: "#1e293b", shirt: "#0ea5e9", backdrop: "#e0f2fe", variant: "maya" },
+  alex: { skin: "#dfb195", hair: "#2d3748", shirt: "#10b981", backdrop: "#d1fae5", variant: "alex" },
   idris: { skin: "#9a694f", hair: "#111827", shirt: "#2563eb", backdrop: "#dbeafe", variant: "idris" },
   elena: { skin: "#f0c7bb", hair: "#4c1d95", shirt: "#8b5cf6", backdrop: "#ede9fe", variant: "elena" },
   lara: { skin: "#e8bf9c", hair: "#7c2d12", shirt: "#f97316", backdrop: "#ffedd5", variant: "lara" },
+  jin: { skin: "#eed2c4", hair: "#0f172a", shirt: "#ec4899", backdrop: "#fce7f3", variant: "jin" },
 };
 
-function FaceSVG({ agent, fill = false }: { agent: LiveAgent; fill?: boolean }) {
-  const p = FACE_PALETTES[agent.id] ?? FACE_PALETTES.maya;
+export function FaceSVG({ id, fill = false }: { id: string; fill?: boolean }) {
+  const p = FACE_PALETTES[id] ?? FACE_PALETTES.maya;
   return (
     <svg
       viewBox="0 0 56 56"
@@ -151,6 +231,9 @@ function FaceSVG({ agent, fill = false }: { agent: LiveAgent; fill?: boolean }) 
           <circle cx="39.5" cy="12.5" r="3.5" fill={p.hair} />
         </>
       )}
+      {p.variant === "alex" && (
+        <path d="M16 21c0-7.8 5.4-12.5 12-12.5s12 4.7 12 12.5c-2.5-2.5-5.8-3.7-12-3.7s-9.5 1.2-12 3.7Z" fill={p.hair} />
+      )}
       {p.variant === "idris" && (
         <path d="M17 20.5c0-7.6 4.6-12.3 11-12.3 6.7 0 11 4.7 11 12.3-2.4-2.2-5.2-3.6-11-3.6-5.7 0-8.4 1.3-11 3.6Z" fill={p.hair} />
       )}
@@ -159,6 +242,9 @@ function FaceSVG({ agent, fill = false }: { agent: LiveAgent; fill?: boolean }) 
       )}
       {p.variant === "lara" && (
         <path d="M15.5 22.5c0-8.3 5.2-13 12.5-13s12.5 4.7 12.5 13c-2-2.4-4.6-4-7.2-4-1.9 0-3.7.7-5.3.7-1.9 0-3.5-.7-5.5-.7-2.4 0-4.8 1.4-7 4Z" fill={p.hair} />
+      )}
+      {p.variant === "jin" && (
+        <path d="M15 21.5c0-8 5-13.5 13-13.5s13 5.5 13 13.5c-2-2-5-3-13-3s-11 1-13 3Z" fill={p.hair} />
       )}
       <circle cx="24.2" cy="24.2" r="1.15" fill="#1f2937" />
       <circle cx="31.8" cy="24.2" r="1.15" fill="#1f2937" />
@@ -235,154 +321,297 @@ export default function LiveAgentsSection() {
                     : undefined,
                 }}
               >
-                <FaceSVG agent={a} fill />
+                <FaceSVG id={a.id} fill />
               </motion.button>
             );
           })}
         </div>
 
         {/* ── ONE combined card ───────────────────────────────────────────── */}
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={agent.id}
-              initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
-              transition={{ duration: 0.35, ease }}
-              className="grid lg:grid-cols-2"
-            >
-              {/* ── Left col: face only ─────────────────────────────────── */}
-              <div
-                className="relative flex flex-col items-center justify-center overflow-hidden py-10 lg:py-0"
-                style={{
-                  background: `linear-gradient(160deg, ${agent.accentColor}18 0%, ${palette.backdrop} 100%)`,
-                  borderRight: "1px solid rgba(226,232,240,0.7)",
-                }}
-              >
-                {/* radial glow behind the face */}
-                <div
-                  className="pointer-events-none absolute inset-0"
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_12px_32px_rgba(0,0,0,0.03)]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[420px] lg:h-[420px]">
+            {/* ── Left col: talking preview ─────────────────────────────────── */}
+            <div className="relative overflow-hidden min-h-[380px] lg:min-h-0 w-full h-full border-b lg:border-b-0 lg:border-r border-slate-100 bg-slate-950">
+              <AnimatePresence>
+                <motion.div
+                  key={agent.id}
+                  initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
+                  transition={{ duration: 0.35, ease }}
+                  className="absolute inset-0 w-full h-full flex flex-col justify-between p-6"
                   style={{
-                    background: `radial-gradient(ellipse at 50% 55%, ${agent.accentColor}28 0%, transparent 68%)`,
+                    background: `radial-gradient(circle at 50% 40%, ${agent.accentColor}18 0%, transparent 70%), linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(2, 6, 23, 1) 100%)`,
+                  }}
+                >
+                  {/* Cyber grid lines */}
+                  <div
+                    className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                    style={{
+                      backgroundImage: `radial-gradient(${agent.accentColor} 1px, transparent 1px)`,
+                      backgroundSize: "16px 16px"
+                    }}
+                  />
+
+                  {/* Scanning Laser Line */}
+                  <motion.div
+                    className="absolute inset-x-0 h-[2px] opacity-20 pointer-events-none"
+                    style={{
+                      background: `linear-gradient(to right, transparent, ${agent.accentColor}, transparent)`,
+                      boxShadow: `0 0 8px ${agent.accentColor}`,
+                    }}
+                    animate={{ top: ["0%", "100%", "0%"] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  {/* Viewfinder corner brackets */}
+                  <div className="absolute top-4 left-4 w-3.5 h-3.5 border-t-2 border-l-2 border-slate-800 pointer-events-none" />
+                  <div className="absolute top-4 right-4 w-3.5 h-3.5 border-t-2 border-r-2 border-slate-800 pointer-events-none" />
+                  <div className="absolute bottom-4 left-4 w-3.5 h-3.5 border-b-2 border-l-2 border-slate-800 pointer-events-none" />
+                  <div className="absolute bottom-4 right-4 w-3.5 h-3.5 border-b-2 border-r-2 border-slate-800 pointer-events-none" />
+
+                  {/* Viewport header */}
+                  <div className="w-full flex items-center justify-between z-10 text-[9px] font-mono text-slate-500">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      SYS_LIVE: TRUE
+                    </span>
+                    <span>AGENT_FEED // {agent.name.toUpperCase()}</span>
+                  </div>
+
+                  {/* Center Avatar Viewport */}
+                  <div className="relative flex items-center justify-center w-full flex-1">
+                    <div className="relative flex items-center justify-center w-36 h-36 md:w-40 md:h-40">
+                      {/* Outer rotating dashboard circle */}
+                      <motion.div
+                        className="absolute inset-0 rounded-full border border-dashed opacity-25 pointer-events-none"
+                        style={{ borderColor: agent.accentColor }}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                      />
+                      {/* Inner glow */}
+                      <div
+                        className="absolute inset-4 rounded-full blur-lg opacity-20 pointer-events-none"
+                        style={{ backgroundColor: agent.accentColor }}
+                      />
+                      {/* Face inside circular frame */}
+                      <div className="relative z-10 w-26 h-26 md:w-30 md:h-30 overflow-hidden rounded-full border border-slate-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                        <FaceSVG id={agent.id} fill />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Audio visualizer + telemetry footer */}
+                  <div className="w-full flex justify-between items-end px-2 z-10">
+                    {/* Left side telemetry */}
+                    <div className="flex flex-col gap-0.5 text-[9px] font-mono text-slate-500 text-left">
+                      <div>SYS.LOC: {agent.timezone.split(" · ")[0]}</div>
+                      <div>LATENCY: {agent.responseTime}</div>
+                    </div>
+
+                    {/* Center dynamic voice waveform */}
+                    <div className="flex items-end justify-center gap-[3px] h-8 px-4 pb-0.5">
+                      {Array.from({ length: 11 }).map((_, idx) => {
+                        const heights = [
+                          [10, 24, 8, 30, 10],
+                          [6, 32, 14, 20, 6],
+                          [12, 18, 6, 28, 12],
+                          [8, 26, 12, 34, 8],
+                        ];
+                        const scaleYPattern = heights[idx % heights.length];
+                        return (
+                          <motion.div
+                            key={idx}
+                            className="w-[3px] rounded-full origin-bottom"
+                            style={{ backgroundColor: agent.accentColor }}
+                            animate={{
+                              height: scaleYPattern,
+                            }}
+                            transition={{
+                              duration: 0.8 + (idx % 3) * 0.2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: idx * 0.05,
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Right side telemetry */}
+                    <div className="flex flex-col gap-0.5 text-[9px] font-mono text-slate-500 text-right">
+                      <div>BITRATE: 4.8 MBPS</div>
+                      <div>CODEC: OPUS_L16</div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* ── Right col: profile info ──────────────────────────────────── */}
+            <div className="relative overflow-hidden w-full h-full bg-white border-l border-slate-100">
+              {/* Top border strip */}
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={`border-${agent.id}`}
+                  className="absolute top-0 inset-x-0 h-[3px] z-20"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 1, scaleX: 1 }}
+                  exit={{ opacity: 0, scaleX: 0 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  style={{
+                    background: `linear-gradient(to right, transparent, ${agent.accentColor}, transparent)`
                   }}
                 />
+              </AnimatePresence>
 
-                {/* face */}
-                <div
-                  className="relative z-10 overflow-hidden rounded-3xl shadow-[0_16px_50px_-20px_rgba(15,23,42,0.4)]"
-                  style={{ width: "11rem", height: "11rem" }}
+              {/* Ambient radial gradient tint */}
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={`tint-${agent.id}`}
+                  className="pointer-events-none absolute inset-0 z-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.45 }}
+                  style={{
+                    background: `radial-gradient(ellipse at top right, ${agent.accentColor}0a 0%, transparent 70%)`
+                  }}
+                />
+              </AnimatePresence>
+
+              {/* Dynamic ambient color glow */}
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={`glow-${agent.id}`}
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 blur-[90px] rounded-full z-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.14, 0.14] }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  style={{ background: agent.accentColor }}
+                />
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={agent.id}
+                  className="relative z-10 w-full h-full flex flex-col justify-between p-6 sm:p-8"
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  variants={{
+                    initial: { opacity: 0 },
+                    animate: { opacity: 1, transition: { duration: 0.25 } },
+                    exit: { opacity: 0, transition: { duration: 0.2 } }
+                  }}
                 >
-                  <FaceSVG agent={agent} fill />
-                </div>
-
-                {/* status */}
-                <div className="relative z-10 mt-5 flex items-center gap-2">
-                  <motion.span
-                    className="h-2 w-2 rounded-full"
-                    style={{ background: statusColor }}
-                    animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <span className="text-[11px] font-semibold tracking-wide" style={{ color: statusColor }}>
-                    {agent.status}
-                  </span>
-                  <span className="text-[11px] text-slate-400">·</span>
-                  <span className="text-[11px] font-medium text-slate-500">{agent.availability}</span>
-                </div>
-              </div>
-
-              {/* ── Right col: employment profile ──────────────────────── */}
-              <div className="flex flex-col justify-between gap-5 p-6 sm:p-7">
-                {/* specialization tag + name */}
-                <div className="space-y-1.5">
-                  <span
-                    className="inline-flex items-center rounded-full border px-3 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em]"
-                    style={{
-                      borderColor: `${agent.accentColor}28`,
-                      background: `${agent.accentColor}10`,
-                      color: agent.accentColor,
-                    }}
-                  >
-                    {agent.specialization}
-                  </span>
-                  <h3 className="text-[1.8rem] font-semibold leading-tight tracking-tight text-slate-950">
-                    {agent.name}
-                  </h3>
-                  <p className="text-sm font-medium text-slate-500">{agent.headline}</p>
-                </div>
-
-                {/* bio */}
-                <p className="text-sm leading-7 text-slate-600">{agent.bio}</p>
-
-                {/* skill bars */}
-                {/* <div className="space-y-3">
-                  {agent.skills.map((skill, si) => (
-                    <div key={skill.label} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-slate-700">{skill.label}</span>
-                        <span className="font-semibold tabular-nums" style={{ color: agent.accentColor }}>
-                          {skill.level}%
+                  {/* Top content area */}
+                  <div className="space-y-4">
+                    {/* Header info */}
+                    <div className="space-y-2">
+                      <motion.div variants={badgeVariants}>
+                        <span
+                          className="inline-flex items-center rounded-full border px-3 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em]"
+                          style={{
+                            borderColor: `${agent.accentColor}28`,
+                            background: `${agent.accentColor}10`,
+                            color: agent.accentColor,
+                          }}
+                        >
+                          {agent.specialization}
                         </span>
-                      </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <motion.div
-                          className="h-full rounded-full"
-                          style={{ background: `linear-gradient(to right, ${agent.accentColor}, ${agent.accentColor}90)` }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${skill.level}%` }}
-                          transition={{ duration: 0.55, ease, delay: si * 0.06 }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div> */}
+                      </motion.div>
 
-                {/* stats row */}
-                {/* <div
-                  className="grid grid-cols-3 gap-3 rounded-2xl border p-4 text-center"
-                  style={{ borderColor: `${agent.accentColor}16`, background: `${agent.accentColor}06` }}
-                >
-                  {[
-                    { label: "Completed", value: agent.completedTasks },
-                    { label: "Response", value: agent.responseTime },
-                    { label: "Timezone", value: agent.timezone },
-                  ].map((stat) => (
-                    <div key={stat.label}>
-                      <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                        {stat.label}
+                      <div className="overflow-hidden flex flex-col gap-0.5">
+                        {agent.name.split(" ").map((word, wi) => (
+                          <motion.div
+                            key={wi}
+                            variants={nameWordVariants(wi)}
+                            className="block text-2xl sm:text-3xl font-semibold leading-[1.05] tracking-tight text-slate-950"
+                          >
+                            {word}
+                          </motion.div>
+                        ))}
                       </div>
-                      <div
-                        className="mt-1 text-[13px] font-semibold leading-tight tracking-tight"
-                        style={{ color: stat.label === "Timezone" ? "#475569" : agent.accentColor }}
+
+                      <motion.p
+                        variants={headlineVariants}
+                        className="text-sm font-medium text-slate-500"
                       >
-                        {stat.value}
-                      </div>
+                        {agent.headline}
+                      </motion.p>
                     </div>
-                  ))}
-                </div> */}
 
-                {/* CTA buttons */}
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button
-                    type="button"
-                    className="h-11 flex-1 rounded-full bg-slate-950 px-5 text-sm font-medium text-white hover:bg-slate-800"
-                  >
-                    Hire me
-                    <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-11 flex-1 rounded-full border-slate-200 bg-white px-5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                  >
-                    Download profile
-                    <Download className="h-4 w-4" strokeWidth={1.8} />
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                    {/* Bio */}
+                    <motion.p
+                      variants={bioVariants}
+                      className="text-sm leading-relaxed text-slate-600"
+                    >
+                      {agent.bio}
+                    </motion.p>
+                  </div>
+
+                  {/* Bottom content area (pinned to bottom) */}
+                  <div className="mt-auto space-y-4">
+                    {/* Telemetry/Status Bar */}
+                    <motion.div
+                      variants={telemetryVariants}
+                      className="flex items-center justify-between border-t border-slate-100 pt-4 text-[11px] text-slate-500"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="h-2 w-2 rounded-full animate-pulse"
+                          style={{ backgroundColor: statusColor }}
+                        />
+                        <span className="font-medium text-slate-700">{agent.status}</span>
+                        <span>({agent.availability})</span>
+                      </div>
+                      <div className="font-medium tabular-nums">
+                        {agent.completedTasks} tasks completed
+                      </div>
+                    </motion.div>
+
+                    {/* Action buttons */}
+                    <motion.div
+                      variants={buttonsVariants}
+                      className="flex flex-col gap-3 sm:flex-row pt-2"
+                    >
+                      <Button
+                        asChild
+                        className="h-11 flex-1 rounded-full bg-slate-950 px-5 text-sm font-medium text-white hover:bg-slate-800 cursor-pointer"
+                      >
+                        <a
+                          href="https://platform.zaby.io/tenant/signup"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-1.5 w-full h-full"
+                        >
+                          <span>Deploy {agent.name.split(" ")[0]}</span>
+                          <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+                        </a>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="h-11 flex-1 rounded-full border-slate-200 hover:border-purple-400 bg-white px-5 text-sm font-medium text-slate-700 hover:bg-white hover:text-purple-400 cursor-pointer"
+                      >
+                        <a
+                          href="https://platform.zaby.io/tenant/signup"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-1.5 w-full h-full"
+                        >
+                          <span>Initialize workflow</span>
+                          <Download className="h-4 w-4" strokeWidth={1.8} />
+                        </a>
+                      </Button>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
       </div>
     </section>

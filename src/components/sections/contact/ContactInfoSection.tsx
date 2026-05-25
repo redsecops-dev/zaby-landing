@@ -66,7 +66,7 @@ export function ContactInfoSection() {
         <div className="grid gap-5 md:grid-cols-3">
           {CONTACT_CHANNELS.map((channel) => (
             <FadeUp key={channel.title}>
-              <div className="flex h-full flex-col rounded-2xl border border-white/60 bg-white/60 p-6 backdrop-blur-md transition-shadow duration-200 hover:shadow-lg hover:shadow-purple-100/30">
+              <div className="flex h-full flex-col rounded-2xl border border-white/60 bg-white/60 p-6 backdrop-blur-md duration-200 hover:shadow-purple-100/30">
                 {/* Icon + Title */}
                 <div className="mb-4 flex items-start gap-4">
                   <div
