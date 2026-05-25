@@ -12,7 +12,7 @@ export function Cta() {
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <Card className="w-full h-[500px] bg-black/[0.96] relative overflow-hidden border border-neutral-800">
+        <Card className="w-full h-[500px] bg-gradient-to-br from-fuchsia-950 via-purple-950 to-indigo-950 text-white relative overflow-hidden border border-white/10">
           <Spotlight
             className="-top-40 left-0 md:left-60 md:-top-20"
             fill="white"

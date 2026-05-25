@@ -52,7 +52,7 @@ function PanelHeading({ lines }: { lines: string[] }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...spring, delay: 0.07 + li * 0.06 }}
           >
-            <span className="text-[2.5rem] font-medium tracking-tight leading-tight text-white block">
+            <span className="text-[2.5rem] font-medium tracking-tight leading-tight text-slate-800 block">
               {line}
             </span>
           </motion.div>
@@ -65,7 +65,7 @@ function PanelHeading({ lines }: { lines: string[] }) {
 export function SaasInfoPanel({ data, index, total }: Props) {
   return (
     <motion.div
-      className="relative flex flex-col justify-between min-h-[520px] lg:h-full p-8 md:p-10 overflow-hidden rounded-[24px]"
+      className="relative flex flex-col justify-between min-h-[520px] lg:h-full p-8 md:p-10 overflow-hidden rounded-[24px] bg-white/40 border border-slate-100/50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -81,7 +81,28 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           style={{ background: data.accentColor }} 
         />
 
-        <div className="relative z-10 flex flex-col justify-between h-full">
+        {/* Glass Layers */}
+        <div
+          className="absolute inset-0 z-0 overflow-hidden rounded-[24px]"
+          style={{
+            backdropFilter: "blur(6px)",
+            filter: "url(#glass-distortion)",
+            isolation: "isolate",
+          }}
+        />
+        <div
+          className="absolute inset-0 z-10 rounded-[24px]"
+          style={{ background: "rgba(255, 255, 255, 0.25)" }}
+        />
+        <div
+          className="absolute inset-0 z-20 rounded-[24px] overflow-hidden"
+          style={{
+            boxShadow:
+              "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.3)",
+          }}
+        />
+
+        <div className="relative z-30 flex flex-col justify-between h-full">
           {/* Badge + counter */}
           <div className="flex items-center justify-between mb-6">
             <StatusBadge label={data.badge} color={data.accentColor} />
@@ -99,7 +120,7 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           {/* Description */}
           <motion.p
             {...fadeUp(0.18)}
-            className="text-sm text-slate-300 leading-relaxed mt-4 mb-6 max-w-md"
+            className="text-sm text-slate-500 leading-relaxed mt-4 mb-6 max-w-md"
           >
             {data.description}
           </motion.p>
@@ -110,14 +131,14 @@ export function SaasInfoPanel({ data, index, total }: Props) {
               <motion.div
                 key={feat.label}
                 {...fadeUp(0.22 + fi * 0.04)}
-                className="flex items-center gap-2.5 rounded-xl border border-white/5 bg-white/5 px-3 py-2.5"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5"
               >
                 <Icon 
                   icon={feat.icon} 
                   className="text-base flex-shrink-0" 
                   style={{ color: data.accentColor }}
                 />
-                <span className="text-xs font-medium text-slate-300">{feat.label}</span>
+                <span className="text-xs font-medium text-slate-500">{feat.label}</span>
               </motion.div>
             ))}
           </div>
@@ -125,11 +146,11 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           {/* Stats row */}
           <motion.div
             {...fadeUp(0.38)}
-            className="flex items-center gap-6 border-t border-white/10 pt-5 mb-6"
+            className="flex items-center gap-6 border-t border-slate-100 pt-5 mb-6"
           >
             {data.stats.map((stat) => (
               <div key={stat.label} className="text-left">
-                <div className="text-lg font-semibold text-white tabular-nums">{stat.value}</div>
+                <div className="text-lg font-semibold text-slate-800 tabular-nums">{stat.value}</div>
                 <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
                   {stat.label}
                 </div>
@@ -138,15 +159,15 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           </motion.div>
 
           {/* CTA */}
-          <motion.div {...fadeUp(0.44)} className="flex items-center gap-4">
+          <motion.div {...fadeUp(0.44)} className="flex items-center gap-4 relative z-40">
             <button
-              className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-semibold text-white transition-transform active:scale-95 cursor-pointer"
+              className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-semibold text-white transition-transform active:scale-95 cursor-pointer animate-in fade-in zoom-in duration-300"
               style={{ background: data.accentColor }}
             >
               {data.cta}
               <ArrowRight size={14} />
             </button>
-            <button className="text-xs font-medium text-slate-400 hover:text-white transition-colors cursor-pointer">
+            <button className="text-xs font-medium text-slate-400 hover:text-slate-800 transition-colors cursor-pointer">
               {data.ctaSecondary}
             </button>
           </motion.div>

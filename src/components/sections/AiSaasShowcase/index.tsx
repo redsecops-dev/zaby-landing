@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence } from "framer-motion";
 import { SaasInfoPanel } from "./SaasInfoPanel";
 import { saasCardData } from "./saas-data";
+import { GlassFilter } from "@/components/ui/liquid-glass";
 
 // Fixed transform preset for each slot in the card fan stack.
 // Every card shares the same base frame size; slot hierarchy comes from the wrapper transform preset.
@@ -45,7 +46,6 @@ const noiseTexture =
 export default function AiSaasShowcase() {
   const rootRef = useRef<HTMLElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   
@@ -59,27 +59,19 @@ export default function AiSaasShowcase() {
 
   useEffect(() => {
     let isDisposed = false;
-    let animationFrameId = 0;
-    let observer: IntersectionObserver | null = null;
-
-    let onResize: (() => void) | null = null;
-    let onPointerMove: ((event: PointerEvent) => void) | null = null;
-
-    let cleanupThree: (() => void) | null = null;
     let cleanupGsap: (() => void) | null = null;
 
     const init = async () => {
-      if (!rootRef.current || !frameRef.current || !canvasRef.current) {
+      if (!rootRef.current || !frameRef.current) {
         return;
       }
 
-      const [{ gsap }, { ScrollTrigger }, THREE] = await Promise.all([
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
         import("gsap"),
         import("gsap/ScrollTrigger"),
-        import("three"),
       ]);
 
-      if (isDisposed || !rootRef.current || !frameRef.current || !canvasRef.current) {
+      if (isDisposed || !rootRef.current || !frameRef.current) {
         return;
       }
 
@@ -87,142 +79,8 @@ export default function AiSaasShowcase() {
 
       const root = rootRef.current;
       const frame = frameRef.current;
-      const canvas = canvasRef.current;
 
-      // ── Three.js Particle System Setup ──
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-      camera.position.z = 50;
 
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setClearColor(0xffffff, 0);
-
-      const vertexShader = `
-        uniform float uTime;
-        attribute float size;
-        varying float vDepth;
-        void main() {
-          vec3 pos = position;
-          pos.z += sin(pos.x * 0.1 + uTime * 0.5) * 2.0;
-          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          vDepth = -mvPosition.z;
-          gl_PointSize = size * (300.0 / -mvPosition.z);
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `;
-
-      const fragmentShader = `
-        uniform float uTime;
-        uniform vec3 uColor;
-        varying float vDepth;
-        void main() {
-          vec2 xy = gl_PointCoord.xy - vec2(0.5);
-          float radius = length(xy);
-          if (radius > 0.5) discard;
-          float alpha = smoothstep(0.5, 0.4, radius);
-          float depthFade = smoothstep(150.0, 20.0, vDepth);
-          float pulse = (sin(uTime * 0.8) * 0.5 + 0.5) * 0.3 + 0.1;
-          gl_FragColor = vec4(uColor, alpha * depthFade * pulse);
-        }
-      `;
-
-      const particles = 800; // Optimized particle count
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(particles * 3);
-      const sizes = new Float32Array(particles);
-
-      for (let i = 0; i < particles; i += 1) {
-        positions[i * 3] = (Math.random() - 0.5) * 120;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
-        sizes[i] = Math.random() * 1.5 + 0.5;
-      }
-
-      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
-
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-          uColor: { value: new THREE.Color(0xa78bfa) }, // Lavender / Light Violet glow
-        },
-        vertexShader,
-        fragmentShader,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.NormalBlending,
-      });
-
-      const pointCloud = new THREE.Points(geometry, material);
-      scene.add(pointCloud);
-
-      let mouseX = 0;
-      let mouseY = 0;
-      const clock = new THREE.Timer();
-
-      const setCanvasSize = () => {
-        const bounds = frame.getBoundingClientRect();
-        const width = Math.max(1, bounds.width);
-        const height = Math.max(1, bounds.height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height, false);
-      };
-
-      onPointerMove = (event) => {
-        const rect = frame.getBoundingClientRect();
-        const halfWidth = rect.width / 2;
-        const halfHeight = rect.height / 2;
-        mouseX = (event.clientX - rect.left - halfWidth) * 0.05;
-        mouseY = (event.clientY - rect.top - halfHeight) * 0.05;
-      };
-
-      onResize = () => {
-        setCanvasSize();
-        ScrollTrigger.refresh();
-      };
-
-      frame.addEventListener("pointermove", onPointerMove, { passive: true });
-      window.addEventListener("resize", onResize);
-      setCanvasSize();
-
-      // Intersection observer to only render when section is visible
-      let isVisible = true;
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            isVisible = entry.isIntersecting;
-          });
-        },
-        { threshold: 0.05 }
-      );
-      observer.observe(canvas);
-
-      const render = () => {
-        if (isVisible) {
-          material.uniforms.uTime.value = clock.getElapsed();
-          camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.05;
-          camera.position.y += (-mouseY * 0.2 - camera.position.y) * 0.05;
-          camera.lookAt(scene.position);
-          renderer.render(scene, camera);
-        }
-        animationFrameId = window.requestAnimationFrame(render);
-      };
-      render();
-
-      cleanupThree = () => {
-        window.cancelAnimationFrame(animationFrameId);
-        frame.removeEventListener("pointermove", onPointerMove as EventListener);
-        window.removeEventListener("resize", onResize as EventListener);
-        if (observer) {
-          observer.disconnect();
-        }
-        scene.remove(pointCloud);
-        geometry.dispose();
-        material.dispose();
-        renderer.dispose();
-      };
 
       // ── GSAP Animations and Stack Carousel Setup ──
       const context = gsap.context(() => {
@@ -359,7 +217,6 @@ export default function AiSaasShowcase() {
     return () => {
       isDisposed = true;
       cleanupGsap?.();
-      cleanupThree?.();
     };
   }, []);
 
@@ -385,18 +242,13 @@ export default function AiSaasShowcase() {
   const activeData = saasCardData[activeIndex] || saasCardData[0];
 
   return (
-    <section ref={rootRef} className="relative w-full py-20 md:py-28 overflow-hidden text-slate-900 selection:bg-slate-200">
-      {/* Soft background grid lines */}
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/50 pointer-events-none" /> */}
-      {/* <div
-        className="absolute inset-0 opacity-20 pointer-events-none"
-        style={{
-          backgroundImage: "linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      /> */}
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
+    <section
+      ref={rootRef}
+      className="relative w-full py-20 md:py-32 overflow-hidden bg-transparent"
+    >
+      <GlassFilter />
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        
         {/* Section header */}
         <div className="text-center mb-12 md:mb-20">
           
@@ -433,9 +285,6 @@ export default function AiSaasShowcase() {
           
           {/* Left: Card stack with particle background */}
           <div ref={frameRef} className="relative min-h-[600px] flex items-center justify-center overflow-visible">
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <canvas ref={canvasRef} className="absolute inset-0 opacity-50" />
-            </div>
 
             <div style={stackSceneStyle} className="relative w-full h-full flex items-center justify-center scale-75 sm:scale-90 md:scale-100 transition-transform duration-300">
               <div ref={containerRef} className="relative w-[340px] h-[520px]">
@@ -447,38 +296,59 @@ export default function AiSaasShowcase() {
                       style={cardWrapperStyle}
                       onClick={() => handleCardClick(physicalIdx)}
                     >
-                      <div className="saas-card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 p-[1px] shadow-[0_30px_60px_rgba(0,0,0,0.25)]">
-                        <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[23px] bg-slate-950 p-8 border border-white/5 group">
+                      <div className="saas-card-content pointer-events-auto h-full w-full rounded-[24px] bg-gradient-to-br from-purple-200 via-fuchsia-200 to-indigo-200 p-[1px]">
+                        <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[23px] bg-white/70 p-8 border border-slate-100/50 group">
                           
+                          {/* Glass Layers */}
+                          <div
+                            className="absolute inset-0 z-0 overflow-hidden rounded-[23px]"
+                            style={{
+                              backdropFilter: "blur(18px)",
+                              filter: "url(#glass-distortion)",
+                              isolation: "isolate",
+                            }}
+                          />
+                          <div
+                            className="absolute inset-0 z-10 rounded-[23px]"
+                            style={{ background: "rgba(255, 255, 255, 0.55)" }}
+                          />
+                          <div
+                            className="absolute inset-0 z-20 rounded-[23px] overflow-hidden"
+                            style={{
+                              boxShadow:
+                                "inset 3px 3px 2px 0 rgba(255, 255, 255, 0.75), inset -2px -2px 2px 1.5px rgba(255, 255, 255, 0.4)",
+                            }}
+                          />
+
                           {/* Colored ambient glow at bottom-right */}
                           <div 
-                            className="absolute -right-20 -bottom-20 w-60 h-60 rounded-full blur-[80px] opacity-30 transition-opacity duration-500 group-hover:opacity-45 pointer-events-none" 
+                            className="absolute -right-20 -bottom-20 w-60 h-60 rounded-full blur-[80px] opacity-15 transition-opacity duration-500 group-hover:opacity-25 pointer-events-none z-0" 
                             style={{ background: card.accentColor }} 
                           />
                           
                           {/* Subtler colored ambient glow at top-left */}
                           <div 
-                            className="absolute -left-10 -top-10 w-40 h-40 rounded-full blur-[60px] opacity-15 pointer-events-none" 
+                            className="absolute -left-10 -top-10 w-40 h-40 rounded-full blur-[60px] opacity-10 pointer-events-none z-0" 
                             style={{ background: card.accentColor }} 
                           />
 
                           {/* Noise overlay */}
                           <div
-                            className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay"
+                            className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay z-0"
                             style={{ backgroundImage: noiseTexture }}
                           />
 
                           {/* Grid texture */}
                           <div
-                            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                            className="absolute inset-0 opacity-[0.1] pointer-events-none z-0"
                             style={{
-                              backgroundImage: "linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                              backgroundImage: "linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)",
                               backgroundSize: "24px 24px",
                             }}
                           />
 
                           {/* Top badge */}
-                          <div className="relative z-10 flex items-center gap-2">
+                          <div className="relative z-30 flex items-center gap-2">
                             <span 
                               className="w-1.5 h-1.5 rounded-full animate-pulse" 
                               style={{ background: card.accentColor }} 
@@ -492,9 +362,9 @@ export default function AiSaasShowcase() {
                           </div>
 
                           {/* Middle visual icon/graphic with soft glow */}
-                          <div className="relative z-10 my-auto flex justify-center items-center h-32">
+                          <div className="relative z-30 my-auto flex justify-center items-center h-32">
                             <div 
-                              className="absolute w-20 h-20 rounded-full blur-[24px] opacity-40 transition-transform duration-500 group-hover:scale-125 pointer-events-none" 
+                              className="absolute w-20 h-20 rounded-full blur-[24px] opacity-25 transition-transform duration-500 group-hover:scale-125 pointer-events-none" 
                               style={{ background: card.accentColor }} 
                             />
                             <Icon 
@@ -505,7 +375,7 @@ export default function AiSaasShowcase() {
                           </div>
 
                           {/* Bottom title & metadata */}
-                          <div className="relative z-10 flex flex-col text-2xl font-light uppercase leading-[1.0] tracking-tight text-white/90">
+                          <div className="relative z-30 flex flex-col text-2xl font-light uppercase leading-[1.0] tracking-tight text-slate-800">
                             {card.heading.map((word, idx) => (
                               <span key={idx} style={idx === 0 ? { color: card.accentColor } : {}}>
                                 {word}
@@ -525,7 +395,7 @@ export default function AiSaasShowcase() {
           </div>
 
           {/* Right: Info panel */}
-          <div className="bg-slate-950/85 backdrop-blur-xl rounded-[24px] border border-white/10 shadow-2xl min-h-[520px] lg:h-[600px] relative overflow-hidden flex flex-col justify-between">
+          <div className="bg-transparent min-h-[520px] lg:h-[600px] relative overflow-hidden flex flex-col justify-between rounded-[24px]">
             <AnimatePresence mode="wait">
               <SaasInfoPanel
                 key={activeData.id}
