@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { HeroGlobe } from "./hero/HeroGlobe";
+import { SplineScene } from "@/components/ui/splite";
 import { HeroMarquee } from "./hero/HeroMarquee";
 
 function RevealWord({
@@ -24,7 +24,7 @@ function RevealWord({
   );
 }
 
-export function HeroSection() {
+export function   HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -88,6 +88,29 @@ export function HeroSection() {
     };
   }, []);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handlePointerMove = (e: PointerEvent) => {
+      const canvas = section.querySelector("canvas");
+      if (!canvas || e.target === canvas) return;
+
+      const syntheticEvent = new PointerEvent("pointermove", {
+        clientX: e.clientX,
+        clientY: e.clientY,
+        pointerId: e.pointerId,
+        pointerType: e.pointerType,
+        isPrimary: e.isPrimary,
+        bubbles: true,
+      });
+      canvas.dispatchEvent(syntheticEvent);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
+
   return (
     <section
       ref={sectionRef}
@@ -96,7 +119,7 @@ export function HeroSection() {
     >
 
 
-      <div className="relative z-10 overflow-hidden px-4 pt-26 md:px-6 md:pt-30 lg:pb-0 lg:pt-24">
+      <div className="relative z-10 overflow-visible px-4 pt-26 md:px-6 md:pt-30 lg:pb-0 lg:pt-24">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 pb-10 md:gap-10 md:pb-12 lg:grid-cols-2 lg:gap-8">
           {/* Left column — text */}
           <div className="relative z-20 order-1 col-span-1 flex flex-col items-center text-center lg:order-1 lg:col-span-1 lg:items-start lg:text-left">
@@ -155,9 +178,14 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right column — globe */}
+          {/* Right column — robot */}
           <div className="relative order-2 hidden h-72 w-full items-center justify-center sm:h-84 md:h-125 lg:order-2 lg:flex lg:h-187.5">
-            <HeroGlobe />
+            <div className="absolute inset-y-0 -left-[20%] right-0 pointer-events-none">
+              <SplineScene 
+                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                className="w-full h-full pointer-events-auto"
+              />
+            </div>
           </div>
         </div>
 

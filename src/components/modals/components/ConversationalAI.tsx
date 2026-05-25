@@ -876,10 +876,10 @@ export default function ConversationalAI() {
                   scale: 0.78,
                   colorTint: "#60a5fa",
                 }}
-                className="w-full rounded-2xl bg-purple-500/5 backdrop-blur-lg text-white border border-purple-500/50 relative overflow-hidden shadow-2xl min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
+                className="w-full rounded-2xl bg-purple-500/5 backdrop-blur-lg text-white border border-purple-500/50 relative overflow-hidden min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
               >
                 <HeroLiquidMetalContainer className="relative z-10 grid gap-6 pb-0 sm:pb-0 lg:pb-0 sm:gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center lg:gap-8 w-full max-w-none px-0">
-                  <HeroLiquidMetalContent className="p-0 sm:px-0 md:px-0 lg:pr-0 lg:pl-0 xl:pl-0 2xl:pl-0 text-left items-start gap-3">
+                <HeroLiquidMetalContent className="p-0 sm:px-0 md:px-0 lg:pr-0 lg:pl-0 xl:pl-0 2xl:pl-0 text-left items-start gap-3">
                     <HeroLiquidMetalHeading 
                       className="text-left pt-0 sm:pt-0 lg:pt-0"
                       headingClassName="text-2xl !text-black md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-light leading-tight tracking-tight text-white text-left lg:text-left pt-0 sm:pt-0" 

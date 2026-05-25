@@ -319,3 +319,14 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Hide Spline Watermark */
+#spline-watermark,
+a[href*="spline.design"],
+[class*="spline-watermark"],
+[style*="spline.design"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
