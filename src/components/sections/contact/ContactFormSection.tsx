@@ -58,10 +58,12 @@ export function ContactFormSection() {
     e.preventDefault();
     setStatus("loading");
     setErrorMessage("");
+      // "https://prod-api.zaby.io/api/v1/public/contact",
+
 
     try {
       const res = await fetch(
-        "https://prod-api.zaby.io/api/v1/public/contact",
+        "http://192.168.68.68:9080/api/v1/public/contact",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

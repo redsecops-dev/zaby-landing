@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import { Button } from "@/components/ui/button";
 import { SplineScene } from "@/components/ui/splite";
 import { HeroMarquee } from "./hero/HeroMarquee";
 
@@ -160,21 +161,25 @@ export function   HeroSection() {
 
             {/* CTA buttons */}
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <Link
-                href="https://platform.zaby.io/tenant/signup"
-                className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+              <Button
+                asChild
+                size="lg"
+                className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-8 py-7 text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
               >
-                <Icon icon="solar:bolt-linear" width={20} height={20} />
-                Get started free
-              </Link>
+                <Link href="https://platform.zaby.io/tenant/signup">
+                  <Icon icon="solar:bolt-linear" width={22} height={22} />
+                  Get started free
+                </Link>
+              </Button>
 
-              <button
-                type="button"
-                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-3.5 font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
+              <Button
+                size="lg"
+                variant="outline"
+                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-7 text-base font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
               >
-                <Icon icon="solar:play-circle-linear" width={20} height={20} />
+                <Icon icon="solar:play-circle-linear" width={22} height={22} />
                 See how it works
-              </button>
+              </Button>
             </div>
           </div>
 

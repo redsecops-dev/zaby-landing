@@ -6,6 +6,7 @@ import { BackgroundImage } from "@/components/shared/BackgroundImage";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 import { siteConfig } from "@/config/site";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,6 +47,8 @@ export default function RootLayout({
         <SmoothScrollProvider>
           <PageShell>{children}</PageShell>
         </SmoothScrollProvider>
+        {/* <ProgressiveBlur position="top" height="10%" className="fixed" /> */}
+        <ProgressiveBlur position="bottom" height="10%" className="fixed" />
         <CookieConsent />
       </body>
     </html>

@@ -18,7 +18,7 @@ export default function QuestionBankHero() {
     <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-35 mx-auto max-w-7xl">
       <InteractiveDottedGrid />
       {/* Founding Access 90% OFF - Right Side Corner Badge */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -34,7 +34,7 @@ export default function QuestionBankHero() {
             className="h-14 md:h-20 w-auto select-none pointer-events-none bg-transparent relative z-50"
           />
         </Link>
-      </motion.div>
+      </motion.div> */}
 
       <div className="flex flex-col items-center text-center">
 
@@ -86,6 +86,23 @@ export default function QuestionBankHero() {
         transition={{ duration: 1, delay: 0.4 }}
         className="relative mx-auto max-w-6xl rounded-3xl p-1 bg-linear-to-br from-white/80 via-[#e879f9]/20 to-white/40 shadow-[0_30px_100px_-20px_rgba(232,121,249,0.15)] backdrop-blur-xl"
       >
+        {/* Floating Founding Access Badge */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+          animate={{ opacity: 1, scale: 1, rotate: -5 }}
+          transition={{ 
+            duration: 0.8, 
+            delay: 1.2,
+            rotate: { duration: 4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }
+          }}
+          className="absolute -right-6 -top-12 z-20 hidden md:block bg-white rounded-full "
+        >
+          <img 
+            src="/Founding-Access-90-OFF.svg" 
+            alt="Founding Access 90% Off" 
+            className="h-32 w-32"
+          />
+        </motion.div>
         <div className="bg-white/95 rounded-[22px] overflow-hidden border border-white/50 aspect-video lg:aspect-[2.2/1] flex flex-col">
 
           {/* Mock Header */}

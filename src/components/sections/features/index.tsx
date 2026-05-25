@@ -8,7 +8,6 @@ import { Icon } from "@iconify/react";
 import { useScrollTriggerAnimation } from "@/lib/gsap-utils";
 import { OrbitingCirclesDemo } from "@/components/modals/components/OrbitingCirclesDemo";
 import { FeatureCard } from "./FeatureCard";
-import { MemoryOrbital } from "./MemoryOrbital";
 import { WorkflowDiagram } from "./WorkflowDiagram";
 
 const CARD_HASH_MAP: Record<number, string> = {
@@ -67,7 +66,7 @@ export function FeaturesSection() {
       ref={sectionRef}
       className="min-h-screen flex items-center justify-center p-4 md:p-8 lg:p-12 text-slate-900"
     >
-      <main className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-2xl border border-white/60 shadow-md p-4 md:p-6 lg:p-8">
+      <main className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-2xl border border-white/60 p-4 md:p-6 lg:p-8">
         <div className="grid grid-cols-12 gap-4 lg:gap-5">
 
           {/* Card 1: UI Stack — col-span-3 row-span-2 */}
@@ -88,7 +87,7 @@ export function FeaturesSection() {
                   <h2 className="reveal-text text-2xl font-medium tracking-tight leading-tight mb-2">
                     Deploy AI that executes, not just responds.
                   </h2>
-                  <p className="reveal-text text-xs text-slate-500 mb-6 mt-2">
+                  <p className="reveal-text text-[0.8rem] text-slate-600 mb-6 mt-2">
                     Autonomous agents operate continuously, completing real tasks across your entire business.
                     Integrate seamlessly with your workflows, automate complex processes, and scale operations with intelligent autonomy.<br/>
                     Experience 24/7 execution, adaptive learning, and reliable results—no manual intervention required.
@@ -125,7 +124,7 @@ export function FeaturesSection() {
 
             {/* Agent figure — right side */}
             <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[45%] items-end justify-center md:flex">
-              <div className="relative h-[100%] w-full max-w-[450px] translate-x-4 translate-y-4 scale-115 transition-transform duration-500 group-hover:translate-y-0 group-hover:scale-[1.22]">
+              <div className="relative h-[85%] w-full max-w-[450px] translate-x-4 translate-y-4 scale-115 mb-5 transition-transform duration-500 group-hover:translate-y-0 group-hover:scale-[1.22]">
                 <Image
                   src="/models/agent.png"
                   alt="Glowing agent figure"
@@ -157,7 +156,7 @@ export function FeaturesSection() {
               <h2 className="reveal-text text-2xl font-medium tracking-tight leading-tight text-slate-900 mb-2">
                 Autonomous Teams. Real Impact.
               </h2>
-              <p className="reveal-text text-xs text-slate-500 leading-relaxed mt-1">
+              <p className="reveal-text text-[0.8rem] text-slate-500 leading-relaxed mt-1">
                 Deploy intelligent agents that plan, act, and deliver outcomes across your entire stack.
               </p>
             </div>
@@ -213,15 +212,22 @@ export function FeaturesSection() {
                 <h2 className="reveal-text text-xl font-medium tracking-tight leading-tight text-slate-900 mb-1">
                   Unified Agent Memory
                 </h2>
-                <p className="reveal-text text-xs text-slate-500 leading-relaxed mt-1">
+                <p className="reveal-text text-[0.8rem] text-slate-500 leading-relaxed mt-1">
                   Multi-lane memory that keeps agents contextual and adaptive.
                 </p>
               </div>
             </div>
 
             {/* Orbital Graphic */}
-            <div className="flex-1 flex items-center justify-center my-2 overflow-visible z-10">
-              <MemoryOrbital />
+            <div className="flex-1 flex items-center justify-center my-2 overflow-hidden z-10">
+              <video 
+                src="/models/AiMemory.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto max-w-[280px] mix-blend-multiply"
+              />
             </div>
 
             {/* Bottom Strip */}
@@ -256,7 +262,7 @@ export function FeaturesSection() {
               <h2 className="reveal-text text-2xl font-medium tracking-tight leading-tight text-slate-900 mb-2">
                 Agentic Workflows
               </h2>
-              <p className="reveal-text text-xs text-slate-500 leading-relaxed mt-1">
+              <p className="reveal-text text-[0.8rem] text-slate-500 leading-relaxed mt-1">
                 Stateful execution for real-world processes.
               </p>
             </div>
@@ -296,7 +302,7 @@ export function FeaturesSection() {
               <h2 className="reveal-text text-2xl font-medium tracking-tight leading-tight text-slate-900 mb-1">
                 Conversational AI
               </h2>
-              <p className="reveal-text text-xs text-slate-500 leading-relaxed font-normal">
+              <p className="reveal-text text-[0.8rem] text-slate-500 leading-relaxed font-normal">
                 Understand. Respond. Act.
               </p>
             </div>

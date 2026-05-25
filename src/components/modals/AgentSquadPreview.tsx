@@ -16,7 +16,7 @@ import ClockHologram from "@/components/ClockHologram";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import AgentSquad from "../sections/agent-squad";
 
@@ -24,6 +24,15 @@ export function AgentSquadPreview() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const shouldPlayRef = useRef(true);
+  const [selectedAgentIndex, setSelectedAgentIndex] = useState(0);
+
+  const scrollToAgents = (index: number) => {
+    setSelectedAgentIndex(index);
+    const element = document.getElementById("live-agent-exchange");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -124,12 +133,13 @@ export function AgentSquadPreview() {
           {/* Right Column: Virtual Cards grid */}
           <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <motion.div
+              onClick={() => scrollToAgents(1)}
               whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className={`p-8 rounded-2xl border backdrop-blur-xl transition-all duration-300 group hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] border-slate-200/80 bg-white/70 hover:bg-white/95`}
+              className={`p-8 rounded-2xl border backdrop-blur-xl transition-all duration-300 group hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] border-slate-200/80 bg-white/70 hover:bg-white/95 cursor-pointer`}
             >
               <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-5 border border-blue-500/20 group-hover:bg-blue-500/20 group-hover:text-blue-300 transition-all duration-300">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,12 +153,13 @@ export function AgentSquadPreview() {
             </motion.div>
 
             <motion.div
+              onClick={() => scrollToAgents(2)}
               whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className={`p-8 rounded-2xl border backdrop-blur-xl transition-all duration-300 group hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] border-slate-200/80 bg-white/70 hover:bg-white/95`}
+              className={`p-8 rounded-2xl border backdrop-blur-xl transition-all duration-300 group hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] border-slate-200/80 bg-white/70 hover:bg-white/95 cursor-pointer`}
             >
               <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-5 border border-blue-500/20 group-hover:bg-blue-500/20 group-hover:text-blue-300 transition-all duration-300">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,7 +230,10 @@ export function AgentSquadPreview() {
 
       {/* AgentSquad moved to standalone section */}
       <AgentSquad/>
-      <LiveAgentsSection />
+      <LiveAgentsSection 
+        activeIndex={selectedAgentIndex} 
+        onSelectAgent={setSelectedAgentIndex} 
+      />
       <Capabilities />
       {/* CTA */}
       {/* Section 5: CTA */}
@@ -272,7 +286,11 @@ export function AgentSquadPreview() {
             "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop",
           ].map((src, i) => (
-            <Avatar key={i} className="w-10 h-10 border-2 border-white shadow-md transition-transform hover:scale-110 hover:z-30 cursor-pointer ring-0">
+            <Avatar 
+              key={i} 
+              onClick={() => scrollToAgents(i)}
+              className="w-10 h-10 border-2 border-white shadow-md transition-transform hover:scale-110 hover:z-30 cursor-pointer ring-0"
+            >
               <AvatarImage src={src} />
               <AvatarFallback>A{i+1}</AvatarFallback>
             </Avatar>
