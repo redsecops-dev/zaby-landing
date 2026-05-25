@@ -242,7 +242,7 @@ export default function SandboxDashboard() {
   };
 
   return (
-    <div className={`w-full font-sans p-6 rounded-3xl border transition-all duration-500 select-none bg-white/70 border-slate-200 text-slate-700 shadow-2xl shadow-slate-200/40`}>
+    <div className={`w-full font-sans p-6 rounded-3xl border transition-all duration-500 select-none bg-white/70 border-slate-200 text-slate-700`}>
       
       {/* ================= HEADER SECTION ================= */}
       <header className={`flex justify-between items-center mb-6 pb-4 border-b transition-colors duration-500 border-slate-200`}>
@@ -353,7 +353,7 @@ export default function SandboxDashboard() {
                   onClick={() => setTerminalTab(tab)}
                   className={`px-4 py-1 text-xs rounded-full transition-all ${
                     tab === terminalTab 
-                      ? ("bg-slate-900 text-white font-semibold shadow-md") 
+                      ? ("bg-slate-900 text-white font-semibold") 
                       : ("text-slate-500 hover:text-slate-900")
                   }`}
                 >
@@ -367,7 +367,7 @@ export default function SandboxDashboard() {
               <button 
                 onClick={handleToggleSandbox}
                 disabled={sandboxState === "Stopping" || sandboxState === "Restarting"}
-                className={`px-5 py-1 text-xs font-bold rounded-lg transition-all flex items-center shadow-lg border ${
+                className={`px-5 py-1 text-xs font-bold rounded-lg transition-all flex items-center border ${
                   sandboxState === "Running"
                     ? ("bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200 animate-none")
                     : ("bg-slate-900 hover:bg-slate-800 text-white border-transparent")
@@ -449,7 +449,7 @@ export default function SandboxDashboard() {
                 {/* 1. STATE: Sandbox Inactive / Not Ready */}
                 {sandboxState !== "Running" && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 select-none bg-slate-50">
-                    <span className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 mb-4 shadow-xl">
+                    <span className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 mb-4 ">
                       <span className="text-gray-500 text-lg">🖥️</span>
                     </span>
                     <h3 className="text-slate-800 text-sm font-semibold mb-1">Sandbox runtime is not ready</h3>
@@ -462,7 +462,7 @@ export default function SandboxDashboard() {
                 {/* 2. STATE: Sandbox Running, VNC Stopped */}
                 {sandboxState === "Running" && vncState === "stopped" && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 select-none bg-slate-50">
-                    <span className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 mb-4 shadow-xl">
+                    <span className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 mb-4 ">
                       <span className="text-blue-500 text-lg">🖥️</span>
                     </span>
                     <h3 className="text-slate-800 text-sm font-semibold mb-1">Daytona VNC is ready</h3>
@@ -528,7 +528,7 @@ export default function SandboxDashboard() {
                         return (
                           <div 
                             key={win.id}
-                            className={`absolute w-[240px] rounded-lg overflow-hidden border border-white/10 shadow-2xl z-30 flex flex-col bg-slate-950 ${
+                            className={`absolute w-[240px] rounded-lg overflow-hidden border border-white/10 z-30 flex flex-col bg-slate-950 ${
                               win.id === "notepad" ? "left-12 top-12" : "right-12 top-20"
                             }`}
                           >
@@ -595,7 +595,7 @@ export default function SandboxDashboard() {
             </div>
           ) : (
             /* ================= STANDARDIZED CLI & FILE VIEWPORTS ================= */
-            <div className="flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col min-h-[360px] relative shadow-sm">
+            <div className="flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col min-h-[360px] relative ">
               
               {/* Box Top Header */}
               <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-[9px] font-mono select-none">
@@ -621,7 +621,7 @@ export default function SandboxDashboard() {
                 {sandboxState !== "Running" ? (
                   /* Screen overlay when stopped */
                   <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-[1px] select-none z-10">
-                    <div className="bg-white border border-slate-200 p-5 rounded-xl text-center shadow-xl max-w-[260px] w-full mx-4">
+                    <div className="bg-white border border-slate-200 p-5 rounded-xl text-center max-w-[260px] w-full mx-4">
                       <span className="text-red-500 text-lg block mb-1">⏹</span>
                       <h3 className="text-slate-800 text-xs font-semibold mb-1">Sandbox is Stopped</h3>
                       <p className="text-slate-500 text-[9px] mb-4">The core cluster runtime is currently offline. Start the sandbox to connect.</p>
@@ -674,7 +674,7 @@ export default function SandboxDashboard() {
                         <span className="text-slate-800">12.4%</span>
                       </div>
                       <div className="w-full h-1.5 bg-slate-200 rounded overflow-hidden">
-                        <div className="w-[12.4%] h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+                        <div className="w-[12.4%] h-full bg-blue-500" />
                       </div>
                     </div>
                     <div className="space-y-1">
@@ -683,7 +683,7 @@ export default function SandboxDashboard() {
                         <span className="text-slate-800">1.82 GB / 4.00 GB</span>
                       </div>
                       <div className="w-full h-1.5 bg-slate-200 rounded overflow-hidden">
-                        <div className="w-[45.5%] h-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.3)]" />
+                        <div className="w-[45.5%] h-full bg-indigo-500 " />
                       </div>
                     </div>
                     <div className="space-y-1">

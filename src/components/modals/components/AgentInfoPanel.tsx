@@ -131,7 +131,7 @@ function StatCell({ label, value, delay, color }: { label: string; value: string
         className="mx-auto h-px w-8 rounded-full"
         style={{ background: `linear-gradient(to right, transparent, ${color}, transparent)` }}
         animate={{ scaleX: [0.4, 1, 0.6, 1, 0.4], opacity: [0.4, 1, 0.6, 1, 0.4] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: delay + 0.4 }}
+        transition={{ type: "tween", duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: delay + 0.4 }}
       />
     </motion.div>
   );
@@ -249,7 +249,7 @@ export function AgentInfoPanel({ data, index, total }: Props) {
                 <motion.span
                   className="flex items-center"
                   animate={{ x: [0, 3, 0] }}
-                  transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ type: "tween", duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <ArrowRight size={14} />
                 </motion.span>

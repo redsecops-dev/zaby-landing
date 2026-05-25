@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import AgentSquad from "./components/AgentSquad";
+// AgentSquad was moved to a standalone landing page section in Wave 3
 import LiveAgentsSection from "./components/LiveAgentsSection";
 import HeroHologram from "./components/HeroHologram";
 import { JoinTheMovementSection } from "../sections";
@@ -13,9 +13,12 @@ import Scene from "@/components/Scene";
 import ParticleField from "@/components/ParticleField";
 import GlobeHologram from "@/components/GlobeHologram";
 import ClockHologram from "@/components/ClockHologram";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 
 import { useRef, useEffect } from "react";
+
+import AgentSquad from "../sections/agent-squad";
 
 export function AgentSquadPreview() {
   const heroRef = useRef<HTMLElement>(null);
@@ -214,7 +217,8 @@ export function AgentSquadPreview() {
         </div>
       </section>
 
-      <AgentSquad />
+      {/* AgentSquad moved to standalone section */}
+      <AgentSquad/>
       <LiveAgentsSection />
       <Capabilities />
       {/* CTA */}
@@ -252,6 +256,31 @@ export function AgentSquadPreview() {
         >
           Deploy now
         </motion.button>
+
+        {/* Avatar Stack UI */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex -space-x-3 items-center z-20 pt-2"
+        >
+          {[
+            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=100&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop",
+          ].map((src, i) => (
+            <Avatar key={i} className="w-10 h-10 border-2 border-white shadow-md transition-transform hover:scale-110 hover:z-30 cursor-pointer ring-0">
+              <AvatarImage src={src} />
+              <AvatarFallback>A{i+1}</AvatarFallback>
+            </Avatar>
+          ))}
+          <div className="w-10 h-10 rounded-full border-2 border-white bg-black flex items-center justify-center shadow-md z-10 transition-transform hover:scale-110 cursor-pointer">
+            <span className="text-white text-[10px] font-bold">+99</span>
+          </div>
+        </motion.div>
 
         <div className={`absolute bottom-10 text-[10px] tracking-[1em] uppercase z-20 transition-colors text-slate-900/70`}>
           PHANTOMS © ZABY WORKFORCE OS

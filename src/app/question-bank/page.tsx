@@ -355,10 +355,10 @@ db.students.find({})`);
       <div className="absolute top-[30%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-linear-to-br from-[#ede9fe] to-[#f5d0fe] opacity-30 blur-[100px] pointer-events-none -z-10" />
 
       {/* Hero Section */}
-      <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-28 mx-auto max-w-7xl">
+      <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-42 mx-auto max-w-7xl">
         <InteractiveDottedGrid />
         <div className="flex flex-col items-center text-center">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -368,7 +368,7 @@ db.students.find({})`);
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2f1362]">
               Founding Access: 90% Off
             </span>
-          </motion.div>
+          </motion.div> */}
 
           {/* Heading */}
           <motion.h1 

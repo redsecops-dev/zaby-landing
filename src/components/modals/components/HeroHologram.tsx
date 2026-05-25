@@ -78,8 +78,8 @@ const ProHologramShader = {
 const LightHologramShader = {
   uniforms: {
     time: { value: 0 },
-    color: { value: new THREE.Color("#1e1b4b") },
-    accent: { value: new THREE.Color("#4338ca") }
+    color: { value: new THREE.Color("#00d4ff") },
+    accent: { value: new THREE.Color("#e0fbff") }
   },
   vertexShader: ProHologramShader.vertexShader,
   fragmentShader: `
@@ -90,26 +90,28 @@ const LightHologramShader = {
     varying vec3 vPosition;
 
     void main() {
+      // 1. Fresnel edge detection
       float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
       
-      float radial = length(vPosition.xz);
-      float gridDensity = 60.0;
-      float gridLineThickness = 0.98;
-      
+      // 2. Grids and lines
+      float gridDensity = 50.0;
+      float gridLineThickness = 0.97;
       float latGrid = step(gridLineThickness, sin(vPosition.y * gridDensity));
-      float lonGrid = step(gridLineThickness, sin(atan(vPosition.z, vPosition.x) * 12.0));
+      float lonGrid = step(gridLineThickness, sin(atan(vPosition.z, vPosition.x) * 10.0));
       float grid = max(latGrid, lonGrid);
       
-      float sparkle = latGrid * lonGrid * (sin(time * 5.0) * 0.5 + 0.5);
-      float scanline = step(0.995, sin(vPosition.y * 2.0 - time * 0.5));
+      float sparkle = latGrid * lonGrid * (sin(time * 4.0) * 0.5 + 0.5);
+      float scanline = step(0.994, sin(vPosition.y * 1.5 - time * 0.8));
       
-      // Deep indigo / navy tones for light mode
-      vec3 edgeColor = vec3(0.16, 0.14, 0.42);   // #29236b - deep indigo edge
-      vec3 coreColor = vec3(0.07, 0.05, 0.22);    // #120e38 - rich navy core
+      // Vibrant cyan holographic colors matching reference image
+      vec3 glowColor = color;          // Bright cyan (#00d4ff)
+      vec3 lightCoreColor = accent;    // Very light cyan/white (#e0fbff)
       
-      vec3 finalColor = mix(coreColor, edgeColor, fresnel * 0.7 + grid * 0.5 + sparkle);
+      // On white background, we mix lightCoreColor with glowColor based on edge glow/grid
+      vec3 finalColor = mix(lightCoreColor, glowColor, fresnel * 0.9 + grid * 0.5 + sparkle * 0.3);
       
-      float finalOpacity = (fresnel * 0.5 + 0.12 + grid * 0.35 + scanline * 0.15 + sparkle * 0.4);
+      // Keep core almost transparent, and edges/grids crisp
+      float finalOpacity = (fresnel * 0.6 + 0.01 + grid * 0.3 + scanline * 0.1 + sparkle * 0.3);
       
       gl_FragColor = vec4(finalColor, finalOpacity);
     }
@@ -128,11 +130,13 @@ export default function HeroHologram() {
   const particleCount = 75000; // Refined density for v2
   const flowCount = 6000;
 
-  // --- Point Cloud Reconstruction (Sampling from Mesh) ---
-  const bodyPoints = useMemo(() => {
-    const allPositions: number[] = [];
-    const meshes: THREE.Mesh[] = [];
+  // Apply the correct shader based on theme
+  const shaderToUse = isLight ? LightHologramShader : ProHologramShader;
+  const blendingMode = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
 
+  // --- Merge Geometries and Reconstruct Point Cloud ---
+  const { mergedGeometry, bodyPoints } = useMemo(() => {
+    const meshes: THREE.Mesh[] = [];
     scene.updateWorldMatrix(true, true);
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
@@ -140,28 +144,49 @@ export default function HeroHologram() {
       }
     });
 
-    if (meshes.length === 0) return new Float32Array(0);
+    if (meshes.length === 0) {
+      return { mergedGeometry: null, bodyPoints: new Float32Array(0) };
+    }
 
-    const pointsPerMesh = Math.floor(particleCount / meshes.length);
-    const tempPosition = new THREE.Vector3();
-
+    // 1. Clone and apply matrixWorld to get all geometries in local space
+    const geometries: THREE.BufferGeometry[] = [];
     meshes.forEach((mesh) => {
-      try {
-        const geo = mesh.geometry.clone();
-        mesh.updateWorldMatrix(true, true);
-        geo.applyMatrix4(mesh.matrixWorld);
-        const sampler = new MeshSurfaceSampler(new THREE.Mesh(geo)).build();
-        for (let i = 0; i < pointsPerMesh; i++) {
-          sampler.sample(tempPosition);
-          allPositions.push(tempPosition.x, tempPosition.y, tempPosition.z);
-        }
-        geo.dispose();
-      } catch (err) {
-        console.error("Sampling error:", err);
-      }
+      const geo = mesh.geometry.clone();
+      mesh.updateWorldMatrix(true, true);
+      geo.applyMatrix4(mesh.matrixWorld);
+      geometries.push(geo);
     });
 
-    return new Float32Array(allPositions);
+    let merged: THREE.BufferGeometry | null = null;
+    try {
+      merged = BufferGeometryUtils.mergeGeometries(geometries, false);
+      geometries.forEach(g => g.dispose());
+    } catch (err) {
+      console.error("Error merging geometries:", err);
+      merged = geometries[0] || null;
+    }
+
+    if (!merged) {
+      return { mergedGeometry: null, bodyPoints: new Float32Array(0) };
+    }
+
+    // 2. Sample points from the merged geometry
+    const allPositions: number[] = [];
+    const tempPosition = new THREE.Vector3();
+    try {
+      const sampler = new MeshSurfaceSampler(new THREE.Mesh(merged)).build();
+      for (let i = 0; i < particleCount; i++) {
+        sampler.sample(tempPosition);
+        allPositions.push(tempPosition.x, tempPosition.y, tempPosition.z);
+      }
+    } catch (err) {
+      console.error("Sampling error on merged geometry:", err);
+    }
+
+    return {
+      mergedGeometry: merged,
+      bodyPoints: new Float32Array(allPositions)
+    };
   }, [scene]);
 
   // --- Energy Flow Strands ---
@@ -180,8 +205,16 @@ export default function HeroHologram() {
     return { pos, vel, angle };
   }, []);
 
-  // Sync animation variables
+  // --- Memoize Uniforms ---
+  const memoizedUniforms = useMemo(() => {
+    return {
+      time: { value: 0 },
+      color: { value: shaderToUse.uniforms.color.value.clone() },
+      accent: { value: shaderToUse.uniforms.accent.value.clone() }
+    };
+  }, [shaderToUse]);
 
+  // --- Animation loop ---
   useFrame(() => {
     const elapsedTime = (performance.now() - startTime.current) / 1000;
     // Continuous premium rotation animation for the holographic human body mesh
@@ -207,52 +240,19 @@ export default function HeroHologram() {
     }
     flowRef.current.geometry.attributes.position.needsUpdate = true;
 
-    // Update time uniforms on all meshes
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh && child.userData?.uniforms?.time) {
-        child.userData.uniforms.time.value = elapsedTime;
-      }
-    });
+    // Update time uniform directly
+    if (memoizedUniforms.time) {
+      memoizedUniforms.time.value = elapsedTime;
+    }
   });
 
-  // Apply the correct shader based on theme
-  const shaderToUse = isLight ? LightHologramShader : ProHologramShader;
-  const blendingMode = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
-
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        if (!mesh.geometry.boundingBox) {
-          mesh.geometry.computeBoundingBox();
-        }
-
-        const mat = new THREE.ShaderMaterial({
-          ...shaderToUse,
-          uniforms: {
-            time: { value: 0 },
-            color: { value: shaderToUse.uniforms.color.value.clone() },
-            accent: { value: shaderToUse.uniforms.accent.value.clone() }
-          },
-          transparent: true,
-          blending: blendingMode,
-          depthWrite: false,
-          side: THREE.DoubleSide
-        });
-        mesh.material = mat;
-        // Store uniforms ref for animation updates
-        mesh.userData = { uniforms: mat.uniforms };
-      }
-    });
-  }, [scene]);
-
-  // Theme-aware colors
-  const particleColor = isLight ? "#1e1b4b" : "#445566";
-  const particleOpacity = isLight ? 0.25 : 0.4;
-  const flowColor = isLight ? "#312e81" : "#334455";
-  const flowOpacity = isLight ? 0.2 : 0.3;
-  const ringColor = isLight ? "#1e1b4b" : "#223344";
-  const ringBaseOpacity = isLight ? 0.1 : 0.15;
+  // Theme-aware colors — vibrant cyan to match reference hologram
+  const particleColor = isLight ? "#00d4ff" : "#445566";
+  const particleOpacity = isLight ? 0.4 : 0.4;
+  const flowColor = isLight ? "#00e5ff" : "#334455";
+  const flowOpacity = isLight ? 0.35 : 0.3;
+  const ringColor = isLight ? "#00d4ff" : "#223344";
+  const ringBaseOpacity = isLight ? 0.18 : 0.15;
 
   return (
     <group ref={groupRef} position={[0, -0.2, 0]} scale={2.5}>
@@ -278,8 +278,19 @@ export default function HeroHologram() {
           </points>
         )}
 
-        {/* 2. Custom Mesh with Pro Hologram Shader */}
-        <primitive object={scene} />
+        {/* 2. Single Merged Custom Mesh with Pro Hologram Shader */}
+        {mergedGeometry && (
+          <mesh geometry={mergedGeometry}>
+            <shaderMaterial
+              {...shaderToUse}
+              uniforms={memoizedUniforms}
+              transparent
+              blending={blendingMode}
+              depthWrite={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        )}
       </group>
 
       {/* 3. Radial Energy Flow Strands */}

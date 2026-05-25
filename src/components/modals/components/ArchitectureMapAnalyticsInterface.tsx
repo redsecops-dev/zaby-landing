@@ -1,0 +1,441 @@
+import React from "react";
+
+export default function ArchitectureMapAnalyticsInterface() {
+  const html = `<section class="bg-black text-zinc-300 w-screen h-screen overflow-hidden font-sans select-none antialiased relative flex items-center justify-center p-4 lg:p-8" style="scrollbar-width: none;">
+<div class="absolute inset-0 pointer-events-none z-0 opacity-[0.04] mix-blend-screen" style="background-image: url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/724142aa-44a6-48d3-9cf3-761e00d05b78_1600w.jpg'); background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.5);"></div>
+
+<div class="absolute inset-0 pointer-events-none z-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, #27272a 0px, #27272a 1px, transparent 1px, transparent 8px);"></div>
+
+<div class="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)]"></div>
+
+<div class="relative w-full max-w-[1600px] h-full flex flex-col z-10">
+        
+        <!-- Premium Gradient Border Wrapper (Restrained to Zinc) -->
+        <div class="absolute inset-0 rounded-sm pointer-events-none" style="background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.04) 100%); padding: 1px;">
+            <div class="w-full h-full bg-zinc-950/95 backdrop-blur-3xl rounded-sm"></div>
+        </div>
+
+        <!-- Inner Grid Layout -->
+        <div class="relative w-full h-full grid grid-cols-1 md:grid-cols-12 grid-rows-[auto_1fr_auto] gap-0 border border-zinc-800/50">
+
+            <!-- L-Brackets for Master Frame -->
+            <svg class="absolute -top-1 -left-1 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M4 20V4h16"></path></svg>
+            <svg class="absolute -top-1 -right-1 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M20 20V4H4"></path></svg>
+            <svg class="absolute -bottom-1 -left-1 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M4 4v16h16"></path></svg>
+            <svg class="absolute -bottom-1 -right-1 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M20 4v16H4"></path></svg>
+
+            <!-- Grid Lines (Horizontal / Vertical boundaries) -->
+            <div class="col-span-12 row-start-2 border-t border-zinc-800/50 pointer-events-none absolute top-0 left-0 right-0 h-px"></div>
+            <div class="col-span-12 row-start-3 border-t border-zinc-800/50 pointer-events-none absolute top-0 left-0 right-0 h-px"></div>
+            
+            <!-- Header (Row 1) -->
+            <header class="col-span-12 flex justify-between items-center px-6 lg:px-10 py-5 z-20">
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2 text-zinc-500">
+                        <iconify-icon icon="solar:network-linear" width="16" stroke-width="1.5"></iconify-icon>
+                        <span class="text-xs font-light tracking-widest uppercase">Neural.Mesh_v2.4</span>
+                    </div>
+                    <h1 class="text-lg lg:text-xl font-normal tracking-tight text-white uppercase">Architecture Map</h1>
+                </div>
+
+                <div class="hidden md:flex gap-10 text-zinc-500 text-xs uppercase tracking-widest font-light">
+                    <div class="flex items-center gap-2 hover:text-white cursor-pointer transition-colors duration-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-700"></span>
+                        <span>Schematics</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-white">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                        <span>Control Plane</span>
+                    </div>
+                    <div class="flex items-center gap-2 hover:text-white cursor-pointer transition-colors duration-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-700"></span>
+                        <span>Event Bus</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-end gap-1.5">
+                    <div class="flex gap-1 items-center">
+                        <span class="text-xs font-light tracking-widest text-zinc-500 uppercase mr-2">Core Load</span>
+                        <div class="w-1 h-3 bg-white rounded-sm"></div>
+                        <div class="w-1 h-3 bg-zinc-400 rounded-sm"></div>
+                        <div class="w-1 h-3 bg-zinc-600 rounded-sm"></div>
+                        <div class="w-1 h-3 bg-zinc-800 rounded-sm"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Diagram Area (Center, spanning rows) -->
+            <main class="col-span-12 md:col-span-8 lg:col-span-9 border-r border-zinc-800/50 relative overflow-hidden bg-black/20 flex items-center justify-center">
+                
+                <div class="relative w-full h-full max-w-[1000px] flex items-center justify-center">
+                    <svg class="w-full h-full min-h-[600px] overflow-visible" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                        
+                        <!-- Center Z-Axis Blueprint Line -->
+                        <line x1="500" y1="120" x2="500" y2="730" stroke="#27272a" stroke-width="1" stroke-dasharray="2 4"></line>
+
+                        <g id="ontology-layers">
+                            
+                            <!-- LAYER 1: Source Nodes (Bottom) -->
+                            <g class="layer" data-y="0">
+                                <!-- Structural Iso Mesh -->
+                                <polygon points="200,680 500,780 800,680 500,580" fill="rgba(24,24,27,0.3)" stroke="#3f3f46" stroke-width="1"></polygon>
+                                <polygon points="230,680 500,770 770,680 500,590" fill="none" stroke="#27272a" stroke-width="1" stroke-dasharray="2 2"></polygon>
+                                <!-- Internal crosshair -->
+                                <line x1="500" y1="580" x2="500" y2="780" stroke="#3f3f46" stroke-width="0.5" stroke-dasharray="1 3"></line>
+                                <line x1="200" y1="680" x2="800" y2="680" stroke="#3f3f46" stroke-width="0.5" stroke-dasharray="1 3"></line>
+                                
+                                <!-- Physical Storage Nodes -->
+                                <g transform="translate(350, 650)">
+                                    <ellipse cx="0" cy="-20" rx="20" ry="10" fill="#09090b" stroke="#71717a" stroke-width="1"></ellipse>
+                                    <path d="M-20,-20 v20 a20,10 0 0,0 40,0 v-20" fill="#09090b" stroke="#71717a" stroke-width="1"></path>
+                                    <text x="0" y="22" class="text-xs font-mono fill-zinc-500" text-anchor="middle">IN_01</text>
+                                </g>
+                                <g transform="translate(500, 710)">
+                                    <ellipse cx="0" cy="-20" rx="20" ry="10" fill="#09090b" stroke="#71717a" stroke-width="1"></ellipse>
+                                    <path d="M-20,-20 v20 a20,10 0 0,0 40,0 v-20" fill="#09090b" stroke="#71717a" stroke-width="1"></path>
+                                    <text x="0" y="22" class="text-xs font-mono fill-zinc-500" text-anchor="middle">IN_02</text>
+                                </g>
+                                <g transform="translate(650, 650)">
+                                    <ellipse cx="0" cy="-20" rx="20" ry="10" fill="#09090b" stroke="#71717a" stroke-width="1"></ellipse>
+                                    <path d="M-20,-20 v20 a20,10 0 0,0 40,0 v-20" fill="#09090b" stroke="#71717a" stroke-width="1"></path>
+                                    <text x="0" y="22" class="text-xs font-mono fill-zinc-500" text-anchor="middle">IN_03</text>
+                                </g>
+                            </g>
+
+                            <!-- Data Stream Connectors L1 to L2 -->
+                            <g class="vertical-links">
+                                <path d="M350,630 Q425,550 420,440" fill="none" stroke="#52525b" stroke-width="1" stroke-dasharray="2 4"></path>
+                                <path d="M500,690 Q500,600 500,470" fill="none" stroke="#52525b" stroke-width="1" stroke-dasharray="2 4"></path>
+                                <path d="M650,630 Q575,550 580,440" fill="none" stroke="#52525b" stroke-width="1" stroke-dasharray="2 4"></path>
+                            </g>
+
+                            <!-- LAYER 2: Contextual Wireframe / Logic Layer (Middle) -->
+                            <g class="layer" data-y="0">
+                                <!-- Structural Iso Mesh -->
+                                <polygon points="150,450 500,560 850,450 500,340" fill="rgba(39,39,42,0.15)" stroke="#52525b" stroke-width="1"></polygon>
+                                <polygon points="180,450 500,550 820,450 500,350" fill="none" stroke="#3f3f46" stroke-width="0.5"></polygon>
+                                
+                                <!-- Logic Edges -->
+                                <g class="graph-edges" stroke="#52525b" stroke-width="1">
+                                    <line x1="340" y1="420" x2="420" y2="440"></line>
+                                    <line x1="420" y1="440" x2="500" y2="470"></line>
+                                    <line x1="500" y1="470" x2="580" y2="440"></line>
+                                    <line x1="580" y1="440" x2="660" y2="420"></line>
+                                    <line x1="420" y1="440" x2="500" y2="390"></line>
+                                    <line x1="580" y1="440" x2="500" y2="390"></line>
+                                    <line x1="340" y1="420" x2="500" y2="390" stroke-dasharray="1 3"></line>
+                                    <line x1="660" y1="420" x2="500" y2="390" stroke-dasharray="1 3"></line>
+                                </g>
+
+                                <!-- Relational Nodes -->
+                                <circle cx="340" cy="420" r="4" fill="#000000" stroke="#a1a1aa" stroke-width="1"></circle>
+                                <text x="340" y="440" class="text-xs font-mono fill-zinc-400" text-anchor="middle">VERTEX_A</text>
+                                
+                                <circle cx="420" cy="440" r="6" fill="#000000" stroke="#d4d4d8" stroke-width="1"></circle>
+                                <text x="420" y="465" class="text-xs font-mono fill-zinc-300" text-anchor="middle">VERTEX_B</text>
+
+                                <!-- Central Core Object -->
+                                <g transform="translate(500, 470)">
+                                    <circle cx="0" cy="0" r="8" fill="#e4e4e7"></circle>
+                                    <circle cx="0" cy="0" r="14" fill="none" stroke="#71717a" stroke-width="1" stroke-dasharray="2 2"></circle>
+                                    <circle cx="0" cy="0" r="22" fill="none" stroke="#3f3f46" stroke-width="0.5"></circle>
+                                    <text x="0" y="36" class="text-xs font-mono fill-white" text-anchor="middle">MASTER_NODE</text>
+                                </g>
+
+                                <circle cx="580" cy="440" r="6" fill="#000000" stroke="#d4d4d8" stroke-width="1"></circle>
+                                <text x="580" y="465" class="text-xs font-mono fill-zinc-300" text-anchor="middle">VERTEX_C</text>
+
+                                <circle cx="660" cy="420" r="4" fill="#000000" stroke="#a1a1aa" stroke-width="1"></circle>
+                                <text x="660" y="440" class="text-xs font-mono fill-zinc-400" text-anchor="middle">VERTEX_D</text>
+
+                                <circle cx="500" cy="390" r="4" fill="#000000" stroke="#a1a1aa" stroke-width="1"></circle>
+                                <text x="500" y="375" class="text-xs font-mono fill-zinc-400" text-anchor="middle">SYNC_REF</text>
+                            </g>
+
+                            <!-- Vertical Connectors L2 to L3 -->
+                            <g class="vertical-links">
+                                <path d="M420,440 L440,260" fill="none" stroke="#71717a" stroke-width="1" stroke-dasharray="2 6"></path>
+                                <path d="M500,470 L500,280" fill="none" stroke="#a1a1aa" stroke-width="1"></path>
+                                <path d="M580,440 L560,260" fill="none" stroke="#71717a" stroke-width="1" stroke-dasharray="2 6"></path>
+                            </g>
+
+                            <!-- LAYER 3: Output Topology (Top) -->
+                            <g class="layer" data-y="0">
+                                <!-- Structural Iso Mesh -->
+                                <polygon points="250,250 500,320 750,250 500,180" fill="rgba(63,63,70,0.05)" stroke="#71717a" stroke-width="1"></polygon>
+                                <polygon points="270,250 500,314 730,250 500,186" fill="none" stroke="#52525b" stroke-width="0.5" stroke-dasharray="1 2"></polygon>
+                                
+                                <!-- Floating Process Representations -->
+                                <g transform="translate(440, 260)">
+                                    <rect x="-15" y="-10" width="30" height="20" fill="#000000" stroke="#a1a1aa" stroke-width="1"></rect>
+                                    <line x1="-10" y1="-2" x2="10" y2="-2" stroke="#52525b" stroke-width="1"></line>
+                                    <line x1="-10" y1="2" x2="5" y2="2" stroke="#52525b" stroke-width="1"></line>
+                                </g>
+
+                                <g transform="translate(500, 280)">
+                                    <polygon points="0,-15 15,0 0,15 -15,0" fill="none" stroke="#e4e4e7" stroke-width="1"></polygon>
+                                    <rect x="-3" y="-3" width="6" height="6" fill="#e4e4e7"></rect>
+                                    <line x1="0" y1="-15" x2="0" y2="-25" stroke="#e4e4e7" stroke-width="1"></line>
+                                    <text x="0" y="32" class="text-xs font-mono fill-white" text-anchor="middle">COMPUTE_KERNEL</text>
+                                </g>
+
+                                <g transform="translate(560, 260)">
+                                    <rect x="-15" y="-10" width="30" height="20" fill="#000000" stroke="#a1a1aa" stroke-width="1"></rect>
+                                    <path d="M-10,5 L-5,0 L0,3 L10,-5" fill="none" stroke="#a1a1aa" stroke-width="1"></path>
+                                </g>
+                            </g>
+
+                        </g>
+
+                        <!-- Sparse Diagnostic Info Pills -->
+                        <g id="annotations">
+                            <!-- ANNOTATION: Execution Engine -->
+                            <g class="annot-item">
+                                <!-- Routed Line -->
+                                <path class="annot-line" d="M 520 270 L 660 270 L 710 200 L 780 200" fill="none" stroke="#a1a1aa" stroke-width="1" stroke-linejoin="bevel"></path>
+                                <circle cx="520" cy="270" r="2" fill="#ffffff"></circle>
+                                <rect x="778" y="198" width="4" height="4" fill="#a1a1aa"></rect>
+                                <!-- Pill -->
+                                <rect x="790" y="185" width="165" height="30" rx="2" fill="#09090b" stroke="#3f3f46" stroke-width="1"></rect>
+                                <text x="800" y="199" class="text-xs font-light tracking-widest uppercase fill-zinc-200" text-anchor="start">Execution Result</text>
+                                <text x="800" y="210" class="text-xs font-mono fill-zinc-500" text-anchor="start">BIN_GENERATED</text>
+                            </g>
+
+                            <!-- ANNOTATION: Structural Alignment -->
+                            <g class="annot-item">
+                                <!-- Routed Line -->
+                                <path class="annot-line" d="M 330 420 L 250 420 L 190 350 L 120 350" fill="none" stroke="#71717a" stroke-width="1" stroke-linejoin="bevel"></path>
+                                <circle cx="330" cy="420" r="2" fill="#a1a1aa"></circle>
+                                <rect x="118" y="348" width="4" height="4" fill="#71717a"></rect>
+                                <!-- Pill -->
+                                <rect x="-55" y="335" width="165" height="30" rx="2" fill="#09090b" stroke="#3f3f46" stroke-width="1"></rect>
+                                <text x="100" y="349" class="text-xs font-light tracking-widest uppercase fill-zinc-200" text-anchor="end">Topology Solver</text>
+                                <text x="100" y="360" class="text-xs font-mono fill-zinc-500" text-anchor="end">PATH_ROUTING</text>
+                            </g>
+
+                            <!-- ANNOTATION: Storage Base -->
+                            <g class="annot-item">
+                                <!-- Routed Line -->
+                                <path class="annot-line" d="M 670 650 L 760 650 L 800 700 L 870 700" fill="none" stroke="#52525b" stroke-width="1" stroke-linejoin="bevel"></path>
+                                <circle cx="670" cy="650" r="2" fill="#71717a"></circle>
+                                <rect x="868" y="698" width="4" height="4" fill="#52525b"></rect>
+                                <!-- Pill -->
+                                <rect x="880" y="685" width="165" height="30" rx="2" fill="#09090b" stroke="#3f3f46" stroke-width="1"></rect>
+                                <text x="890" y="699" class="text-xs font-light tracking-widest uppercase fill-zinc-400" text-anchor="start">Hardware Layer</text>
+                                <text x="890" y="710" class="text-xs font-mono fill-zinc-600" text-anchor="start">SECTOR_WRITE</text>
+                            </g>
+                        </g>
+
+                    </svg>
+                </div>
+            </main>
+
+            <!-- Right Telemetry Panel (Scrollable for Reveal) -->
+            <aside class="hidden md:flex col-span-4 lg:col-span-3 flex-col bg-zinc-950/80 relative overflow-hidden">
+                <div class="absolute inset-0 overflow-y-auto no-scrollbar scroll-smooth p-6 pb-20" id="scroll-container">
+                    
+                    <!-- Masked Explanatory Reveal -->
+                    <div class="flex flex-col gap-4 mb-16">
+                        <div class="flex items-center gap-2 border-b border-zinc-800 pb-2">
+                            <div class="w-1.5 h-1.5 bg-zinc-500"></div>
+                            <h2 class="text-xs font-light tracking-widest text-zinc-500 uppercase">Structural Insights</h2>
+                        </div>
+                        <p class="text-xs lg:text-sm font-light leading-relaxed text-zinc-300" id="reveal-text">
+                            The foundational framework synchronizes scattered compute instances into an integrated structural map. This algorithmic harmonization eliminates protocol conflicts, securely routing critical dependencies, and dynamically supplying telemetry for advanced performance metrics.
+                        </p>
+                    </div>
+
+                    <!-- Hardware / Allocation Widgets -->
+                    <div class="flex flex-col gap-6 mb-16">
+                        <h2 class="text-xs font-light tracking-widest text-zinc-500 uppercase border-b border-zinc-800 pb-2">Compute Distribution</h2>
+                        
+                        <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex justify-between text-xs font-light uppercase tracking-widest text-zinc-400">
+                                    <span>Connected Peers</span>
+                                    <span class="font-mono text-zinc-200">14.2M</span>
+                                </div>
+                                <div class="w-full h-1 bg-zinc-900 border border-zinc-800 overflow-hidden relative">
+                                    <div class="absolute top-0 left-0 h-full bg-[repeating-linear-gradient(45deg,#a1a1aa_0px,#a1a1aa_2px,transparent_2px,transparent_4px)] w-[85%] border-r border-zinc-400"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <div class="flex justify-between text-xs font-light uppercase tracking-widest text-zinc-400">
+                                    <span>Matrix Depth</span>
+                                    <span class="font-mono text-zinc-200">LVL 09</span>
+                                </div>
+                                <div class="w-full h-1 bg-zinc-900 border border-zinc-800 overflow-hidden relative">
+                                    <div class="absolute top-0 left-0 h-full bg-[repeating-linear-gradient(45deg,#52525b_0px,#52525b_2px,transparent_2px,transparent_4px)] w-[60%] border-r border-zinc-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Telemetry Widget -->
+                    <div class="flex flex-col gap-4">
+                        <h2 class="text-xs font-light tracking-widest text-zinc-500 uppercase border-b border-zinc-800 pb-2">Execution Log</h2>
+                        <div class="flex flex-col gap-2 text-xs font-mono tracking-wider opacity-80">
+                            <div class="flex justify-between text-zinc-500 items-center">
+                                <span>T-00:12</span>
+                                <span class="flex items-center gap-1.5"><div class="w-1 h-1 bg-zinc-600"></div> FETCH_RAW_INPUT</span>
+                            </div>
+                            <div class="flex justify-between text-zinc-400 items-center">
+                                <span>T-00:13</span>
+                                <span class="flex items-center gap-1.5"><div class="w-1 h-1 bg-zinc-500"></div> MAP_RELATIONS</span>
+                            </div>
+                            <div class="flex justify-between text-zinc-200 items-center">
+                                <span>T-00:14</span>
+                                <span class="flex items-center gap-1.5 border border-zinc-700 px-1.5 py-0.5 bg-zinc-900"><div class="w-1 h-1 bg-white animate-pulse"></div> RENDER_VECTORS</span>
+                            </div>
+                            <div class="flex justify-between text-zinc-600 items-center">
+                                <span>T-00:15</span>
+                                <span class="flex items-center gap-1.5"><div class="w-1 h-1 bg-zinc-700"></div> COMMIT_STATE</span>
+                            </div>
+                            <div class="flex justify-between text-zinc-600 items-center">
+                                <span>T-00:16</span>
+                                <span class="flex items-center gap-1.5"><div class="w-1 h-1 bg-zinc-700"></div> STANDBY_MODE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Scroll cue -->
+                    <div class="mt-20 flex justify-center opacity-30">
+                        <iconify-icon icon="solar:mouse-circle-linear" width="20"></iconify-icon>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Footer Toolbar (Row 3) -->
+            <footer class="col-span-12 px-6 lg:px-10 py-4 flex justify-between items-center z-20">
+                
+                <div class="flex items-center gap-3">
+                    <button class="w-8 h-8 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-500 transition-colors bg-black/50">
+                        <iconify-icon icon="solar:map-linear" width="16"></iconify-icon>
+                    </button>
+                    <button class="w-8 h-8 border border-zinc-600 flex items-center justify-center text-white bg-zinc-900 transition-colors">
+                        <iconify-icon icon="solar:eye-linear" width="16"></iconify-icon>
+                    </button>
+                    <div class="ml-3 pl-3 border-l border-zinc-800 flex flex-col justify-center">
+                        <span class="text-xs font-mono text-zinc-500">VIEW_MODE</span>
+                        <span class="text-xs font-light tracking-wider text-zinc-300 uppercase">Wireframe</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center gap-4">
+                    <div class="text-xs font-mono text-zinc-600 tracking-widest flex gap-4">
+                        <span>UPTIME: 99.9%</span>
+                        <span>PING: 14MS</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="border border-zinc-800 px-4 py-1.5 flex items-center gap-2 text-xs text-zinc-300 bg-black/50 hover:border-zinc-500 hover:text-white cursor-pointer transition-colors">
+                        <iconify-icon icon="solar:cpu-bolt-linear" width="14"></iconify-icon>
+                        <span class="tracking-wider uppercase font-light">Deploy Sequence</span>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .word-wrap { display: inline-block; overflow: hidden; vertical-align: bottom; }
+        .word-inner { display: inline-block; transform: translateY(100%); }
+    </style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 1. Initial SVG Diagram Build Sequence (Diagnostic Stage)
+            const tl = gsap.timeline({ delay: 0.2 });
+
+            // Animate connector lines
+            const annotLines = document.querySelectorAll('.annot-line, .vertical-links path');
+            annotLines.forEach(line => {
+                const length = line.getTotalLength();
+                line.style.strokeDasharray = length;
+                line.style.strokeDashoffset = length;
+            });
+
+            // Stage 1: Build layers structure
+            tl.fromTo(".layer", 
+                { y: 40, scale: 0.95, opacity: 0, rotationX: 2 },
+                { y: 0, scale: 1, opacity: 1, rotationX: 0, duration: 1.4, stagger: 0.2, ease: "power3.out" }
+            );
+
+            // Stage 2: Establish vertical routes
+            tl.to(".vertical-links path",
+                { strokeDashoffset: 0, duration: 1, stagger: 0.1, ease: "power1.inOut" },
+                "-=0.8"
+            );
+
+            // Stage 3: Project annotation lines
+            tl.to(".annot-line", 
+                { strokeDashoffset: 0, duration: 0.8, stagger: 0.15, ease: "power2.inOut" },
+                "-=0.4"
+            );
+            
+            // Stage 4: Render diagnostic pills
+            tl.fromTo(".annot-item rect, .annot-item text, .annot-item circle",
+                { opacity: 0 },
+                { opacity: 1, duration: 0.5, stagger: 0.05, ease: "power1.out" },
+                "-=0.4"
+            );
+
+            // Subtle analytical drift (wireframe rotation)
+            gsap.to("#ontology-layers", {
+                rotationY: 1,
+                rotationX: 0.5,
+                y: -4,
+                duration: 6,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                transformOrigin: "center center"
+            });
+
+            // 2. Masked Word Reveal on Scroll
+            const textEl = document.getElementById('reveal-text');
+            if(textEl) {
+                const words = textEl.innerText.split(' ');
+                textEl.innerHTML = '';
+                
+                words.forEach(word => {
+                    const wrap = document.createElement('span');
+                    wrap.className = 'word-wrap mr-1';
+                    const inner = document.createElement('span');
+                    inner.className = 'word-inner';
+                    inner.innerText = word;
+                    wrap.appendChild(inner);
+                    textEl.appendChild(wrap);
+                });
+
+                gsap.to(".word-inner", {
+                    y: "0%",
+                    duration: 0.5,
+                    stagger: 0.015,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: "#reveal-text",
+                        scroller: "#scroll-container",
+                        start: "top 95%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            }
+        });
+    </script>
+</section>`;
+
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+}

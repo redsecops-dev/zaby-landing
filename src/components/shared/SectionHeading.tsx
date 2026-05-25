@@ -52,8 +52,7 @@ export function SectionHeading({
       )}
       <h2
         className={cn(
-          "font-bold leading-tight tracking-tight text-[var(--color-text-primary)]",
-          headingVariants({ size }),
+          "leading-tight tracking-tight font-light text-lg text-[var(--color-text-primary)]",
           gradient && "gradient-text"
         )}
       >

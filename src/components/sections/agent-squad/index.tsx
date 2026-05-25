@@ -2,7 +2,8 @@
 
 import { Icon } from "@iconify/react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { AgentInfoPanel, type AgentCardData } from "./AgentInfoPanel";
+import { AgentInfoPanel } from "./AgentInfoPanel";
+import { type AgentCardData } from "./agent-data";
 
 const agentData: AgentCardData[] = [
     {

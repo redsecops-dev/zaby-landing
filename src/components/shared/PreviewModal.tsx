@@ -27,6 +27,42 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
     return () => document.removeEventListener("keydown", handleKey);
   }, [isOpen, onClose]);
 
+  // Lock body scroll and pause Lenis when modal is open (Stripe pattern)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Save original styles
+    const originalOverflowHtml = document.documentElement.style.overflow;
+    const originalOverflowBody = document.body.style.overflow;
+
+    // Lock background scroll
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    // Pause Lenis smooth scroll
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      lenis.stop();
+    }
+
+    // Scroll the modal overlay back to top
+    const scroller = document.querySelector('[data-preview-scroller="true"]');
+    if (scroller) {
+      scroller.scrollTop = 0;
+    }
+
+    return () => {
+      // Restore background scroll
+      document.documentElement.style.overflow = originalOverflowHtml;
+      document.body.style.overflow = originalOverflowBody;
+
+      // Resume Lenis smooth scroll
+      if (lenis) {
+        lenis.start();
+      }
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -49,8 +85,9 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
 
           {/* Scroll container — fixed overlay that scrolls its content */}
           <div
-            className="fixed inset-0 z-200 overflow-y-auto overscroll-contain flex min-h-full items-stretch justify-center p-0 sm:items-start sm:px-6 sm:pt-14 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="fixed inset-0 z-200 overflow-y-auto overscroll-contain flex min-h-full items-stretch justify-center p-0 sm:items-start sm:px-6 sm:py-14"
             data-preview-scroller="true"
+            data-lenis-prevent
             role="dialog"
             aria-modal="true"
             aria-label="Feature preview"
@@ -66,7 +103,7 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
                 stiffness: 300,
                 damping: 30,
               }}
-              className="relative min-h-dvh h-auto w-full max-w-none rounded-none bg-white shadow-none flex flex-col sm:mt-6 sm:mb-0 sm:max-h-[calc(100dvh-1.5rem)] sm:min-h-0 sm:max-w-7xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)]"
+              className="relative w-full max-w-none rounded-none bg-white shadow-none sm:my-6 sm:min-h-0 sm:max-w-7xl sm:rounded-2xl sm:shadow-[0_24px_80px_-8px_rgba(0,0,0,0.28),0_0_0_1px_rgba(0,0,0,0.05)] h-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Floating close button */}
@@ -78,8 +115,8 @@ export function PreviewModal({ isOpen, onClose, selectedCard }: PreviewModalProp
                 <X size={15} strokeWidth={2} />
               </button>
 
-              {/* Content */}
-              <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-none sm:rounded-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {/* Content (Scroll container removed here; scrolled by parent overlay wrapper) */}
+              <div className="w-full overflow-x-hidden rounded-none sm:rounded-2xl">
                 {selectedCard === 1 && <AgentSquadPreview />}
                 {selectedCard === 4 && <OpenAgentsPreview />}
                 {selectedCard === 7 && <AiMemoryPreview />}

@@ -1,6 +1,6 @@
 export { HeroSection } from "./HeroSection";
 export { LogosSection } from "./LogosSection";
-export { FeaturesSection } from "./FeaturesSection";
+export { FeaturesSection } from "./features";
 export { WorkflowSection } from "./WorkflowSection";
 export { DataSynchronySection } from "./DataSynchronySection";
 export { FutureWorkspacesSection } from "./FutureWorkspacesSection";
@@ -14,3 +14,6 @@ export { InfrastructureSection } from "./InfrastructureSection";
 export { FaqSection } from "./FaqSection";
 export { CtaSection } from "./CtaSection";
 export { default as FooterSection } from "./footer/Footer";
+export { default as AiSaasShowcase } from "./AiSaasShowcase";
+export { default as UseCasesSection } from "./UseCasesSection";
+export { default as TrustStripSection } from "./TrustStripSection";
