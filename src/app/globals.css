@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 @import "../styles/utilities.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -329,4 +330,13 @@ a[href*="spline.design"],
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+@keyframes moveBackground {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 0% -1000%;
+  }
 }

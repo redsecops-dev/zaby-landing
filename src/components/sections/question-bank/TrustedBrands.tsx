@@ -6,12 +6,12 @@ import { Icon } from "@iconify/react";
 import { Award } from "lucide-react";
 
 const BRAND_ITEMS = [
-  { icon: "solar:hexagon-linear",  name: "Acme Corp",  bold: false },
-  { icon: "solar:triangle-linear", name: "Vortex",     bold: false },
-  { icon: "solar:target-linear",   name: "Sphere",     bold: true  },
-  { icon: "solar:box-linear",      name: "Cube AI",    bold: true  },
-  { icon: "solar:globus-linear",   name: "Nexus",      bold: false },
-  { icon: "solar:cpu-linear",      name: "Synapse",    bold: false },
+  { icon: "solar:hexagon-linear", name: "Acme Corp", bold: false },
+  { icon: "solar:triangle-linear", name: "Vortex", bold: false },
+  { icon: "solar:target-linear", name: "Sphere", bold: true },
+  { icon: "solar:box-linear", name: "Cube AI", bold: true },
+  { icon: "solar:globus-linear", name: "Nexus", bold: false },
+  { icon: "solar:cpu-linear", name: "Synapse", bold: false },
 ] as const;
 
 export default function TrustedBrands() {
@@ -25,7 +25,7 @@ export default function TrustedBrands() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          
+
           {/* Moving Marquee of brands */}
           <div
             className="relative flex-1 overflow-hidden"
@@ -52,9 +52,9 @@ export default function TrustedBrands() {
                   {BRAND_ITEMS.map((brand) => (
                     <div
                       key={`${copyIndex}-${brand.name}`}
-                      className={`flex items-center gap-3 text-lg tracking-tight text-[#525252] md:text-xl transition-colors duration-200 hover:text-[#171717] ${brand.bold ? "font-bold" : "font-semibold"}`}
+                      className={`flex items-center gap-3 text-lg tracking-tight text-[#525252] md:text-2xl transition-colors duration-200 hover:text-[#171717] ${brand.bold ? "font-bold" : "font-semibold"}`}
                     >
-                      <Icon icon={brand.icon} width={26} height={26} className="text-[#a3a3a3]" />
+                      <Icon icon={brand.icon} width={30} height={30} className="text-[#a3a3a3]" />
                       <span>{brand.name}</span>
                     </div>
                   ))}
@@ -62,13 +62,6 @@ export default function TrustedBrands() {
               ))}
             </motion.div>
           </div>
-
-          {/* Static Non-Moving ISO 27001 Badge */}
-          <div className="shrink-0 flex items-center gap-2 text-sm md:text-base font-bold bg-white border border-[#e879f9]/20 px-4 py-2 rounded-2xl shadow-[0_4px_20px_rgba(232,121,249,0.06)] backdrop-blur-md">
-            <Award className="h-5 w-5 text-[#e879f9]" />
-            <span className="text-[#2f1362]">ISO 27001 Certified</span>
-          </div>
-
         </div>
       </div>
     </section>

@@ -3,39 +3,47 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { 
-  Sparkles, 
-  Zap, 
-  TrendingUp, 
-  Cpu, 
-  Activity, 
-  Terminal 
+import {
+  Sparkles,
+  Zap,
+  TrendingUp,
+  Cpu,
+  Activity,
+  Terminal
 } from "lucide-react";
 import InteractiveDottedGrid from "./InteractiveDottedGrid";
 
 export default function QuestionBankHero() {
   return (
-    <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-28 mx-auto max-w-7xl">
+    <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-35 mx-auto max-w-7xl">
       <InteractiveDottedGrid />
-      <div className="flex flex-col items-center text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-5 ml-auto inline-flex items-center gap-2 rounded-full border border-[#e879f9]/30 bg-white/80 px-4 py-2 shadow-[0_10px_30px_rgba(232,121,249,0.12)] backdrop-blur-md"
+      {/* Founding Access 90% OFF - Right Side Corner Badge */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="absolute top-2 md:top-6 right-1 md:right-0 z-[9999]"
+      >
+        <Link
+          href="https://platform.zaby.io/tenant/signup"
+          className="group block bg-transparent border-0 outline-none transition-transform duration-300 hover:scale-[1.05]"
         >
-          <Sparkles className="h-4 w-4 text-[#d946ef]" />
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2f1362]">
-            Founding Access: 90% Off
-          </span>
-        </motion.div>
+          <img
+            src="/Founding.svg"
+            alt="Founding Access 90% OFF"
+            className="h-14 md:h-20 w-auto select-none pointer-events-none bg-transparent relative z-50"
+          />
+        </Link>
+      </motion.div>
+
+      <div className="flex flex-col items-center text-center">
 
         {/* Heading */}
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-6 max-w-3xl text-3xl font-extrabold leading-[1.15] tracking-tight text-[#171717] sm:text-4xl md:text-5xl lg:text-6xl"
+          className="mb-6 max-w-3xl text-[2.15rem] font-extrabold leading-[1.1] tracking-tight text-[#171717] sm:text-5xl md:text-7xl lg:text-6xl"
         >
           Next-Gen{" "}
           <span className="text-[#e879f9]">
@@ -44,13 +52,13 @@ export default function QuestionBankHero() {
         </motion.h1>
 
         {/* Subtitle */}
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-8 max-w-3xl text-base font-light leading-relaxed text-[#525252] sm:text-lg md:text-xl"
         >
-          ZABY replaces static MCQs and outdated coding tests with dynamic AI-generated labs, 
+          ZABY replaces static MCQs and outdated coding tests with dynamic AI-generated labs,
           adaptive assessments, and real-time candidate intelligence.
         </motion.p>
 
@@ -72,14 +80,14 @@ export default function QuestionBankHero() {
       </div>
 
       {/* Large Dashboard Interactive Mockup */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.4 }}
         className="relative mx-auto max-w-6xl rounded-3xl p-1 bg-linear-to-br from-white/80 via-[#e879f9]/20 to-white/40 shadow-[0_30px_100px_-20px_rgba(232,121,249,0.15)] backdrop-blur-xl"
       >
         <div className="bg-white/95 rounded-[22px] overflow-hidden border border-white/50 aspect-video lg:aspect-[2.2/1] flex flex-col">
-          
+
           {/* Mock Header */}
           <div className="px-6 py-4 border-b border-[#e5e5e5] bg-[#fafafa]/80 flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -101,7 +109,7 @@ export default function QuestionBankHero() {
 
           {/* Dashboard Content Grid */}
           <div className="flex-1 grid grid-cols-1 md:grid-cols-4 p-5 gap-4 overflow-hidden">
-            
+
             {/* Left Widget Panel */}
             <div className="md:col-span-1 flex flex-col gap-4">
               <div className="bg-linear-to-br from-[#ede9fe]/80 to-[#f5d0fe]/40 rounded-2xl border border-white p-4 flex flex-col justify-between h-full shadow-[0_4px_20px_rgba(232,121,249,0.04)]">
@@ -115,8 +123,8 @@ export default function QuestionBankHero() {
                 </div>
                 <div className="h-10 w-full mt-2 flex items-end gap-1">
                   {[30, 45, 35, 60, 50, 75, 90, 80, 98].map((h, i) => (
-                    <div 
-                      key={i} 
+                    <div
+                      key={i}
                       className="flex-1 bg-[#d946ef]/40 rounded-xs hover:bg-[#d946ef] transition-colors"
                       style={{ height: `${h}%` }}
                     />
@@ -130,7 +138,7 @@ export default function QuestionBankHero() {
               <div className="absolute top-0 right-0 p-4 opacity-5">
                 <Cpu className="h-40 w-40" />
               </div>
-              
+
               {/* Active assessment stream */}
               <div className="flex justify-between items-center border-b border-slate-800 pb-3">
                 <div className="flex items-center gap-2">

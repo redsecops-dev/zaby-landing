@@ -12,7 +12,7 @@ import PromoSection from "@/components/sections/question-bank/PromoSection";
 
 export default function QuestionBankPage() {
   return (
-    <div className="w-full relative overflow-x-hidden antialiased bg-[#FAF9F6] text-[#171717]">
+    <div className="w-full relative overflow-x-hidden antialiased bg-transparent text-[#171717]">
 
       {/* Decorative Blur Background Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-linear-to-tr from-[#f5d0fe] to-[#ede9fe] opacity-35 blur-[120px] pointer-events-none -z-10" />
