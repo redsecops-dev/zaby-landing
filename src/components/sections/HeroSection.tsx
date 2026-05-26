@@ -25,8 +25,9 @@ function RevealWord({
   );
 }
 
-export function   HeroSection() {
+export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const logoRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -186,7 +187,7 @@ export function   HeroSection() {
           {/* Right column — robot */}
           <div className="relative order-2 hidden h-72 w-full items-center justify-center sm:h-84 md:h-125 lg:order-2 lg:flex lg:h-187.5">
             <div className="absolute inset-y-0 -left-[20%] right-0 pointer-events-none">
-              <SplineScene 
+              <SplineScene
                 scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
                 className="w-full h-full pointer-events-auto"
               />
