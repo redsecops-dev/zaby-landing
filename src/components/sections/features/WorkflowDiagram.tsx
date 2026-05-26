@@ -63,7 +63,7 @@ const NODES = [
 
 export function WorkflowDiagram() {
   return (
-    <div className="relative w-full h-[270px] flex items-center justify-center overflow-visible scale-[1.08] sm:scale-[1.16] origin-center select-none">
+    <div className="relative w-full h-[230px] flex items-center justify-center overflow-visible scale-[1.08] sm:scale-[1.16] origin-center select-none">
       <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" viewBox="0 0 380 220" fill="none">
         
         {/* Connection Lines */}

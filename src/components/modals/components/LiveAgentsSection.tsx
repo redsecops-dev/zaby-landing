@@ -255,32 +255,50 @@ export function FaceSVG({ id, fill = false }: { id: string; fill?: boolean }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function LiveAgentsSection() {
+interface LiveAgentsSectionProps {
+  activeIndex?: number;
+  onSelectAgent?: (index: number) => void;
+}
+
+export default function LiveAgentsSection({ 
+  activeIndex: externalIndex, 
+  onSelectAgent: onExternalSelect 
+}: LiveAgentsSectionProps) {
   const prefersReducedMotion = useReducedMotion();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [internalIndex, setInternalIndex] = useState(0);
   const [cycleSeed, setCycleSeed] = useState(0);
 
+  const activeIndex = externalIndex ?? internalIndex;
+
   const advanceAgent = useEffectEvent(() => {
-    setActiveIndex((i) => (i + 1) % liveAgents.length);
+    if (onExternalSelect) {
+      onExternalSelect((activeIndex + 1) % liveAgents.length);
+    } else {
+      setInternalIndex((i) => (i + 1) % liveAgents.length);
+    }
   });
 
   useEffect(() => {
     if (prefersReducedMotion) return;
     const id = window.setInterval(() => advanceAgent(), 3800);
     return () => window.clearInterval(id);
-  }, [cycleSeed, prefersReducedMotion]);
+  }, [cycleSeed, prefersReducedMotion, activeIndex]);
 
   const agent = liveAgents[activeIndex] ?? liveAgents[0];
   const statusColor = STATUS_COLORS[agent.status] ?? "#94a3b8";
   const palette = FACE_PALETTES[agent.id] ?? FACE_PALETTES.maya;
 
   const handleSelect = (i: number) => {
-    setActiveIndex(i);
+    if (onExternalSelect) {
+      onExternalSelect(i);
+    } else {
+      setInternalIndex(i);
+    }
     setCycleSeed((s) => s + 1);
   };
 
   return (
-    <section className="relative overflow-hidden p-5 sm:p-8">
+    <section id="live-agent-exchange" className="relative overflow-hidden p-5 sm:p-8">
       {/* ambient blobs */}
       {/* <div className="pointer-events-none absolute -left-12 top-0 h-52 w-52 rounded-full bg-sky-200/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-12 bottom-0 h-52 w-52 rounded-full bg-violet-200/35 blur-3xl" /> */}
