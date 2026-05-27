@@ -16,13 +16,13 @@ const BRAND_ITEMS = [
 
 export default function TrustedBrands() {
   return (
-    <section className="border-y border-[#e5e5e5] bg-[#FAF9F6]/50 py-10 overflow-hidden relative">
+    <section className="border-y border-[#e5e5e5] bg-[#FAF9F6]/50 py-10  my-20 overflow-hidden relative">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="text-center mb-6">
+        {/* <div className="text-center mb-6">
           <span className="text-xs uppercase font-bold tracking-widest text-[#a3a3a3]">
             Trusted by Forward-Thinking Teams & Global Security Standards
           </span>
-        </div>
+        </div> */}
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
 

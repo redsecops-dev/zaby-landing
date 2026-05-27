@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FooterSection } from "@/components/sections";
+import { SectionWrapper, Container } from "@/components/layout";
+import { GlassPanel, GradientOrb, HeroBadge } from "@/components/shared";
+import { ScrollReveal } from "@/components/animations";
+import { cn } from "@/lib/utils";
+
 
 // ─── Privacy Content ────────────────────────────────────────────────────────
 
@@ -429,27 +434,33 @@ function TableOfContents({
   onSectionClick: (id: string) => void;
 }) {
   return (
-    <nav className="sticky top-24 w-56 shrink-0 hidden lg:block self-start">
-      <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
-        In this article
-      </p>
-      <ul className="flex flex-col gap-0.5">
-        {PRIVACY_SECTIONS.map((section) => (
-          <li key={section.id}>
-            <button
-              onClick={() => onSectionClick(section.id)}
-              className={`text-left text-sm w-full px-2 py-1.5 rounded-md transition-colors leading-snug cursor-pointer ${
-                activeSection === section.id
-                  ? "text-fuchsia-600 font-medium bg-fuchsia-50"
-                  : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"
-              }`}
-            >
-              {section.title}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <aside className="hidden lg:block">
+      <nav className="sticky top-32 w-56 shrink-0 self-start border-l border-[var(--color-border-strong)]/20 pl-4 py-2">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-text-secondary)]/50 mb-4 pl-3">
+          On this page
+        </p>
+        <ul className="flex flex-col gap-1 text-left">
+          {PRIVACY_SECTIONS.map((section) => {
+            const isActive = activeSection === section.id;
+            return (
+              <li key={section.id}>
+                <button
+                  onClick={() => onSectionClick(section.id)}
+                  className={cn(
+                    "text-left text-xs w-full px-3 py-2 rounded-lg transition-all duration-200 leading-snug cursor-pointer font-medium",
+                    isActive
+                      ? "text-[var(--color-accent-soft)] bg-[var(--color-accent)]/5 shadow-xs translate-x-1"
+                      : "text-[var(--color-text-secondary)]/80 hover:text-[var(--color-text-primary)] hover:bg-white/40 dark:hover:bg-zinc-900/40"
+                  )}
+                >
+                  {section.title}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </aside>
   );
 }
 
@@ -463,19 +474,23 @@ function MobileSectionSelector({
   return (
     <div className="lg:hidden mb-10 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide">
       <div className="flex gap-2 whitespace-nowrap">
-        {PRIVACY_SECTIONS.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => onSectionClick(section.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
-              activeSection === section.id
-                ? "bg-fuchsia-600 text-white shadow-md shadow-fuchsia-200"
-                : "bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-300"
-            }`}
-          >
-            {section.title.split(". ")[1] || section.title}
-          </button>
-        ))}
+        {PRIVACY_SECTIONS.map((section) => {
+          const isActive = activeSection === section.id;
+          return (
+            <button
+              key={section.id}
+              onClick={() => onSectionClick(section.id)}
+              className={cn(
+                "px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer backdrop-blur-md",
+                isActive
+                  ? "bg-[var(--color-accent-soft)] text-white shadow-md shadow-[var(--color-accent)]/20"
+                  : "bg-white/40 dark:bg-zinc-900/20 border border-[var(--color-border-strong)]/30 text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)]/30"
+              )}
+            >
+              {section.title.split(". ")[1] || section.title}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -487,14 +502,14 @@ function SectionContent({ content }: { content: ContentBlock[] }) {
       {content.map((block, i) => {
         if (block.type === "paragraph") {
           return (
-            <p key={i} className="text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
+            <p key={i} className="text-base sm:text-lg leading-relaxed text-[var(--color-text-secondary)] font-light">
               {block.text}
             </p>
           );
         }
         if (block.type === "subheading") {
           return (
-            <h3 key={i} className="text-lg font-bold text-neutral-800 mt-4">
+            <h3 key={i} className="text-lg sm:text-xl font-bold text-[var(--color-text-primary)] font-display mt-6 mb-2">
               {block.text}
             </h3>
           );
@@ -503,8 +518,8 @@ function SectionContent({ content }: { content: ContentBlock[] }) {
           return (
             <ul key={i} className="flex flex-col gap-3.5 pl-1 sm:pl-2">
               {block.items.map((item, j) => (
-                <li key={j} className="flex items-start gap-3.5 text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
-                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-fuchsia-500 shrink-0" />
+                <li key={j} className="flex items-start gap-3.5 text-base sm:text-lg leading-relaxed text-[var(--color-text-secondary)] font-light">
+                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-[var(--color-accent-soft)] shrink-0" />
                   {item}
                 </li>
               ))}
@@ -555,120 +570,141 @@ export default function PrivacyPage() {
   return (
     <>
       {/* Hero / Header */}
-            <section className="relative mt-30 flex items-center justify-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black">
-          <div className="w-full max-w-7xl bg-white/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-8 md:p-10 lg:p-12">
+      <SectionWrapper
+        spacing="none"
+        background="transparent"
+        className="relative mt-20 sm:mt-30 flex items-center justify-center overflow-visible"
+      >
+        <GradientOrb
+          color="purple"
+          size="xl"
+          className="absolute right-1/4 top-1/2 -translate-y-1/2 opacity-[0.08] dark:opacity-[0.05] pointer-events-none"
+        />
+        <GradientOrb
+          color="pink"
+          size="lg"
+          className="absolute left-1/4 top-1/4 opacity-[0.06] dark:opacity-[0.03] pointer-events-none"
+        />
 
-           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-8">
-            <Link href="/" className="hover:text-fuchsia-600 transition-colors">
-              Home
-            </Link>
-            <span>/</span>
-            <span className="text-neutral-600">Privacy Policy</span>
-          </nav>
+        <Container size="lg" className="relative z-10 py-10 sm:py-16">
+          <ScrollReveal direction="up" delay={0.05}>
+            <nav className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]/60 mb-8 sm:mb-10">
+              <Link href="/" className="hover:text-[var(--color-accent-soft)] transition-colors cursor-pointer">
+                Home
+              </Link>
+              <span>/</span>
+              <span className="text-[var(--color-text-primary)]">Privacy Policy</span>
+            </nav>
+          </ScrollReveal>
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-fuchsia-50 border border-fuchsia-100 rounded-full px-3 py-1 mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-fuchsia-600">
-              Legal
-            </span>
-          </div>
+          <ScrollReveal direction="up" delay={0.1}>
+            <HeroBadge text="LEGAL" />
+          </ScrollReveal>
 
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-neutral-900 mb-4">
-            Privacy Policy
-          </h1>
-          <p className="text-neutral-500 text-base max-w-2xl leading-relaxed">
-            We are committed to protecting your privacy and the data processed through our platform.
-            This policy explains how we collect, use, and safeguard your information.
-          </p>
-          <p className="mt-4 text-sm text-neutral-400">
-            Last updated:{" "}
-            <time dateTime="2025-05-14" className="font-medium text-neutral-600">
-              May 14, 2025
-            </time>
-          </p>
-        </div>
-      </section>
+          <ScrollReveal direction="up" delay={0.15}>
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[var(--color-text-primary)] mb-6 font-display leading-[1.1]">
+              Privacy Policy
+            </h1>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.18}>
+            <p className="text-[var(--color-text-secondary)] text-base sm:text-lg max-w-2xl leading-relaxed font-light mb-6">
+              We are committed to protecting your privacy and the data processed through our platform.
+              This policy explains how we collect, use, and safeguard your information.
+            </p>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.2}>
+            <p className="text-xs text-[var(--color-text-secondary)]/70">
+              Last updated:{" "}
+              <time dateTime="2025-05-14" className="font-semibold text-[var(--color-text-primary)]">
+                May 14, 2025
+              </time>
+            </p>
+          </ScrollReveal>
+        </Container>
+      </SectionWrapper>
 
       {/* Main layout */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 py-14 md:py-20">
-        {/* Mobile Section Selector */}
-        <MobileSectionSelector activeSection={activeSection} onSectionClick={scrollToSection} />
+      <SectionWrapper spacing="md" background="transparent" className="overflow-visible pt-4">
+        <Container size="lg">
+          {/* Mobile Section Selector */}
+          <MobileSectionSelector activeSection={activeSection} onSectionClick={scrollToSection} />
 
-        <div className="flex gap-16 xl:gap-20">
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {/* Intro block */}
-            <div className="mb-12 pb-10 border-b border-neutral-200">
-              <p className="text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
-                This Privacy Policy describes how Zaby AI, Inc. collects, uses, stores, and protects
-                information when you use the Zaby platform, including{" "}
-                <a
-                  href="https://zaby.ai"
-                  className="text-fuchsia-600 hover:underline cursor-pointer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://zaby.ai
-                </a>{" "}
-                and all related services, APIs, and applications.
-              </p>
-              <p className="mt-4 text-[15px] sm:text-[16px] leading-relaxed text-neutral-600">
-                For questions about our Terms of Service, visit our{" "}
-                <Link href="/terms" className="text-fuchsia-600 hover:underline cursor-pointer">
-                  Terms of Service
-                </Link>{" "}
-                page. To exercise your privacy rights, contact us at{" "}
-                <a href="mailto:privacy@zaby.ai" className="text-fuchsia-600 hover:underline cursor-pointer">
-                  privacy@zaby.ai
-                </a>
-                .
-              </p>
+          <div className="grid lg:grid-cols-[1fr_260px] gap-12 sm:gap-16 md:gap-20">
+            {/* Main Content */}
+            <div className="min-w-0">
+              {/* Intro block */}
+              <div className="mb-12 pb-10 border-b border-[var(--color-border-strong)]/30">
+                <p className="text-base sm:text-lg leading-relaxed text-[var(--color-text-secondary)] font-light">
+                  This Privacy Policy describes how Zaby AI, Inc. collects, uses, stores, and protects
+                  information when you use the Zaby platform, including{" "}
+                  <a
+                    href="https://zaby.ai"
+                    className="text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] hover:underline cursor-pointer font-medium transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://zaby.ai
+                  </a>{" "}
+                  and all related services, APIs, and applications.
+                </p>
+                <p className="mt-4 text-base sm:text-lg leading-relaxed text-[var(--color-text-secondary)] font-light">
+                  For questions about our Terms of Service, visit our{" "}
+                  <Link href="/terms" className="text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] hover:underline cursor-pointer font-medium transition-colors">
+                    Terms of Service
+                  </Link>{" "}
+                  page. To exercise your privacy rights, contact us at{" "}
+                  <a href="mailto:privacy@zaby.ai" className="text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] hover:underline cursor-pointer font-medium transition-colors">
+                    privacy@zaby.ai
+                  </a>
+                  .
+                </p>
+              </div>
+
+              {/* Section blocks */}
+              <div className="flex flex-col gap-14 text-left">
+                {PRIVACY_SECTIONS.map((section) => (
+                  <section
+                    key={section.id}
+                    id={section.id}
+                    ref={(el) => {
+                      sectionRefs.current[section.id] = el;
+                    }}
+                    className="scroll-mt-28"
+                  >
+                    <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-5 pb-3 border-b border-[var(--color-border-strong)]/30 font-display">
+                      {section.title}
+                    </h2>
+                    <SectionContent content={section.content as ContentBlock[]} />
+                  </section>
+                ))}
+              </div>
+
+              {/* Footer note */}
+              <div className="mt-16 pt-10 border-t border-[var(--color-border-strong)]/30 text-left">
+                <p className="text-sm text-[var(--color-text-secondary)] font-light">
+                  For privacy-related questions or to exercise your rights, contact us at{" "}
+                  <a
+                    href="mailto:privacy@zaby.ai"
+                    className="text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] hover:underline font-semibold transition-colors"
+                  >
+                    privacy@zaby.ai
+                  </a>
+                  . For general legal inquiries, visit our{" "}
+                  <Link href="/terms" className="text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] hover:underline font-semibold transition-colors">
+                    Terms of Service
+                  </Link>
+                  .
+                </p>
+              </div>
             </div>
 
-            {/* Section blocks */}
-            <div className="flex flex-col gap-14">
-              {PRIVACY_SECTIONS.map((section) => (
-                <section
-                  key={section.id}
-                  id={section.id}
-                  ref={(el) => {
-                    sectionRefs.current[section.id] = el;
-                  }}
-                  className="scroll-mt-28"
-                >
-                  <h2 className="text-xl font-bold text-neutral-900 mb-5 pb-3 border-b border-neutral-200">
-                    {section.title}
-                  </h2>
-                  <SectionContent content={section.content as ContentBlock[]} />
-                </section>
-              ))}
-            </div>
-
-            {/* Footer note */}
-            <div className="mt-16 pt-10 border-t border-neutral-200">
-              <p className="text-sm text-neutral-500">
-                For privacy-related questions or to exercise your rights, contact us at{" "}
-                <a
-                  href="mailto:privacy@zaby.ai"
-                  className="text-fuchsia-600 hover:underline font-medium"
-                >
-                  privacy@zaby.ai
-                </a>
-                . For general legal inquiries, visit our{" "}
-                <Link href="/terms" className="text-fuchsia-600 hover:underline font-medium">
-                  Terms of Service
-                </Link>
-                .
-              </p>
-            </div>
+            {/* Sticky Table of Contents */}
+            <TableOfContents activeSection={activeSection} onSectionClick={scrollToSection} />
           </div>
-
-          {/* Sticky Table of Contents */}
-          <TableOfContents activeSection={activeSection} onSectionClick={scrollToSection} />
-        </div>
-      </div>
+        </Container>
+      </SectionWrapper>
 
     </>
   );

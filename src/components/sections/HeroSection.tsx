@@ -6,26 +6,15 @@ import { Icon } from "@iconify/react";
 import { Button } from "@/components/ui/button";
 import { SplineScene } from "@/components/ui/splite";
 import { HeroMarquee } from "./hero/HeroMarquee";
+import { 
+  HeroBadge, 
+  HeroHeading, 
+  RevealWord, 
+  GradientOrb, 
+  GridBackground 
+} from "@/components/shared";
 
-function RevealWord({
-  children,
-  className = "",
-}: {
-  children: string;
-  className?: string;
-}) {
-  return (
-    <span className="inline-block overflow-hidden align-top">
-      <span
-        className={`reveal-word inline-block translate-y-full motion-reduce:translate-y-0 ${className}`}
-      >
-        {children}
-      </span>
-    </span>
-  );
-}
-
-export function   HeroSection() {
+export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -116,48 +105,44 @@ export function   HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative overflow-x-hidden antialiased"
+      className="relative overflow-hidden antialiased bg-transparent"
     >
-
+      {/* Ambient background effects */}
+      <GradientOrb 
+        color="purple" 
+        size="xl" 
+        className="absolute -top-[20%] -left-[10%] opacity-20 blur-[120px] z-0" 
+      />
+      <GradientOrb 
+        color="blue" 
+        size="lg" 
+        className="absolute top-[20%] -right-[5%] opacity-15 blur-[100px] z-0" 
+      />
+      <GridBackground variant="dots" opacity="light" className="z-0 opacity-[0.05]" />
 
       <div className="relative z-10 overflow-visible px-4 pt-26 md:px-6 md:pt-30 lg:pb-0 lg:pt-24">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 pb-10 md:gap-10 md:pb-12 lg:grid-cols-2 lg:gap-8">
           {/* Left column — text */}
           <div className="relative z-20 order-1 col-span-1 flex flex-col items-center text-center lg:order-1 lg:col-span-1 lg:items-start lg:text-left">
-            {/* Badge */}
-            <div className="group mb-5 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/50 bg-white/60 px-3 py-1 backdrop-blur-md transition-colors hover:bg-white/80 md:mb-8">
-              {/* <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-              </span> */}
-              <span className="text-xs font-medium tracking-wide text-accent/90">
-                ✦ Introducing Zaby AI
-              </span>
-              <Icon
-                icon="solar:alt-arrow-right-linear"
-                width={12}
-                height={12}
-                className="text-text-secondary transition-transform group-hover:translate-x-0.5"
-              />
-            </div>
+            <HeroBadge 
+              text="Introducing Zaby AI" 
+              icon="solar:alt-arrow-right-linear" 
+              className="mb-8"
+            />
 
-            {/* Heading */}
-            <h1
-              className="masked-reveal-title mb-5 text-[2.15rem] font-semibold leading-[1.1] tracking-tight text-text-primary drop-shadow-2xl text-balance sm:text-5xl md:mb-8 md:text-7xl lg:text-8xl"
-            >
-              <RevealWord>Re-Defining</RevealWord>{" "}
-              <RevealWord>AI FOR</RevealWord>{" "}
-              <br className="hidden lg:block" />
-              <RevealWord className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
-                Next-GEN
-              </RevealWord>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mb-7 max-w-xl px-1 text-[0.98rem] font-light leading-relaxed text-text-secondary text-balance md:mb-12 md:max-w-2xl md:px-0 md:text-lg lg:text-xl">
-              Zaby is the AI workspace for modern teams — think, write, and ship
-              faster with context-aware intelligence built into every workflow.
-            </p>
+            <HeroHeading 
+              title={
+                <>
+                  <RevealWord>Re-Defining</RevealWord>{" "}
+                  <RevealWord>AI FOR</RevealWord>{" "}
+                  <br className="hidden lg:block" />
+                  <RevealWord className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
+                    Next-GEN
+                  </RevealWord>
+                </>
+              }
+              subtitle="Zaby is the AI workspace for modern teams — think, write, and ship faster with context-aware intelligence built into every workflow."
+            />
 
             {/* CTA buttons */}
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">

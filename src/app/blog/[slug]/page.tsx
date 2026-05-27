@@ -12,7 +12,10 @@ import {
   LinkedinIcon as Linkedin,
   TwitterIcon as Twitter,
 } from "@/components/shared/icons";
-import { FooterSection } from "@/components/sections";
+import { SectionWrapper, Container } from "@/components/layout";
+import { GlassPanel, GradientOrb, HeroBadge } from "@/components/shared";
+import { ScrollReveal } from "@/components/animations";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -77,25 +80,25 @@ const accentStyles: Record<
   { badge: string; bar: string; gradient: string; avatar: string; prose: string }
 > = {
   fuchsia: {
-    badge: "bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-100",
-    bar: "bg-fuchsia-500",
-    gradient: "from-fuchsia-100 via-purple-50 to-pink-100",
-    avatar: "bg-fuchsia-100 text-fuchsia-700",
-    prose: "marker:text-fuchsia-500",
+    badge: "bg-[var(--color-accent)]/10 text-[var(--color-accent-soft)] border border-[var(--color-accent)]/20",
+    bar: "bg-[var(--color-accent-soft)]",
+    gradient: "from-[var(--color-accent)]/15 via-purple-500/5 to-pink-500/10",
+    avatar: "bg-[var(--color-accent)]/10 text-[var(--color-accent-soft)]",
+    prose: "marker:text-[var(--color-accent-soft)]",
   },
   blue: {
-    badge: "bg-blue-50 text-blue-700 border border-blue-100",
+    badge: "bg-blue-500/10 text-blue-500 border border-blue-500/20",
     bar: "bg-blue-500",
-    gradient: "from-blue-100 via-sky-50 to-indigo-100",
-    avatar: "bg-blue-100 text-blue-700",
+    gradient: "from-blue-500/15 via-sky-500/5 to-indigo-500/10",
+    avatar: "bg-blue-500/10 text-blue-500",
     prose: "marker:text-blue-500",
   },
   teal: {
-    badge: "bg-teal-50 text-teal-700 border border-teal-100",
+    badge: "bg-teal-500/10 text-teal-600 border border-teal-500/20",
     bar: "bg-teal-500",
-    gradient: "from-teal-100 via-emerald-50 to-cyan-100",
-    avatar: "bg-teal-100 text-teal-700",
-    prose: "marker:text-teal-500",
+    gradient: "from-teal-500/15 via-emerald-500/5 to-cyan-500/10",
+    avatar: "bg-teal-500/10 text-teal-600",
+    prose: "marker:text-teal-600",
   },
 };
 
@@ -186,6 +189,7 @@ function getCategoryName(post: BlogPost): string {
   return post.category?.name?.trim() || "Zaby";
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getAuthorName(post: BlogPost): string {
   return post.author?.name?.trim() || "Zaby Team";
 }
@@ -229,7 +233,7 @@ function CategoryBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center text-xs font-semibold px-2.5 py-0.5 rounded-full ${accentStyles[accent].badge}`}
+      className={`inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${accentStyles[accent].badge}`}
     >
       {category}
     </span>
@@ -270,15 +274,22 @@ function BlogHeroImage({ post, accent }: { post: BlogPost; accent: Accent }) {
 
   if (image) {
     return (
-      <div className="relative aspect-4/3 rounded-3xl overflow-hidden border border-neutral-200 bg-neutral-100 shadow-lg shadow-fuchsia-100/40">
+      <GlassPanel
+        padding="none"
+        className="relative aspect-4/3 rounded-3xl overflow-hidden border border-[var(--color-glass-border)] bg-white/40 dark:bg-zinc-950/20 backdrop-blur-md shadow-lg"
+      >
         <img src={image} alt={post.title} className="h-full w-full object-cover" />
-      </div>
+      </GlassPanel>
     );
   }
 
   return (
-    <div
-      className={`relative aspect-4/3 rounded-3xl overflow-hidden bg-linear-to-br ${styles.gradient} border border-neutral-200 shadow-lg shadow-fuchsia-100/40`}
+    <GlassPanel
+      padding="none"
+      className={cn(
+        "relative aspect-4/3 rounded-3xl overflow-hidden bg-linear-to-br border border-[var(--color-glass-border)] shadow-lg",
+        styles.gradient
+      )}
     >
       <div className={`absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-40 blur-2xl ${styles.bar}`} />
       <div className={`absolute -bottom-10 -left-10 w-32 h-32 rounded-full opacity-30 blur-xl ${styles.bar}`} />
@@ -287,7 +298,7 @@ function BlogHeroImage({ post, accent }: { post: BlogPost; accent: Accent }) {
           <span className="text-white text-4xl font-bold">Z</span>
         </div>
       </div>
-    </div>
+    </GlassPanel>
   );
 }
 
@@ -299,19 +310,22 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
   const href = `/blog/${post.id}`;
 
   return (
-    <article className="group flex flex-col bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:border-fuchsia-200 hover:shadow-lg hover:shadow-fuchsia-50 transition-all duration-300">
+    <GlassPanel
+      padding="none"
+      className="group flex flex-col border border-[var(--color-glass-border)] bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md rounded-2xl overflow-hidden hover:border-[var(--color-accent-soft)]/40 hover:scale-[1.01] hover:shadow-xs transition-all duration-300 h-full"
+    >
       <Link href={href} className="block cursor-pointer">
         {image ? (
           <div className="h-36 overflow-hidden bg-neutral-100">
             <img
               src={image}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-350 group-hover:scale-103"
               loading="lazy"
             />
           </div>
         ) : (
-          <div className={`relative h-36 bg-linear-to-br ${styles.gradient} flex items-center justify-center`}>
+          <div className={cn("relative h-36 bg-linear-to-br flex items-center justify-center w-full", styles.gradient)}>
             <div className={`absolute top-0 left-0 right-0 h-1 ${styles.bar}`} />
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${styles.bar}`}>
               <span className="text-white text-base font-bold">Z</span>
@@ -323,31 +337,31 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
       <div className="flex flex-col flex-1 p-5">
         <div className="flex items-center gap-2 mb-3">
           <CategoryBadge category={category} accent={accent} />
-          <span className="text-neutral-300">.</span>
-          <time dateTime={post.publishedAt || post.createdAt} className="text-xs text-neutral-400">
+          <span className="text-[var(--color-text-secondary)]/30">.</span>
+          <time dateTime={post.publishedAt || post.createdAt} className="text-[11px] font-medium text-[var(--color-text-secondary)]/70">
             {formatDate(post.publishedAt || post.createdAt)}
           </time>
         </div>
 
-        <Link href={href} className="cursor-pointer">
-          <h3 className="text-base font-bold text-neutral-900 leading-snug mb-3 group-hover:text-fuchsia-700 transition-colors line-clamp-2">
+        <Link href={href} className="cursor-pointer block mb-3">
+          <h3 className="text-base font-bold text-[var(--color-text-primary)] leading-snug group-hover:text-[var(--color-accent-soft)] transition-colors line-clamp-2 font-display">
             {post.title}
           </h3>
         </Link>
 
-        <p className="text-sm text-neutral-500 leading-relaxed line-clamp-3 flex-1 mb-5">
+        <p className="text-[13px] text-[var(--color-text-secondary)] leading-relaxed line-clamp-3 flex-1 mb-5 font-light">
           {getExcerpt(post)}
         </p>
 
         <Link
           href={href}
-          className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors group/link cursor-pointer"
+          className="mt-auto inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] transition-colors group/link cursor-pointer"
         >
           Read more
           <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
         </Link>
       </div>
-    </article>
+    </GlassPanel>
   );
 }
 
@@ -386,103 +400,132 @@ export default async function BlogPostPage({ params }: Props) {
   const shareUrl = `https://zaby.io${sharePath}`;
 
   return (
-    <div className=" min-h-screen">
-      <section className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 md:pt-40 md:pb-24">
-        <div
-          className={`absolute top-0 right-0 w-[520px] h-[520px] bg-linear-to-br ${styles.gradient} opacity-60 blur-3xl rounded-full -translate-y-1/2 translate-x-1/4`}
+    <div className="min-h-screen">
+      {/* Hero Header Section */}
+      <SectionWrapper
+        spacing="none"
+        background="transparent"
+        className="relative mt-20 sm:mt-30 flex items-center justify-center overflow-hidden"
+      >
+        {/* Background ambient glow orbs */}
+        <GradientOrb
+          color="purple"
+          size="xl"
+          className="absolute right-1/4 top-1/2 -translate-y-1/2 opacity-[0.08] dark:opacity-[0.05] pointer-events-none"
         />
-        <div
-          className={`absolute bottom-0 left-0 w-[320px] h-[320px] bg-linear-to-br ${styles.gradient} opacity-50 blur-2xl rounded-full translate-y-1/2 -translate-x-1/4`}
+        <GradientOrb
+          color="pink"
+          size="lg"
+          className="absolute left-1/4 top-1/4 opacity-[0.06] dark:opacity-[0.03] pointer-events-none"
         />
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 relative z-10">
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-8 sm:mb-10">
-            <Link
-              href="/"
-              className="group relative text-neutral-600 hover:text-neutral-950 transition-all duration-300 cursor-pointer inline-flex items-center gap-1"
-            >
-              Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-fuchsia-500 to-fuchsia-400 group-hover:w-full transition-all duration-300" />
-            </Link>
-            <span className="text-neutral-300">/</span>
-            <Link
-              href="/blog"
-              className="group relative text-neutral-600 hover:text-neutral-950 transition-all duration-300 cursor-pointer inline-flex items-center gap-1"
-            >
-              Blog
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-fuchsia-500 to-fuchsia-400 group-hover:w-full transition-all duration-300" />
-            </Link>
-            <span className="text-neutral-300">/</span>
-            <span className="text-neutral-400 line-clamp-1">{post.title}</span>
-          </nav>
+        <Container size="lg" className="relative z-10 py-10 sm:py-16">
+          {/* Breadcrumbs */}
+          <ScrollReveal direction="up" delay={0.05}>
+            <nav className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]/60 mb-8 sm:mb-10">
+              <Link href="/" className="hover:text-[var(--color-accent-soft)] transition-colors cursor-pointer">
+                Home
+              </Link>
+              <span>/</span>
+              <Link href="/blog" className="hover:text-[var(--color-accent-soft)] transition-colors cursor-pointer">
+                Blog
+              </Link>
+              <span>/</span>
+              <span className="text-[var(--color-text-primary)] line-clamp-1">{post.title}</span>
+            </nav>
+          </ScrollReveal>
 
+          {/* Heading Content */}
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
-                <CategoryBadge category={category} accent={accent} />
-                <div className="flex items-center gap-2 text-neutral-500 text-xs sm:text-sm">
-                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {formatDate(publishedDate)}
+              <ScrollReveal direction="up" delay={0.1}>
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
+                  <CategoryBadge category={category} accent={accent} />
+                  <div className="flex items-center gap-2 text-[var(--color-text-secondary)]/80 text-xs sm:text-sm font-medium">
+                    <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--color-accent-soft)]" />
+                    {formatDate(publishedDate)}
+                  </div>
+                  <div className="flex items-center gap-2 text-[var(--color-text-secondary)]/80 text-xs sm:text-sm font-medium">
+                    <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--color-accent-soft)]" />
+                    {calculateReadingTime(post.content)}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-neutral-500 text-xs sm:text-sm">
-                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {calculateReadingTime(post.content)}
-                </div>
-              </div>
+              </ScrollReveal>
 
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-neutral-950 leading-[1.15] sm:leading-[1.1] tracking-tight mb-6 sm:mb-8">
-                {post.title}
-              </h1>
+              <ScrollReveal direction="up" delay={0.15}>
+                <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-[var(--color-text-primary)] leading-[1.15] sm:leading-[1.1] tracking-tight mb-6 sm:mb-8 font-display">
+                  {post.title}
+                </h1>
+              </ScrollReveal>
 
-              <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed max-w-2xl">
-                {getExcerpt(post)}
-              </p>
+              <ScrollReveal direction="up" delay={0.18}>
+                <p className="text-base sm:text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-2xl font-light">
+                  {getExcerpt(post)}
+                </p>
+              </ScrollReveal>
             </div>
 
             <div className="hidden lg:block">
-              <BlogHeroImage post={post} accent={accent} />
+              <ScrollReveal direction="up" delay={0.2}>
+                <BlogHeroImage post={post} accent={accent} />
+              </ScrollReveal>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </SectionWrapper>
 
-      <section className="py-12 sm:py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-24">
+      {/* Main Content Article & Sidebar */}
+      <SectionWrapper spacing="md" background="transparent" className="overflow-visible">
+        <Container size="lg">
           <div className="grid lg:grid-cols-[1fr_300px] gap-12 sm:gap-16 md:gap-24">
+            {/* Article Content */}
             <article className="max-w-none">
               <div
-                className={`blog-content max-w-none text-neutral-700 ${styles.prose} [&_p]:mb-6 [&_p]:text-base sm:[&_p]:text-lg [&_p]:leading-relaxed [&_strong]:font-semibold [&_strong]:text-neutral-900 [&_h2]:mt-10 sm:[&_h2]:mt-14 [&_h2]:mb-4 sm:[&_h2]:mb-6 [&_h2]:border-b [&_h2]:border-neutral-100 [&_h2]:pb-3 sm:[&_h2]:pb-4 [&_h2]:text-2xl sm:[&_h2]:text-3xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-neutral-900 [&_h3]:mt-8 sm:[&_h3]:mt-10 [&_h3]:mb-3 sm:[&_h3]:mb-4 [&_h3]:text-xl sm:[&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-neutral-900 [&_ul]:mb-8 [&_ul]:ml-5 sm:[&_ul]:ml-6 [&_ul]:list-disc [&_ol]:mb-8 [&_ol]:ml-5 sm:[&_ol]:ml-6 [&_ol]:list-decimal [&_li]:mb-3 [&_li_p]:mb-0 [&_hr]:my-10 sm:[&_hr]:my-12 [&_hr]:border-neutral-200 [&_img]:my-6 sm:[&_img]:my-8 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-neutral-100 [&_img]:object-cover [&_img]:shadow-sm`}
+                className={cn(
+                  "blog-content max-w-none text-[var(--color-text-primary)] font-light",
+                  styles.prose,
+                  "[&_p]:mb-6 [&_p]:text-base sm:[&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-[var(--color-text-secondary)]",
+                  "[&_strong]:font-semibold [&_strong]:text-[var(--color-text-primary)]",
+                  "[&_h2]:mt-10 sm:[&_h2]:mt-14 [&_h2]:mb-4 sm:[&_h2]:mb-6 [&_h2]:border-b [&_h2]:border-[var(--color-border-strong)]/30 [&_h2]:pb-3 sm:[&_h2]:pb-4 [&_h2]:text-2xl sm:[&_h2]:text-3xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-[var(--color-text-primary)] [&_h2]:font-display",
+                  "[&_h3]:mt-8 sm:[&_h3]:mt-10 [&_h3]:mb-3 sm:[&_h3]:mb-4 [&_h3]:text-xl sm:[&_h3]:text-2xl [&_h3]:font-bold [&_h3]:text-[var(--color-text-primary)] [&_h3]:font-display",
+                  "[&_ul]:mb-8 [&_ul]:ml-5 sm:[&_ul]:ml-6 [&_ul]:list-disc [&_ol]:mb-8 [&_ol]:ml-5 sm:[&_ol]:ml-6 [&_ol]:list-decimal [&_li]:mb-3 [&_li_p]:mb-0 [&_li]:text-[var(--color-text-secondary)]",
+                  "[&_hr]:my-10 sm:[&_hr]:my-12 [&_hr]:border-[var(--color-border-strong)]/30",
+                  "[&_img]:my-6 sm:[&_img]:my-8 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-[var(--color-border-strong)]/30 [&_img]:object-cover [&_img]:shadow-xs"
+                )}
                 dangerouslySetInnerHTML={{ __html: post.content || "" }}
               />
             </article>
 
+            {/* Sidebar Aside */}
             <aside>
-              <div className="sticky top-32 space-y-10 sm:space-y-12">
+              <div className="sticky top-32 space-y-10 sm:space-y-12 text-left">
+                {/* Author Info */}
                 <div className="pt-0">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-text-secondary)]/60 mb-4">
                     Author
                   </h4>
                   <div className="flex items-center gap-4">
                     <AuthorAvatar author={post.author} accent={accent} />
                     <div>
-                      <div className="text-sm font-bold text-neutral-900">{authorName}</div>
-                      <div className="text-xs text-neutral-500">
+                      <div className="text-sm font-bold text-[var(--color-text-primary)] font-display">{authorName}</div>
+                      <div className="text-xs text-[var(--color-text-secondary)]/70 mt-0.5">
                         {post.author?.designation || "Zaby Team"}
                       </div>
                     </div>
                   </div>
                 </div>
 
+                {/* Tags */}
                 {post.tags && post.tags.length > 0 ? (
-                  <div className="pt-8 border-t border-neutral-100">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
+                  <div className="pt-8 border-t border-[var(--color-border-strong)]/30">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-text-secondary)]/60 mb-4">
                       Tags
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-[11px] font-medium text-neutral-600"
+                          className="rounded-full border border-[var(--color-border-strong)]/40 bg-white/40 dark:bg-zinc-900/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]"
                         >
                           {tag.name}
                         </span>
@@ -491,8 +534,9 @@ export default async function BlogPostPage({ params }: Props) {
                   </div>
                 ) : null}
 
-                <div className="pt-8 border-t border-neutral-100">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">
+                {/* Share Post */}
+                <div className="pt-8 border-t border-[var(--color-border-strong)]/30">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-text-secondary)]/60 mb-4">
                     Share post
                   </h4>
                   <div className="flex gap-3">
@@ -500,7 +544,7 @@ export default async function BlogPostPage({ params }: Props) {
                       href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
+                      className="w-10 h-10 rounded-full border border-[var(--color-border-strong)]/60 flex items-center justify-center text-[var(--color-text-secondary)]/80 hover:border-[var(--color-accent-soft)] hover:text-[var(--color-accent-soft)] hover:bg-[var(--color-accent)]/10 transition-all duration-200 cursor-pointer"
                       aria-label="Share on Twitter"
                     >
                       <Twitter className="w-4 h-4" />
@@ -509,15 +553,15 @@ export default async function BlogPostPage({ params }: Props) {
                       href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
+                      className="w-10 h-10 rounded-full border border-[var(--color-border-strong)]/60 flex items-center justify-center text-[var(--color-text-secondary)]/80 hover:border-[var(--color-accent-soft)] hover:text-[var(--color-accent-soft)] hover:bg-[var(--color-accent)]/10 transition-all duration-200 cursor-pointer"
                       aria-label="Share on LinkedIn"
                     >
                       <Linkedin className="w-4 h-4" />
                     </a>
                     <Link
                       href={sharePath}
-                      className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:border-fuchsia-200 hover:text-fuchsia-600 hover:bg-fuchsia-50 transition-all cursor-pointer"
-                      aria-label="Open canonical blog link"
+                      className="w-10 h-10 rounded-full border border-[var(--color-border-strong)]/60 flex items-center justify-center text-[var(--color-text-secondary)]/80 hover:border-[var(--color-accent-soft)] hover:text-[var(--color-accent-soft)] hover:bg-[var(--color-accent)]/10 transition-all duration-200 cursor-pointer"
+                      aria-label="Open canonical link"
                     >
                       <LinkIcon className="w-4 h-4" />
                     </Link>
@@ -526,22 +570,27 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
             </aside>
           </div>
-        </div>
-      </section>
+        </Container>
+      </SectionWrapper>
 
-       <section className="relative mb-10 flex items-center justify-center text-center overflow-x-hidden text-(--foreground) antialiased selection:bg-white/30 selection:text-black px-4 sm:px-0">
-          <div className="w-full max-w-7xl md:bg-white/40 md:backdrop-blur-3xl md:rounded-[2.5rem] md:border md:border-white/60 md:shadow-[0_8px_40px_rgb(0,0,0,0.04)] p-6 sm:p-10 md:p-12 lg:p-16">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 text-left gap-6">
+      {/* Related Posts Section */}
+      <SectionWrapper spacing="lg" background="transparent">
+        <Container size="lg">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 text-left gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3 sm:mb-4">Related posts</h2>
-              <p className="text-neutral-500 text-sm sm:text-base">More insights from the Zaby team.</p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--color-text-primary)] mb-2 font-display">
+                Related posts
+              </h2>
+              <p className="text-[var(--color-text-secondary)] text-sm sm:text-base font-light">
+                More insights from the Zaby team.
+              </p>
             </div>
             <Link
               href="/blog"
-              className="hidden sm:flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors cursor-pointer"
+              className="hidden sm:flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] transition-colors cursor-pointer"
             >
               View all posts
-              <ArrowLeft className="w-4 h-4 rotate-180" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -552,7 +601,7 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-neutral-200 bg-white p-10 text-center text-sm text-neutral-500">
+            <div className="rounded-2xl border border-[var(--color-border-strong)]/30 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm p-10 text-center text-sm text-[var(--color-text-secondary)]">
               More posts will appear here as the blog grows.
             </div>
           )}
@@ -560,15 +609,14 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mt-10 sm:hidden text-center">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] hover:text-[var(--color-accent-hover)] transition-colors cursor-pointer"
             >
               View all posts
-              <ArrowLeft className="w-4 h-4 rotate-180" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
-      </section>
-
+        </Container>
+      </SectionWrapper>
     </div>
   );
 }

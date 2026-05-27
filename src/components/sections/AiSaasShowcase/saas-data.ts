@@ -2,6 +2,7 @@ export interface SaasCardData {
   id: string;
   badge: string;
   accentColor: string;
+  colorName: "purple" | "blue" | "orange" | "primary" | "pink";
   heading: string[];
   description: string;
   features: { icon: string; label: string }[];
@@ -15,6 +16,7 @@ export const saasCardData: SaasCardData[] = [
     id: "assessments",
     badge: "AI ASSESSMENTS",
     accentColor: "#7c3aed",
+    colorName: "purple",
     heading: ["AI", "Assessments"],
     description: "Automated candidate screening and evaluation with adaptive AI-generated questions and grading.",
     features: [
@@ -35,6 +37,7 @@ export const saasCardData: SaasCardData[] = [
     id: "interviews",
     badge: "MOCK INTERVIEWS",
     accentColor: "#0ea5e9",
+    colorName: "blue",
     heading: ["Mock", "Interviews"],
     description: "Practice sessions with intelligent AI feedback, real-time coaching, and performance analysis.",
     features: [
@@ -55,6 +58,7 @@ export const saasCardData: SaasCardData[] = [
     id: "analytics",
     badge: "SKILL ANALYTICS",
     accentColor: "#f59e0b",
+    colorName: "orange",
     heading: ["Skill", "Analytics"],
     description: "Deep insight into workforce capability gaps with predictive modeling and growth tracking.",
     features: [
@@ -75,6 +79,7 @@ export const saasCardData: SaasCardData[] = [
     id: "question-bank",
     badge: "AUTO QUESTION BANK",
     accentColor: "#10b981",
+    colorName: "primary",
     heading: ["Auto", "Question Bank"],
     description: "AI-generated assessment libraries with domain-specific questions, difficulty tuning, and version control.",
     features: [
@@ -95,6 +100,7 @@ export const saasCardData: SaasCardData[] = [
     id: "talent-intel",
     badge: "TALENT INTEL",
     accentColor: "#ec4899",
+    colorName: "pink",
     heading: ["Talent", "Intelligence"],
     description: "Market intelligence for hiring strategy with role benchmarking and competitive talent mapping.",
     features: [
@@ -115,6 +121,7 @@ export const saasCardData: SaasCardData[] = [
     id: "compliance",
     badge: "SECURITY COMPLIANCE",
     accentColor: "#6366f1",
+    colorName: "purple",
     heading: ["Security", "Compliance"],
     description: "Automated compliance monitoring, audit trails, and policy enforcement for enterprise AI operations.",
     features: [

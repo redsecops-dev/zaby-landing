@@ -1,12 +1,17 @@
 "use client";
 
-import { Icon } from "@iconify/react";
-import { FadeUp } from "@/components/animations";
-import { GradientOrb } from "@/components/shared/GradientOrb";
+import React from "react";
+import { SectionWrapper, Container } from "@/components/layout";
+import { HeroBadge, HeroHeading, GradientOrb } from "@/components/shared";
+import { ScrollReveal } from "@/components/animations";
 
 export function ContactHeroSection() {
   return (
-    <section className="relative flex min-h-[52vh] items-center justify-center overflow-hidden py-28 md:py-36">
+    <SectionWrapper
+      spacing="none"
+      background="transparent"
+      className="relative flex min-h-[80vh] items-center md:mt-30 justify-center overflow-hidden"
+    >
       {/* Background orbs */}
       <GradientOrb
         color="purple"
@@ -19,36 +24,33 @@ export function ContactHeroSection() {
         className="absolute right-1/4 top-1/4 opacity-15"
       />
 
-      <div className="relative mx-auto w-full max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-        <FadeUp>
+      <Container
+        size="lg"
+        className="relative z-10 flex flex-col items-center text-center"
+      >
+        <ScrollReveal direction="up" delay={0.1}>
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/50 bg-white/60 px-3 py-1 backdrop-blur-md">
-            <Icon
-              icon="solar:phone-calling-bold-duotone"
-              width={12}
-              height={12}
-              className="text-accent"
-            />
-            <span className="text-xs font-medium tracking-wide text-accent/90">
-              Contact Us
-            </span>
-          </div>
+          <HeroBadge
+            text="Contact Us"
+            icon="solar:phone-calling-bold-duotone"
+            className="mb-6 inline-flex"
+          />
 
-          {/* Heading */}
-          <h1 className="text-[2.5rem] font-semibold leading-[1.08] tracking-tight text-text-primary sm:text-5xl md:text-6xl lg:text-7xl">
-            Get in{" "}
-            <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
-              Touch
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mx-auto mt-6 max-w-2xl text-lg font-light leading-relaxed text-text-secondary">
-            Ready to deploy operational AI across your business? We&apos;re here
-            to help you build, configure, and scale your AI workforce.
-          </p>
-        </FadeUp>
-      </div>
-    </section>
+          {/* Heading & Subtitle */}
+          <HeroHeading
+            className="w-full items-center lg:!items-center text-center [&>h1]:text-center [&>p]:mx-auto"
+            title={
+              <>
+                Get in{" "}
+                <span className="bg-linear-to-br from-[var(--color-accent)] via-[#c026d3] to-[var(--color-accent-soft)] bg-clip-text text-transparent">
+                  Touch
+                </span>
+              </>
+            }
+            subtitle="Ready to deploy operational AI across your business? We're here to help you build, configure, and scale your AI workforce."
+          />
+        </ScrollReveal>
+      </Container>
+    </SectionWrapper>
   );
 }

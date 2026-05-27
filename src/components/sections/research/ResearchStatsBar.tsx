@@ -1,32 +1,43 @@
-import { FadeUp } from "@/components/animations";
+"use client";
+
+import { SectionWrapper, Container } from "@/components/layout";
+import { ScrollReveal } from "@/components/animations";
+import { cn } from "@/lib/utils";
 import { RESEARCH_STATS } from "./data";
 
 export function ResearchStatsBar() {
   return (
-    <section className="border-y border-white/60 bg-white/40 backdrop-blur-sm">
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 divide-x divide-white/40 md:grid-cols-4">
+    <SectionWrapper
+      spacing="none"
+      background="transparent"
+      className="border-y border-[var(--color-border-strong)]/40 py-14"
+    >
+      <Container size="lg">
+        <div className="grid grid-cols-2 gap-y-10 md:grid-cols-4">
           {RESEARCH_STATS.map((stat, i) => (
-            <FadeUp key={stat.label} delay={i * 0.07}>
-              <div className="flex flex-col items-center py-8 px-4 text-center sm:py-10">
-                <div className="text-4xl font-bold tracking-tight sm:text-5xl">
-                  <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
-                    {stat.value}
-                  </span>
-                </div>
-                <div className="mt-1.5 text-sm font-semibold text-foreground">
+            <ScrollReveal key={stat.label} direction="up" delay={i * 0.07}>
+              <div
+                className={cn(
+                  "flex flex-col items-center gap-1.5 px-4 text-center",
+                  i > 0 && "md:border-l md:border-[var(--color-border-strong)]/30"
+                )}
+              >
+                <span className="text-3xl sm:text-4xl font-semibold tracking-tight bg-linear-to-br from-[var(--color-accent)] via-[#c026d3] to-[var(--color-accent-soft)] bg-clip-text text-transparent leading-none">
+                  {stat.value}
+                </span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-primary)]">
                   {stat.label}
-                </div>
+                </span>
                 {stat.description && (
-                  <p className="mt-1 hidden text-xs leading-snug text-muted-foreground/70 sm:block">
+                  <p className="mt-1 hidden max-w-[200px] text-xs leading-relaxed text-[var(--color-text-secondary)]/80 sm:block">
                     {stat.description}
                   </p>
                 )}
               </div>
-            </FadeUp>
+            </ScrollReveal>
           ))}
         </div>
-      </div>
-    </section>
+      </Container>
+    </SectionWrapper>
   );
 }

@@ -1,13 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const headingVariants = cva("", {
+const headingVariants = cva("flex flex-col gap-3", {
   variants: {
-    size: {
-      sm: "text-2xl sm:text-3xl",
-      md: "text-3xl sm:text-4xl",
-      lg: "text-4xl sm:text-5xl",
-    },
     align: {
       left: "text-left items-start",
       center: "text-center items-center",
@@ -15,14 +10,26 @@ const headingVariants = cva("", {
     },
   },
   defaultVariants: {
-    size: "md",
     align: "center",
   },
 });
 
-export interface SectionHeadingProps extends VariantProps<typeof headingVariants> {
+const titleVariants = cva("leading-tight tracking-tight font-light text-[var(--color-text-primary)]", {
+  variants: {
+    size: {
+      sm: "text-2xl sm:text-3xl",
+      md: "text-3xl sm:text-4xl",
+      lg: "text-4xl sm:text-5xl",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
+
+export interface SectionHeadingProps extends VariantProps<typeof headingVariants>, VariantProps<typeof titleVariants> {
   label?: string;
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
   gradient?: boolean;
   className?: string;
@@ -38,7 +45,7 @@ export function SectionHeading({
   className,
 }: SectionHeadingProps) {
   return (
-    <div className={cn("flex flex-col gap-3", headingVariants({ align }), className)}>
+    <div className={cn(headingVariants({ align }), className)}>
       {label && (
         <span
           className={cn(
@@ -52,7 +59,7 @@ export function SectionHeading({
       )}
       <h2
         className={cn(
-          "leading-tight tracking-tight font-light text-[var(--color-text-primary)]",
+          titleVariants({ size }),
           gradient && "gradient-text"
         )}
       >

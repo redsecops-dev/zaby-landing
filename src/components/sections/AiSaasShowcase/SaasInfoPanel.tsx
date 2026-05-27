@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { SaasCardData } from "./saas-data";
+import { GlassPanel } from "@/components/shared/GlassPanel";
+import { GradientOrb } from "@/components/shared/GradientOrb";
 
 interface Props {
   data: SaasCardData;
@@ -52,7 +54,7 @@ function PanelHeading({ lines }: { lines: string[] }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...spring, delay: 0.07 + li * 0.06 }}
           >
-            <span className="text-[2.5rem] font-medium tracking-tight leading-tight text-slate-800 block">
+            <span className="text-[2.5rem] font-medium tracking-tight leading-tight text-[var(--color-text-primary)] block">
               {line}
             </span>
           </motion.div>
@@ -65,42 +67,26 @@ function PanelHeading({ lines }: { lines: string[] }) {
 export function SaasInfoPanel({ data, index, total }: Props) {
   return (
     <motion.div
-      className="relative flex flex-col justify-between min-h-[520px] lg:h-full p-8 md:p-10 overflow-hidden rounded-[24px] bg-white/40 border border-slate-100/50"
+      className="relative flex flex-col justify-between min-h-[520px] lg:h-full p-8 md:p-10 overflow-hidden rounded-[24px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
         {/* Ambient background glows */}
-        <div 
-          className="absolute -right-32 -top-32 w-80 h-80 rounded-full blur-[100px] opacity-25 pointer-events-none transition-all duration-700" 
-          style={{ background: data.accentColor }} 
+        <GradientOrb 
+          color={data.colorName} 
+          size="lg" 
+          className="absolute -right-32 -top-32 opacity-25 transition-all duration-700 z-0" 
         />
-        <div 
-          className="absolute -left-20 -bottom-20 w-60 h-60 rounded-full blur-[80px] opacity-15 pointer-events-none transition-all duration-700" 
-          style={{ background: data.accentColor }} 
+        <GradientOrb 
+          color={data.colorName} 
+          size="md" 
+          className="absolute -left-20 -bottom-20 opacity-15 transition-all duration-700 z-0" 
         />
 
-        {/* Glass Layers */}
-        <div
-          className="absolute inset-0 z-0 overflow-hidden rounded-[24px]"
-          style={{
-            backdropFilter: "blur(6px)",
-            filter: "url(#glass-distortion)",
-            isolation: "isolate",
-          }}
-        />
-        <div
-          className="absolute inset-0 z-10 rounded-[24px]"
-          style={{ background: "rgba(255, 255, 255, 0.25)" }}
-        />
-        <div
-          className="absolute inset-0 z-20 rounded-[24px] overflow-hidden"
-          style={{
-            boxShadow:
-              "inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.3)",
-          }}
-        />
+        {/* Standard Glass Background */}
+        <GlassPanel padding="none" className="absolute inset-0 z-0 rounded-[24px]" />
 
         <div className="relative z-30 flex flex-col justify-between h-full">
           {/* Badge + counter */}
@@ -108,7 +94,7 @@ export function SaasInfoPanel({ data, index, total }: Props) {
             <StatusBadge label={data.badge} color={data.accentColor} />
             <motion.span
               {...fadeUp(0.12)}
-              className="text-xs text-slate-400 font-medium tabular-nums"
+              className="text-xs text-[var(--color-text-secondary)] font-medium tabular-nums"
             >
               {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
             </motion.span>
@@ -120,7 +106,7 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           {/* Description */}
           <motion.p
             {...fadeUp(0.18)}
-            className="text-sm text-slate-500 leading-relaxed mt-4 mb-6 max-w-md"
+            className="text-sm text-[var(--color-text-secondary)] leading-relaxed mt-4 mb-6 max-w-md"
           >
             {data.description}
           </motion.p>
@@ -131,14 +117,14 @@ export function SaasInfoPanel({ data, index, total }: Props) {
               <motion.div
                 key={feat.label}
                 {...fadeUp(0.22 + fi * 0.04)}
-                className="flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5"
+                className="flex items-center gap-2.5 rounded-xl border border-[var(--color-border-strong)] bg-slate-50/50 px-3 py-2.5"
               >
                 <Icon 
                   icon={feat.icon} 
                   className="text-base flex-shrink-0" 
                   style={{ color: data.accentColor }}
                 />
-                <span className="text-xs font-medium text-slate-500">{feat.label}</span>
+                <span className="text-xs font-medium text-[var(--color-text-secondary)]">{feat.label}</span>
               </motion.div>
             ))}
           </div>
@@ -146,12 +132,12 @@ export function SaasInfoPanel({ data, index, total }: Props) {
           {/* Stats row */}
           <motion.div
             {...fadeUp(0.38)}
-            className="flex items-center gap-6 border-t border-slate-100 pt-5 mb-6"
+            className="flex items-center gap-6 border-t border-[var(--color-border-strong)] pt-5 mb-6"
           >
             {data.stats.map((stat) => (
               <div key={stat.label} className="text-left">
-                <div className="text-lg font-semibold text-slate-800 tabular-nums">{stat.value}</div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
+                <div className="text-lg font-semibold text-[var(--color-text-primary)] tabular-nums">{stat.value}</div>
+                <div className="text-[10px] text-[var(--color-text-secondary)] uppercase tracking-wider font-medium">
                   {stat.label}
                 </div>
               </div>
@@ -167,7 +153,7 @@ export function SaasInfoPanel({ data, index, total }: Props) {
               {data.cta}
               <ArrowRight size={14} />
             </button>
-            <button className="text-xs font-medium text-slate-400 hover:text-slate-800 transition-colors cursor-pointer">
+            <button className="text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer">
               {data.ctaSecondary}
             </button>
           </motion.div>
