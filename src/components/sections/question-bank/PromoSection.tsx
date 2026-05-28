@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Database, Fingerprint, Users, ArrowRight } from "lucide-react";
 import { SectionWrapper, Container } from "@/components/layout";
-import { GlassPanel, GradientOrb } from "@/components/shared";
+import { GlassPanel, GradientOrb, ShimmerButton } from "@/components/shared";
 import { ScrollReveal } from "@/components/animations";
 import { Button } from "@/components/ui/button";
 
@@ -41,16 +41,18 @@ export default function PromoSection() {
               </p>
               
               <div className="mt-4 flex flex-wrap gap-4">
-                <Button 
+                <ShimmerButton
                   asChild
-                  size="lg"
-                  className="group cursor-pointer rounded-full bg-[var(--color-button-primary-bg)] hover:bg-[var(--color-button-primary-hover)] text-white font-semibold shadow-[rgba(47,19,98,0.15)_0px_10px_25px_-5px] transition-all duration-300 hover:scale-[1.02]"
+                  shimmerColor="#e879f9"
+                  background="var(--color-button-primary-bg)"
+                  borderRadius="9999px"
+                  className="group relative flex cursor-pointer items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold tracking-wide text-white shadow-[rgba(47,19,98,0.15)_0px_10px_25px_-5px]"
                 >
                   <Link href="https://platform.zaby.io/tenant/signup">
-                    Book Demo
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    <span className="relative z-10">Book Demo</span>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 relative z-10" />
                   </Link>
-                </Button>
+                </ShimmerButton>
               </div>
             </div>
 

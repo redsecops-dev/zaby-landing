@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import SandboxDashboard from "../shared/SandboxDashboard";
+import { GlassPanel } from "@/components/shared";
 import {
   HeroLiquidMetalRoot,
   HeroLiquidMetalContainer,
@@ -18,13 +19,13 @@ import {
 
 export function OpenAgentsPreview() {
   return (
-    <div className="w-full min-h-full h-auto bg-white text-slate-800 font-sans antialiased selection:bg-blue-500/10 p-8 flex flex-col gap-12 relative overflow-hidden"
-      style={{ backgroundImage: "radial-gradient(circle at top center, rgba(59, 130, 246, 0.04) 0%, transparent 60%)" }}>
+    <div className="w-full min-h-full h-auto bg-slate-50/20 text-slate-800 font-sans antialiased selection:bg-purple-500/10 p-8 flex flex-col gap-12 relative overflow-hidden"
+      style={{ backgroundImage: "radial-gradient(circle at top center, rgba(232, 121, 249, 0.05) 0%, transparent 60%)" }}>
 
       {/* Background subtle grid */}
       <div className="absolute inset-0 pointer-events-none opacity-40"
         style={{
-          backgroundImage: "linear-gradient(to right, rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.08) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(to right, rgba(232, 121, 249, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(232, 121, 249, 0.08) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
           maskImage: "radial-gradient(circle at center, black, transparent 80%)",
           WebkitMaskImage: "radial-gradient(circle at center, black, transparent 80%)"
@@ -52,7 +53,7 @@ export function OpenAgentsPreview() {
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16 relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-blue-500 text-xs uppercase tracking-[0.25em] font-bold">Agent Capabilities</span>
+            <span className="text-purple-500 text-xs uppercase tracking-[0.25em] font-bold">Agent Capabilities</span>
           </div>
 
           <motion.h2
@@ -67,7 +68,10 @@ export function OpenAgentsPreview() {
         </div>
 
         {/* Bento Grid Container with Border Gradients */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 relative z-10 bg-white/60 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-slate-200/80 rounded-2xl overflow-hidden">
+        <GlassPanel
+          padding="none"
+          className="grid grid-cols-1 lg:grid-cols-3 relative z-10 bg-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-slate-200/80 rounded-2xl overflow-hidden"
+        >
 
           {/* Cell 1: Autonomous workflow automation */}
           <motion.div
@@ -75,7 +79,7 @@ export function OpenAgentsPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
+            whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
             className="p-8 h-72 relative group overflow-hidden bg-white"
             style={{ borderRight: "1px solid rgba(226, 232, 240, 0.8)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)" }}>
 
@@ -89,7 +93,7 @@ export function OpenAgentsPreview() {
 
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-blue-500 font-bold mb-2 block">01 / Workflow</span>
+                <span className="text-[10px] uppercase tracking-widest text-purple-500 font-bold mb-2 block">01 / Workflow</span>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Autonomous Workflow Automation</h3>
                 <p className="text-xs font-light leading-relaxed transition-colors text-slate-500 max-w-[90%]">
                   Orchestrate complex tasks from start to finish without human intervention, adapting dynamically to system state changes.
@@ -126,10 +130,10 @@ export function OpenAgentsPreview() {
             {/* Spinning Orbits */}
             <div className="absolute inset-0 flex items-center justify-center opacity-[0.15] pointer-events-none z-0">
               <svg width="300" height="300" viewBox="0 0 100 100" className="animate-[spin_40s_linear_infinite]">
-                <circle cx="50" cy="50" r="20" fill="none" stroke="black" strokeWidth="0.2" strokeDasharray="1 2"></circle>
-                <circle cx="50" cy="50" r="30" fill="none" stroke="black" strokeWidth="0.2" strokeDasharray="1 3"></circle>
-                <circle cx="50" cy="50" r="40" fill="none" stroke="black" strokeWidth="0.2" strokeDasharray="2 4"></circle>
-                <circle cx="50" cy="50" r="45" fill="none" stroke="black" strokeWidth="0.1" strokeDasharray="1 5"></circle>
+                <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(232, 121, 249, 0.25)" strokeWidth="0.2" strokeDasharray="1 2"></circle>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(232, 121, 249, 0.25)" strokeWidth="0.2" strokeDasharray="1 3"></circle>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(232, 121, 249, 0.25)" strokeWidth="0.2" strokeDasharray="2 4"></circle>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(232, 121, 249, 0.25)" strokeWidth="0.1" strokeDasharray="1 5"></circle>
               </svg>
             </div>
 
@@ -140,7 +144,7 @@ export function OpenAgentsPreview() {
                 aria-hidden
               >
                 <div className="absolute h-[88%] w-[78%] rounded-[42%] bg-purple-500/[0.22] blur-[52px] transition-opacity duration-700 group-hover:bg-purple-500/[0.28]" />
-                <div className="absolute h-[62%] w-[58%] translate-y-1 rounded-full bg-cyan-400/[0.14] blur-[40px] transition-opacity duration-700 group-hover:bg-cyan-400/[0.2]" />
+                <div className="absolute h-[62%] w-[58%] translate-y-1 rounded-full bg-fuchsia-400/[0.14] blur-[40px] transition-opacity duration-700 group-hover:bg-fuchsia-400/[0.2]" />
                 <div className="absolute h-[48%] w-[42%] -translate-y-2 rounded-full bg-fuchsia-400/[0.12] blur-[32px] transition-opacity duration-700 group-hover:bg-fuchsia-400/[0.18]" />
                 <div className="absolute bottom-[8%] left-1/2 h-10 w-[65%] -translate-x-1/2 rounded-full bg-purple-400/[0.1] blur-2xl" />
               </div>
@@ -154,7 +158,7 @@ export function OpenAgentsPreview() {
             </div>
 
             <div className="mt-8 text-center max-w-[90%] relative z-10">
-              <span className="text-[10px] uppercase tracking-widest text-blue-500 font-bold mb-2 block">Core Intelligence</span>
+              <span className="text-[10px] uppercase tracking-widest text-purple-500 font-bold mb-2 block">Core Intelligence</span>
               <h3 className="text-lg font-semibold text-slate-900 mb-2">Multi-Step Reasoning & Decision Making</h3>
               <p className="text-xs font-light leading-relaxed transition-colors text-slate-500">
                 Empower agents to evaluate complex execution trees, plan steps ahead, and automatically self-heal from exceptions.
@@ -168,7 +172,7 @@ export function OpenAgentsPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
+            whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
             className="p-8 h-72 relative group overflow-hidden bg-white"
             style={{ borderRight: "1px solid rgba(226, 232, 240, 0.8)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)" }}>
 
@@ -176,7 +180,7 @@ export function OpenAgentsPreview() {
 
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-blue-500 font-bold mb-2 block">02 / Protocol</span>
+                <span className="text-[10px] uppercase tracking-widest text-purple-500 font-bold mb-2 block">02 / Protocol</span>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Sandbox MCPs</h3>
                 <p className="text-xs font-light leading-relaxed transition-colors text-slate-500 max-w-[90%]">
                   Expose secure Model Context Protocol servers to agents, enabling dynamic tool discovery and safe sandbox resource execution.
@@ -184,12 +188,12 @@ export function OpenAgentsPreview() {
               </div>
 
               {/* Animated MCP Server Badge */}
-              <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-slate-200 bg-slate-50 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.02)] self-start mt-2">
+              <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-purple-100 bg-slate-50 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.02)] self-start mt-2">
                 <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                 </span>
-                <span className="text-[9px] text-slate-500 font-mono tracking-wider font-semibold">MCP_SERVER_ACTIVE</span>
+                <span className="text-[9px] text-purple-600 font-mono tracking-wider font-semibold">MCP_SERVER_ACTIVE</span>
               </div>
             </div>
           </motion.div>
@@ -200,7 +204,7 @@ export function OpenAgentsPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
+            whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
             className="p-8 h-72 relative group overflow-hidden bg-white"
             style={{ borderRight: "1px solid rgba(226, 232, 240, 0.8)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)" }}>
 
@@ -214,7 +218,7 @@ export function OpenAgentsPreview() {
 
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-blue-500 font-bold mb-2 block">03 / Execution</span>
+                <span className="text-[10px] uppercase tracking-widest text-purple-500 font-bold mb-2 block">03 / Execution</span>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Browser & Desktop Automation</h3>
                 <p className="text-xs font-light leading-relaxed transition-colors text-slate-500 max-w-[90%]">
                   Cross-platform environment interaction, directly managing web viewports, filesystems, and legacy desktop software.
@@ -228,8 +232,14 @@ export function OpenAgentsPreview() {
                 <svg viewBox="0 0 100 45" className="absolute bottom-1.5 w-full opacity-45 transition-transform duration-700 group-hover:-translate-y-4">
                   <polygon points="5,25 50,5 95,25 50,45" fill="none" stroke="currentColor" strokeWidth="0.75"></polygon>
                 </svg>
-                <svg viewBox="0 0 100 45" className="absolute bottom-3 w-full drop-shadow-[0_12px_20px_rgba(59,130,246,0.25)] transition-transform duration-700 group-hover:-translate-y-6">
-                  <polygon points="5,15 50,-5 95,15 50,35" fill="url(#topFace)" stroke="#3b82f6" strokeWidth="0.5"></polygon>
+                <svg viewBox="0 0 100 45" className="absolute bottom-3 w-full drop-shadow-[0_12px_20px_rgba(232,121,249,0.3)] transition-transform duration-700 group-hover:-translate-y-6">
+                  <defs>
+                    <linearGradient id="open-topFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#f5d0fe" />
+                      <stop offset="100%" stopColor="#e879f9" />
+                    </linearGradient>
+                  </defs>
+                  <polygon points="5,15 50,-5 95,15 50,35" fill="url(#open-topFace)" stroke="#e879f9" strokeWidth="0.5"></polygon>
                 </svg>
               </div>
             </div>
@@ -241,7 +251,7 @@ export function OpenAgentsPreview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
+            whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
             className="p-8 h-72 relative group overflow-hidden bg-white"
             style={{ borderRight: "1px solid rgba(226, 232, 240, 0.8)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)" }}>
 
@@ -252,17 +262,17 @@ export function OpenAgentsPreview() {
               <svg width="100%" height="100%" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-4 right-0 w-40 h-40">
                 <path d="M30,150 L80,100 L120,130 L170,80" stroke="rgba(0,0,0,0.1)" strokeWidth="1"></path>
                 <path d="M80,100 L110,60 L170,80" stroke="rgba(0,0,0,0.1)" strokeWidth="1"></path>
-                <path d="M80,100 L120,130 L170,80" stroke="#3b82f6" strokeWidth="1.2" strokeDasharray="4 4" className="drop-shadow-[0_0_5px_rgba(59,130,246,0.4)]"></path>
-                <rect x="28" y="148" width="4" height="4" fill="#ffffff" stroke="#94a3b8" strokeWidth="0.5" transform="rotate(45 30 150)"></rect>
-                <rect x="78" y="98" width="4" height="4" fill="#ffffff" stroke="#94a3b8" strokeWidth="0.5" transform="rotate(45 80 100)"></rect>
-                <rect x="118" y="128" width="4" height="4" fill="#ffffff" stroke="#3b82f6" strokeWidth="1" transform="rotate(45 120 130)"></rect>
-                <rect x="168" y="78" width="4" height="4" fill="#3b82f6" stroke="var(--color-surface-raised)" strokeWidth="0.5" transform="rotate(45 170 80)"></rect>
+                <path d="M80,100 L120,130 L170,80" stroke="#e879f9" strokeWidth="1.2" strokeDasharray="4 4" className="drop-shadow-[0_0_5px_rgba(232,121,249,0.4)]"></path>
+                <rect x="28" y="148" width="4" height="4" fill="#ffffff" stroke="#d946ef" strokeWidth="0.5" transform="rotate(45 30 150)"></rect>
+                <rect x="78" y="98" width="4" height="4" fill="#ffffff" stroke="#d946ef" strokeWidth="0.5" transform="rotate(45 80 100)"></rect>
+                <rect x="118" y="128" width="4" height="4" fill="#ffffff" stroke="#e879f9" strokeWidth="1" transform="rotate(45 120 130)"></rect>
+                <rect x="168" y="78" width="4" height="4" fill="#e879f9" stroke="var(--color-surface-raised)" strokeWidth="0.5" transform="rotate(45 170 80)"></rect>
               </svg>
             </div>
 
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-blue-500 font-bold mb-2 block">04 / Integration</span>
+                <span className="text-[10px] uppercase tracking-widest text-purple-500 font-bold mb-2 block">04 / Integration</span>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Tool & API Integration</h3>
                 <p className="text-xs font-light leading-relaxed transition-colors text-slate-500 max-w-[90%]">
                   Connect agents to thousands of SaaS applications, custom APIs, local databases, and execution sandboxes instantly.
@@ -272,9 +282,8 @@ export function OpenAgentsPreview() {
             </div>
           </motion.div>
 
-        </div>
+        </GlassPanel>
       </section>
-
       {/* ------------------------------------------------------------- */}
       {/* SECTION 2: SUPPORTED OS */}
       {/* ------------------------------------------------------------- */}
@@ -284,7 +293,7 @@ export function OpenAgentsPreview() {
           {/* Left Side: Sticky side heading */}
           <div className="w-full lg:w-1/3 lg:sticky lg:top-8">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-blue-500 text-xs uppercase tracking-[0.25em] font-bold">Supported OS</span>
+              <span className="text-purple-500 text-xs uppercase tracking-[0.25em] font-bold">Supported OS</span>
             </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -309,10 +318,10 @@ export function OpenAgentsPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
-              className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(59,130,246,0.1)] transition-all duration-500 group relative overflow-hidden"
+              whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
+              className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(232, 121, 249, 0.15)] transition-all duration-500 group relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-transparent rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500/5 to-transparent rounded-bl-full pointer-events-none" />
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-xl bg-slate-50/50 flex items-center justify-center border border-slate-200/60 group-hover:bg-slate-100/80 transition-colors duration-500 ">
@@ -322,7 +331,7 @@ export function OpenAgentsPreview() {
                   </svg>
                 </div>
                 <div>
-                  <span className="text-[9px] font-bold text-blue-500 uppercase tracking-wider block">Enterprise & Desktop</span>
+                  <span className="text-[9px] font-bold text-purple-500 uppercase tracking-wider block">Enterprise & Desktop</span>
                   <h3 className="text-xl font-bold text-slate-900">Windows</h3>
                 </div>
               </div>
@@ -333,7 +342,7 @@ export function OpenAgentsPreview() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2">
-                <span className="px-2.5 py-1 text-[10px] font-semibold text-blue-600 bg-blue-50/50 border border-blue-500/20 rounded-full">Win32 APIs</span>
+                <span className="px-2.5 py-1 text-[10px] font-semibold text-purple-600 bg-purple-50/55 border border-purple-500/20 rounded-full">Win32 APIs</span>
                 <span className="px-2.5 py-1 text-[10px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/60 rounded-full">PowerShell v7</span>
                 <span className="px-2.5 py-1 text-[10px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/60 rounded-full">GUI Hooks</span>
               </div>
@@ -345,8 +354,8 @@ export function OpenAgentsPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              whileHover={{ y: -6, borderColor: "rgba(59,130,246,0.3)" }}
-              className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(15,23,42,0.05)] hover:border-slate-400/60 transition-all duration-500 group relative overflow-hidden"
+              whileHover={{ y: -6, borderColor: "rgba(232, 121, 249, 0.3)" }}
+              className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(232, 121, 249, 0.15)] hover:border-purple-300/60 transition-all duration-500 group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-slate-500/5 to-transparent rounded-bl-full pointer-events-none" />
 
@@ -391,7 +400,7 @@ export function OpenAgentsPreview() {
           {/* Header */}
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <span className="text-blue-500 text-xs uppercase tracking-[0.25em] font-bold">Agent Infrastructure</span>
+              <span className="text-purple-500 text-xs uppercase tracking-[0.25em] font-bold">Agent Infrastructure</span>
             </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -419,14 +428,14 @@ export function OpenAgentsPreview() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                whileHover={{ y: -4, borderColor: "rgba(99,102,241,0.2)" }}
-                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(99,102,241,0.05)] transition-all duration-500 group relative"
+                whileHover={{ y: -4, borderColor: "rgba(232, 121, 249, 0.2)" }}
+                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(232, 121, 249, 0.15)] transition-all duration-500 group relative"
               >
                 {/* Animated SVG Connection Line to Center */}
                 <div className="absolute top-1/2 -right-32 w-32 h-24 -translate-y-1/2 pointer-events-none hidden lg:block z-0 overflow-visible">
                   <svg className="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 128,80 C 64,80 64,48 0,48" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
-                    <circle r="3" fill="#6366f1" className="shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+                    <path d="M 128,80 C 64,80 64,48 0,48" fill="none" stroke="rgba(232, 121, 249, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
+                    <circle r="3" fill="#e879f9" className="shadow-[0_0_10px_rgba(232,121,249,0.5)]">
                       <animateMotion dur="4s" repeatCount="indefinite" path="M 128,80 C 64,80 64,48 0,48" />
                     </circle>
                   </svg>
@@ -434,7 +443,7 @@ export function OpenAgentsPreview() {
 
                 <div className="flex flex-col gap-4 relative z-10">
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50/50 group-hover:border-indigo-200/50 transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-purple-500 group-hover:bg-purple-50/50 group-hover:border-purple-200/50 transition-all duration-500">
                       <Icon icon="solar:server-square-cloud-bold-duotone" width={22} />
                     </div>
                     <span className="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md border border-slate-200/50">
@@ -443,7 +452,7 @@ export function OpenAgentsPreview() {
                   </div>
                   
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500/80 mb-1 block">Orchestration</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-500/80 mb-1 block">Orchestration</span>
                     <h4 className="text-xl font-medium text-slate-900 tracking-tight">Multi-Agent Control</h4>
                     <p className="text-sm font-light leading-relaxed text-slate-500 mt-2">
                       Scale complex reasoning across distributed agent swarms with automated task synchronization.
@@ -458,14 +467,14 @@ export function OpenAgentsPreview() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                whileHover={{ y: -4, borderColor: "rgba(99,102,241,0.2)" }}
-                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(99,102,241,0.05)] transition-all duration-500 group relative"
+                whileHover={{ y: -4, borderColor: "rgba(232, 121, 249, 0.2)" }}
+                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(232, 121, 249, 0.15)] transition-all duration-500 group relative"
               >
                 {/* Animated SVG Connection Line to Center */}
                 <div className="absolute top-1/2 -right-32 w-32 h-24 -translate-y-1/2 pointer-events-none hidden lg:block z-0 overflow-visible">
                   <svg className="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 128,16 C 64,16 64,48 0,48" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
-                    <circle r="3" fill="#6366f1" className="shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+                    <path d="M 128,16 C 64,16 64,48 0,48" fill="none" stroke="rgba(232, 121, 249, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
+                    <circle r="3" fill="#e879f9" className="shadow-[0_0_10px_rgba(232,121,249,0.5)]">
                       <animateMotion dur="5s" repeatCount="indefinite" path="M 128,16 C 64,16 64,48 0,48" />
                     </circle>
                   </svg>
@@ -473,7 +482,7 @@ export function OpenAgentsPreview() {
 
                 <div className="flex flex-col gap-4 relative z-10">
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50/50 group-hover:border-indigo-200/50 transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-purple-500 group-hover:bg-purple-50/50 group-hover:border-purple-200/50 transition-all duration-500">
                       <Icon icon="solar:shield-check-bold-duotone" width={22} />
                     </div>
                     <span className="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md border border-slate-200/50">
@@ -482,7 +491,7 @@ export function OpenAgentsPreview() {
                   </div>
                   
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500/80 mb-1 block">Security</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-500/80 mb-1 block">Security</span>
                     <h4 className="text-xl font-medium text-slate-900 tracking-tight">Secure by Design</h4>
                     <p className="text-sm font-light leading-relaxed text-slate-500 mt-2">
                       Bank-grade isolation and zero-trust execution environments for safe resource management.
@@ -496,8 +505,8 @@ export function OpenAgentsPreview() {
             {/* Center Column: 3D Isometric Architecture Stack */}
             <div className="flex flex-col items-center justify-center py-6 lg:py-0 h-[550px] relative z-10 w-full order-2 lg:order-2">
               {/* Natural Purple Glow Background */}
-              <div className="absolute w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[100px] -z-10 animate-pulse pointer-events-none" style={{ animationDuration: '8s' }} />
-              <div className="absolute w-[250px] h-[250px] rounded-full bg-purple-500/10 blur-[60px] -z-10 pointer-events-none" />
+              <div className="absolute w-[400px] h-[400px] rounded-full bg-purple-500/10 blur-[100px] -z-10 animate-pulse pointer-events-none" style={{ animationDuration: '8s' }} />
+              <div className="absolute w-[250px] h-[250px] rounded-full bg-fuchsia-500/10 blur-[60px] -z-10 pointer-events-none" />
 
               {/* 3D Isometric Stack Container */}
               <div className="relative w-full h-full flex items-center justify-center [perspective:1500px] [transform-style:preserve-3d]">
@@ -519,13 +528,13 @@ export function OpenAgentsPreview() {
                 >
                   {/* Layer 6: Bottom Glass Shadow/Base */}
                   <div className="absolute inset-0 [transform-style:preserve-3d]" style={{ transform: "translateZ(-120px)" }}>
-                    <div className="absolute inset-0 rounded-[40px] border border-indigo-500/10 bg-indigo-500/5 backdrop-blur-[1px] shadow-[inset_0_0_50px_rgba(99,102,241,0.05)]" />
+                    <div className="absolute inset-0 rounded-[40px] border border-purple-500/10 bg-purple-500/5 backdrop-blur-[1px] shadow-[inset_0_0_50px_rgba(232,121,249,0.05)]" />
                   </div>
 
                   {/* Layer 5: Sandbox / Protocol Layer */}
                   <div className="absolute inset-0 [transform-style:preserve-3d]" style={{ transform: "translateZ(-60px)" }}>
                     <div className="absolute inset-0 rounded-[40px] border border-slate-200/60 bg-white/40 flex items-center justify-center overflow-hidden shadow-lg backdrop-blur-sm">
-                       <Icon icon="solar:shield-up-linear" className="text-indigo-500/5 text-9xl" />
+                       <Icon icon="solar:shield-up-linear" className="text-purple-500/5 text-9xl" />
                        <div className="absolute top-6 left-8 text-[9px] font-mono tracking-wider text-slate-400/60 uppercase">L5: Sandbox_Core</div>
                     </div>
                   </div>
@@ -533,7 +542,7 @@ export function OpenAgentsPreview() {
                   {/* Layer 4: Intelligence / Orchestration Layer */}
                   <div className="absolute inset-0 [transform-style:preserve-3d]" style={{ transform: "translateZ(0px)" }}>
                     <div className="absolute inset-0 rounded-[40px] border border-slate-200/80 bg-white/60 flex items-center justify-center overflow-hidden shadow-xl backdrop-blur-md">
-                       <Icon icon="solar:layers-minimalistic-linear" className="text-indigo-500/10 text-9xl" />
+                       <Icon icon="solar:layers-minimalistic-linear" className="text-purple-500/10 text-9xl" />
                        <div className="absolute top-6 left-8 text-[9px] font-mono tracking-wider text-slate-400/70 uppercase">L4: Orchestrator</div>
                     </div>
                   </div>
@@ -541,14 +550,14 @@ export function OpenAgentsPreview() {
                   {/* Layer 3: Output / Execution Layer */}
                   <div className="absolute inset-0 [transform-style:preserve-3d]" style={{ transform: "translateZ(60px)" }}>
                     <div className="absolute inset-0 rounded-[40px] border border-slate-200 bg-white/80 flex items-center justify-center overflow-hidden shadow-2xl backdrop-blur-lg">
-                       <Icon icon="solar:play-circle-linear" className="text-indigo-500/15 text-9xl" />
+                       <Icon icon="solar:play-circle-linear" className="text-purple-500/15 text-9xl" />
                        <div className="absolute top-6 left-8 text-[9px] font-mono tracking-wider text-slate-400/80 uppercase">L3: Execution_Runtime</div>
                     </div>
                   </div>
 
                   {/* Layer 2: Main Logo Block (The Core) */}
                   <div className="absolute inset-0 [transform-style:preserve-3d]" style={{ transform: "translateZ(120px)" }}>
-                    <div className="absolute inset-0 rounded-[40px] border border-indigo-500/30 bg-slate-900 flex items-center justify-center overflow-hidden shadow-[0_0_50px_rgba(99,102,241,0.3)]">
+                    <div className="absolute inset-0 rounded-[40px] border border-purple-500/30 bg-slate-900 flex items-center justify-center overflow-hidden shadow-[0_0_50px_rgba(232,121,249,0.3)]">
                        <div className="absolute inset-0 opacity-40 mix-blend-lighten bg-cover bg-center" style={{ backgroundImage: "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg')" }} />
                        
                        <motion.div
@@ -587,7 +596,7 @@ export function OpenAgentsPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 className="mt-12 px-4 py-1.5 bg-slate-50/80 backdrop-blur-md border border-slate-200/60 rounded-full flex items-center gap-2 shadow-sm"
               >
-                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">Zaby Infra Spec v2.1.0</span>
               </motion.div>
             </div>
@@ -601,14 +610,14 @@ export function OpenAgentsPreview() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                whileHover={{ y: -4, borderColor: "rgba(99,102,241,0.2)" }}
-                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(99,102,241,0.05)] transition-all duration-500 group relative"
+                whileHover={{ y: -4, borderColor: "rgba(232, 121, 249, 0.2)" }}
+                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(232, 121, 249, 0.15)] transition-all duration-500 group relative"
               >
                 {/* Animated SVG Connection Line to Center */}
                 <div className="absolute top-1/2 -left-32 w-32 h-24 -translate-y-1/2 pointer-events-none hidden lg:block z-0 overflow-visible">
                   <svg className="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 0,80 C 64,80 64,48 128,48" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
-                    <circle r="3" fill="#6366f1" className="shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+                    <path d="M 0,80 C 64,80 64,48 128,48" fill="none" stroke="rgba(232, 121, 249, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
+                    <circle r="3" fill="#e879f9" className="shadow-[0_0_10px_rgba(232, 121, 249, 0.5)]">
                       <animateMotion dur="3.5s" repeatCount="indefinite" path="M 0,80 C 64,80 64,48 128,48" />
                     </circle>
                   </svg>
@@ -616,7 +625,7 @@ export function OpenAgentsPreview() {
 
                 <div className="flex flex-col gap-4 relative z-10">
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50/50 group-hover:border-indigo-200/50 transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-purple-500 group-hover:bg-purple-50/50 group-hover:border-purple-200/50 transition-all duration-500">
                       <Icon icon="solar:buildings-bold-duotone" width={22} />
                     </div>
                     <span className="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md border border-slate-200/50">
@@ -625,7 +634,7 @@ export function OpenAgentsPreview() {
                   </div>
                   
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500/80 mb-1 block">Reliability</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-500/80 mb-1 block">Reliability</span>
                     <h4 className="text-xl font-medium text-slate-900 tracking-tight">Enterprise Grade</h4>
                     <p className="text-sm font-light leading-relaxed text-slate-500 mt-2">
                       Mission-critical reliability for global operational workflows with high availability.
@@ -640,14 +649,14 @@ export function OpenAgentsPreview() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                whileHover={{ y: -4, borderColor: "rgba(99,102,241,0.2)" }}
-                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(99,102,241,0.05)] transition-all duration-500 group relative"
+                whileHover={{ y: -4, borderColor: "rgba(232, 121, 249, 0.2)" }}
+                className="bg-white/70 backdrop-blur-xl border border-slate-200/50 rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(232, 121, 249, 0.15)] transition-all duration-500 group relative"
               >
                 {/* Animated SVG Connection Line to Center */}
                 <div className="absolute top-1/2 -left-32 w-32 h-24 -translate-y-1/2 pointer-events-none hidden lg:block z-0 overflow-visible">
                   <svg className="w-full h-full overflow-visible" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 0,16 C 64,16 64,48 128,48" fill="none" stroke="rgba(99,102,241,0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
-                    <circle r="3" fill="#10b981" className="shadow-[0_0_10px_rgba(16,185,129,0.5)]">
+                    <path d="M 0,16 C 64,16 64,48 128,48" fill="none" stroke="rgba(232, 121, 249, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" className="animate-[dash_30s_linear_infinite]" />
+                    <circle r="3" fill="#d946ef" className="shadow-[0_0_10px_rgba(217,70,239,0.5)]">
                       <animateMotion dur="4.2s" repeatCount="indefinite" path="M 0,16 C 64,16 64,48 128,48" />
                     </circle>
                   </svg>
@@ -655,7 +664,7 @@ export function OpenAgentsPreview() {
 
                 <div className="flex flex-col gap-4 relative z-10">
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50/50 group-hover:border-indigo-200/50 transition-all duration-500">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-purple-500 group-hover:bg-purple-50/50 group-hover:border-purple-200/50 transition-all duration-500">
                       <Icon icon="solar:eye-bold-duotone" width={22} />
                     </div>
                     <span className="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md border border-slate-200/50">
@@ -664,7 +673,7 @@ export function OpenAgentsPreview() {
                   </div>
                   
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500/80 mb-1 block">Observability</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-500/80 mb-1 block">Observability</span>
                     <h4 className="text-xl font-medium text-slate-900 tracking-tight">Deep Tracing</h4>
                     <p className="text-sm font-light leading-relaxed text-slate-500 mt-2">
                       Real-time visibility into every agent action and reasoning step for complete oversight.
@@ -694,8 +703,8 @@ export function OpenAgentsPreview() {
               <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
             </linearGradient>
             <linearGradient id="sparklineGradBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+              <stop offset="0%" stopColor="#e879f9" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#e879f9" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>
@@ -773,7 +782,7 @@ export function OpenAgentsPreview() {
                 </Link>
               </div>
             </HeroLiquidMetalContent>
-            <HeroLiquidMetalVisual className="h-[200px] lg:h-[240px] xl:h-[310px] relative" />
+            <HeroLiquidMetalVisual className="h-[200px] lg:h-[200px] xl:h-[340px] relative" />
           </HeroLiquidMetalContainer>
           <HeroLiquidMetalMobileVisual />
         </HeroLiquidMetalRoot>

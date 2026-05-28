@@ -3,7 +3,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { SectionWrapper, Container } from "@/components/layout";
-import { GlassPanel, SectionHeading, GradientOrb } from "@/components/shared";
+import { GlassPanel, SectionHeading, GradientOrb, CalendlyButton } from "@/components/shared";
 import { ScrollReveal } from "@/components/animations";
 import { DottedMap } from "@/components/ui/dotted-map";
 
@@ -14,6 +14,7 @@ const CONTACT_CHANNELS = [
     bgColor: "bg-[var(--color-accent)]/10",
     title: "Email Us",
     subtitle: "Our team will respond within 24 hours",
+    isCalendly: false,
     items: [
       { label: "General & Support", value: "support@zaby.io", href: "mailto:support@zaby.io" },
       { label: "Sales", value: "sales@zaby.io", href: "mailto:sales@zaby.io" },
@@ -27,10 +28,21 @@ const CONTACT_CHANNELS = [
     bgColor: "bg-emerald-500/10",
     title: "Call Us",
     subtitle: "Speak with our team directly",
+    isCalendly: false,
     items: [
       { label: null, value: "+91-8523871114", href: "tel:+918523871114" },
     ],
     note: "Monday – Friday, 9 AM – 6 PM IST",
+  },
+  {
+    icon: "solar:calendar-bold-duotone",
+    iconColor: "text-purple-500",
+    bgColor: "bg-purple-500/10",
+    title: "Schedule Demo",
+    subtitle: "Book an interactive session",
+    isCalendly: true,
+    items: [],
+    note: "Instant calendar confirmation",
   },
   {
     icon: "solar:map-point-bold-duotone",
@@ -38,10 +50,11 @@ const CONTACT_CHANNELS = [
     bgColor: "bg-blue-500/10",
     title: "Visit Us",
     subtitle: "Our headquarters",
+    isCalendly: false,
     items: [
       {
         label: null,
-        value: "Plot No.25, Srujana, Lakshmi Nagar Colony, Ameenpur, Ramachandrapuram, Medak – 502032, Telangana, India",
+        value: "Plot No.25, Srujana, Lakshmi Nagar Colony, Gachibowli, Hyderabad, Telangana, India",
         href: "https://maps.google.com/?q=Plot+No.25,+Srujana,+Lakshmi+Nagar+Colony,+Ameenpur,+Ramachandrapuram,+Medak,+Telangana,+502032,+India",
       },
     ],
@@ -129,19 +142,19 @@ export function ContactInfoSection() {
 
                       {/* Tooltip Card shadow/border background */}
                       <rect
-                        x={x - 16.8}
-                        y={y - 15.3}
-                        width={34}
-                        height={6.4}
-                        rx={1}
+                        x={x - 28.8}
+                        y={y - 17.9}
+                        width={58}
+                        height={8.6}
+                        rx={1.5}
                         fill="rgba(0, 0, 0, 0.05)"
                       />
                       <rect
-                        x={x - 17}
-                        y={y - 15.5}
-                        width={34}
-                        height={6.4}
-                        rx={1}
+                        x={x - 29}
+                        y={y - 18.1}
+                        width={58}
+                        height={8.6}
+                        rx={1.5}
                         fill="var(--color-bg, #ffffff)"
                         stroke="var(--color-accent-soft, #d946ef)"
                         strokeWidth={0.2}
@@ -150,14 +163,15 @@ export function ContactInfoSection() {
                       {/* Tooltip Text */}
                       <text
                         x={x}
-                        y={y - 12.3}
+                        y={y - 13.8}
                         fill="var(--color-text-primary, #171717)"
-                        fontSize={1.35}
+                        fontSize={2.4}
                         fontFamily="var(--font-sans), sans-serif"
                         fontWeight="600"
                         textAnchor="middle"
+                        dominantBaseline="central"
                       >
-                        Ameenpur, Telangana, India
+                        Gachibowli, Hyderabad, Telangana, India
                       </text>
                     </g>
                   )}
@@ -201,25 +215,36 @@ export function ContactInfoSection() {
                     <div className="my-2.5 border-t border-[var(--color-border-strong)]/40" />
 
                     {/* Items */}
-                    <div className="flex flex-col gap-1.5 text-left">
-                      {channel.items.map((item) => (
-                        <div key={item.value} className="flex flex-col gap-0.5">
-                          {item.label && (
-                            <span className="text-[10px] font-semibold text-[var(--color-text-secondary)]/70">
-                              {item.label}:
-                            </span>
-                          )}
-                          <a
-                            href={item.href}
-                            target={item.href.startsWith("http") ? "_blank" : undefined}
-                            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                            className="wrap-break-word text-xs font-semibold text-[var(--color-accent-soft)] transition-colors hover:text-[var(--color-accent-hover)]"
-                          >
-                            {item.value}
-                          </a>
-                        </div>
-                      ))}
-                    </div>
+                    {channel.isCalendly ? (
+                      <div className="mt-2 text-left">
+                        <CalendlyButton
+                          variant="secondary"
+                          text="Book Demo Call"
+                          icon="solar:calendar-date-bold-duotone"
+                          className="w-full justify-start py-2.5 rounded-xl border border-purple-500/20 text-xs font-semibold bg-purple-500/5 hover:bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-1.5 text-left">
+                        {channel.items.map((item) => (
+                          <div key={item.value} className="flex flex-col gap-0.5">
+                            {item.label && (
+                              <span className="text-[10px] font-semibold text-[var(--color-text-secondary)]/70">
+                                {item.label}:
+                              </span>
+                            )}
+                            <a
+                              href={item.href}
+                              target={item.href.startsWith("http") ? "_blank" : undefined}
+                              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                              className="wrap-break-word text-xs font-semibold text-[var(--color-accent-soft)] transition-colors hover:text-[var(--color-accent-hover)]"
+                            >
+                              {item.value}
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Note badge */}

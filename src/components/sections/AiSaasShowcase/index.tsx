@@ -261,14 +261,14 @@ export default function AiSaasShowcase() {
         </div>
 
         {/* Brand strip */}
-        <div className="hidden md:flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mb-16 md:mb-20 border-y border-[var(--color-border-strong)]/30 py-6 bg-[var(--color-muted)]/20">
+        {/* <div className="hidden md:flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mb-16 md:mb-20 border-y border-[var(--color-border-strong)]/30 py-6 bg-[var(--color-muted)]/20">
           {brandItems.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] font-medium hover:text-[var(--color-text-primary)] transition-colors duration-300">
               <Icon icon={item.icon} className="text-base text-[var(--color-text-secondary)]/60" />
               <span className="uppercase tracking-wider">{item.label}</span>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Two-panel layout (Desktop Only) */}
         <div className="hidden lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">

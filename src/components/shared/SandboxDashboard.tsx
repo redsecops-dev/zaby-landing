@@ -102,7 +102,7 @@ export default function SandboxDashboard() {
     { type: "output", text: "bash • /var/jenkins_home $ " }
   ]);
 
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalContainerRef = useRef<HTMLDivElement>(null);
 
   // 1. Stable dynamic IDs generated on mount for absolute privacy
   const [sandboxId] = useState(() => {
@@ -122,13 +122,274 @@ export default function SandboxDashboard() {
     return `tty-${p1}-7e0b-49f2-8272-${p2}`;
   });
 
-  // Auto scroll terminal
+  // Autoplay / Demo Simulation states
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const isAutoPlayingRef = useRef(true);
+
+  // Metrics states
+  const [cpuUtil, setCpuUtil] = useState(12.4);
+  const [memUtil, setMemUtil] = useState(1.82);
+  const [netThroughput, setNetThroughput] = useState(2.4);
+
+  // Time state
+  const [currentTime, setCurrentTime] = useState("11:58 AM");
+
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    isAutoPlayingRef.current = isAutoPlaying;
+  }, [isAutoPlaying]);
+
+  // Keep time updated
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    };
+    update();
+    const interval = setInterval(update, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Metrics fluctuation
+  useEffect(() => {
+    if (sandboxState !== "Running") {
+      setCpuUtil(0);
+      setNetThroughput(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setCpuUtil(prev => {
+        const change = (Math.random() - 0.5) * 6;
+        return Math.max(5, Math.min(95, parseFloat((prev + change).toFixed(1))));
+      });
+      setMemUtil(prev => {
+        const change = (Math.random() - 0.5) * 0.05;
+        return Math.max(1.5, Math.min(3.8, parseFloat((prev + change).toFixed(2))));
+      });
+      setNetThroughput(prev => {
+        const change = (Math.random() - 0.5) * 1.2;
+        return Math.max(0.2, Math.min(8.5, parseFloat((prev + change).toFixed(1))));
+      });
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [sandboxState]);
+
+  // Autoplay script runner
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    let activeTimeout: any = null;
+    let isAborted = false;
+
+    const delay = (ms: number) => {
+      return new Promise((resolve) => {
+        activeTimeout = setTimeout(resolve, ms);
+      });
+    };
+
+    const runScript = async () => {
+      const checkAbort = () => {
+        if (!isAutoPlayingRef.current || isAborted) {
+          throw new Error("aborted");
+        }
+      };
+
+      try {
+        while (true) {
+          checkAbort();
+
+          // 1. Wait a bit, then Start Sandbox
+          await delay(1800);
+          checkAbort();
+          setSandboxState("Restarting");
+          
+          await delay(1200);
+          checkAbort();
+          setSandboxState("Running");
+
+          // 2. Start VNC
+          await delay(1800);
+          checkAbort();
+          setVncState("booting");
+
+          await delay(1500);
+          checkAbort();
+          setVncState("running");
+
+          // 3. Open Welcome text
+          await delay(2000);
+          checkAbort();
+          setActiveWindows(prev => prev.map(w => w.id === "notepad" ? { ...w, isOpen: true } : w));
+
+          // 4. Open CMD
+          await delay(3000);
+          checkAbort();
+          setActiveWindows(prev => prev.map(w => w.id === "cmd" ? { ...w, isOpen: true } : w));
+
+          // 5. Switch to Terminal tab
+          await delay(4000);
+          checkAbort();
+          setTerminalTab("Terminal");
+
+          // 6. Type "neofetch"
+          await delay(1500);
+          checkAbort();
+          await simulateTyping("neofetch");
+          checkAbort();
+
+          // 7. Type "cat config.xml"
+          await delay(3500);
+          checkAbort();
+          await simulateTyping("cat config.xml");
+          checkAbort();
+
+          // 8. Switch to Metrics tab
+          await delay(4500);
+          checkAbort();
+          setTerminalTab("Metrics");
+
+          // 9. Switch to Traces tab
+          await delay(5000);
+          checkAbort();
+          setTerminalTab("Traces");
+
+          // 10. Switch to Logs tab
+          await delay(5000);
+          checkAbort();
+          setTerminalTab("Logs");
+
+          // 11. Switch back to VNC
+          await delay(5000);
+          checkAbort();
+          setTerminalTab("VNC");
+
+          // 12. Close windows & stop sandbox to loop
+          await delay(4000);
+          checkAbort();
+          setActiveWindows(prev => prev.map(w => ({ ...w, isOpen: false })));
+          setVncState("stopped");
+          setSandboxState("Stopping");
+          
+          await delay(1200);
+          checkAbort();
+          setSandboxState("Stopped");
+
+          // Reset history back to original state
+          setTerminalHistory([
+            { type: "system", text: "Zaby Terminal Client v1.2.0 initialized." },
+            { type: "system", text: "bash • /var/jenkins_home session active." },
+            { type: "system", text: "Type 'help' to see list of operational shell commands." },
+            { type: "output", text: "bash • /var/jenkins_home $ " }
+          ]);
+
+          await delay(2500);
+        }
+      } catch (err) {
+        // aborted cleanly
+      }
+    };
+
+    const simulateTyping = async (command: string) => {
+      const chars = command.split("");
+      let currentTyped = "";
+      
+      for (const char of chars) {
+        if (!isAutoPlayingRef.current || isAborted) throw new Error("aborted");
+        currentTyped += char;
+        
+        setTerminalHistory(prev => {
+          const historyCopy = [...prev];
+          if (historyCopy.length > 0 && historyCopy[historyCopy.length - 1].text.endsWith("$ ")) {
+            historyCopy[historyCopy.length - 1] = {
+              ...historyCopy[historyCopy.length - 1],
+              text: `bash • /var/jenkins_home $ ${currentTyped}`
+            };
+          } else if (historyCopy.length > 0 && historyCopy[historyCopy.length - 1].text.startsWith("bash • /var/jenkins_home $ ")) {
+            historyCopy[historyCopy.length - 1] = {
+              ...historyCopy[historyCopy.length - 1],
+              text: `bash • /var/jenkins_home $ ${currentTyped}`
+            };
+          } else {
+            historyCopy.push({ type: "output", text: `bash • /var/jenkins_home $ ${currentTyped}` });
+          }
+          return historyCopy;
+        });
+
+        await delay(100 + Math.random() * 60);
+      }
+
+      await delay(600);
+      if (!isAutoPlayingRef.current || isAborted) throw new Error("aborted");
+
+      let responseText = "";
+      const lowerCmd = command.toLowerCase();
+      
+      switch (lowerCmd) {
+        case "neofetch":
+          responseText = `
+   /\\_/\\      zaby@jenkins-node-cluster
+  ( o.o )     -------------------------
+   > ^ <      OS: Zaby WorkOS Linux v4.0.0
+              Kernel: 6.1.0-21-amd64
+              Uptime: 2 hours, 14 mins
+              Packages: 842 (apt)
+              Shell: bash 5.2.15
+              CPU: Virtual Core Core-i9 (2)
+              Memory: 1.82 GB / 4.00 GB (45%)
+          `;
+          break;
+        case "cat config.xml":
+          responseText = `<?xml version='1.1' encoding='UTF-8'?>\n<zaby-configuration>\n  <sandbox-id>${sandboxId}</sandbox-id>\n  <tenant-name>${tenantId}</tenant-name>\n  <node-lifecycle auto-stop="30" auto-archive="7" />\n  <resources cpu="2" memory="4096" storage="5120" />\n</zaby-configuration>`;
+          break;
+        default:
+          responseText = `bash: command not found: ${command}`;
+          break;
+      }
+
+      setTerminalHistory(prev => {
+        const historyCopy = [...prev];
+        historyCopy.push({ type: "output", text: responseText });
+        historyCopy.push({ type: "output", text: "bash • /var/jenkins_home $ " });
+        return historyCopy;
+      });
+    };
+
+    runScript();
+
+    return () => {
+      isAborted = true;
+      clearTimeout(activeTimeout);
+    };
+  }, [isAutoPlaying]);
+
+  // Auto scroll terminal container
+  useEffect(() => {
+    if (terminalContainerRef.current) {
+      terminalContainerRef.current.scrollTop = terminalContainerRef.current.scrollHeight;
+    }
   }, [terminalHistory]);
+
+  const toggleAutoplay = () => {
+    setIsAutoPlaying(prev => {
+      const next = !prev;
+      if (next) {
+        setSandboxState("Stopped");
+        setVncState("stopped");
+        setActiveWindows(prev => prev.map(w => ({ ...w, isOpen: false })));
+        setTerminalTab("VNC");
+        setTerminalHistory([
+          { type: "system", text: "Zaby Terminal Client v1.2.0 initialized." },
+          { type: "system", text: "bash • /var/jenkins_home session active." },
+          { type: "system", text: "Type 'help' to see list of operational shell commands." },
+          { type: "output", text: "bash • /var/jenkins_home $ " }
+        ]);
+      }
+      return next;
+    });
+  };
 
   // Handle Command Submission
   const handleCommandSubmit = (command: string) => {
+    setIsAutoPlaying(false);
     const cleanCmd = command.trim();
     if (!cleanCmd) return;
 
@@ -202,6 +463,7 @@ export default function SandboxDashboard() {
 
   // Operational Start/Stop transitions
   const handleToggleSandbox = () => {
+    setIsAutoPlaying(false);
     if (sandboxState === "Stopped") {
       setSandboxState("Restarting");
       setTimeout(() => {
@@ -218,6 +480,7 @@ export default function SandboxDashboard() {
 
   // VNC functions
   const handleStartVnc = () => {
+    setIsAutoPlaying(false);
     if (sandboxState !== "Running" || vncState !== "stopped") return;
     setVncState("booting");
     setTimeout(() => {
@@ -226,10 +489,12 @@ export default function SandboxDashboard() {
   };
 
   const handleStopVnc = () => {
+    setIsAutoPlaying(false);
     setVncState("stopped");
   };
 
   const handleRefreshVnc = () => {
+    setIsAutoPlaying(false);
     if (vncState !== "running") return;
     setIsVncReconnecting(true);
     setTimeout(() => {
@@ -238,6 +503,7 @@ export default function SandboxDashboard() {
   };
 
   const toggleWindow = (id: string, state: boolean) => {
+    setIsAutoPlaying(false);
     setActiveWindows(prev => prev.map(win => win.id === id ? { ...win, isOpen: state } : win));
   };
 
@@ -255,6 +521,17 @@ export default function SandboxDashboard() {
           <span className={`px-1.5 py-0.5 text-[8px] font-mono border rounded uppercase tracking-wider transition-colors border-slate-200 bg-slate-100 text-slate-600`}>
             Free
           </span>
+          <button
+            onClick={toggleAutoplay}
+            className={`flex items-center gap-1 px-2 py-0.5 text-[8px] font-mono border rounded-full uppercase tracking-wider transition-all duration-300 ${
+              isAutoPlaying 
+                ? "bg-purple-50 text-purple-600 border-purple-200/60 shadow-[0_0_8px_rgba(168,85,247,0.15)] animate-pulse" 
+                : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
+            }`}
+          >
+            <span className={`w-1 h-1 rounded-full ${isAutoPlaying ? "bg-purple-500" : "bg-slate-400"}`} />
+            {isAutoPlaying ? "Autoplay Active" : "Interactive Mode"}
+          </button>
           <span className="text-xs text-gray-500 hidden sm:inline">us • jenkins</span>
         </div>
         <div className="flex items-center space-x-4 text-xs">
@@ -350,7 +627,10 @@ export default function SandboxDashboard() {
               {["Logs", "Traces", "Metrics", "Terminal", "Filesystem", "VNC"].map((tab) => (
                 <button 
                   key={tab} 
-                  onClick={() => setTerminalTab(tab)}
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setTerminalTab(tab);
+                  }}
                   className={`px-4 py-1 text-xs rounded-full transition-all ${
                     tab === terminalTab 
                       ? ("bg-slate-900 text-white font-semibold") 
@@ -582,7 +862,7 @@ export default function SandboxDashboard() {
 
                       {/* System Tray time */}
                       <div className="text-[8px] text-gray-400 font-mono tracking-wide flex items-center gap-1.5">
-                        <span>11:58 AM</span>
+                        <span>{currentTime}</span>
                         <span>📶</span>
                       </div>
                     </div>
@@ -617,7 +897,7 @@ export default function SandboxDashboard() {
               </div>
 
               {/* Inner content stream */}
-              <div className="flex-1 p-4 font-mono text-[10px] text-gray-500 relative overflow-y-auto leading-relaxed select-text min-h-[300px]">
+              <div ref={terminalContainerRef} className="flex-1 p-4 font-mono text-[10px] text-gray-500 relative overflow-y-auto leading-relaxed select-text min-h-[300px]">
                 {sandboxState !== "Running" ? (
                   /* Screen overlay when stopped */
                   <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-[1px] select-none z-10">
@@ -671,28 +951,28 @@ export default function SandboxDashboard() {
                     <div className="space-y-1">
                       <div className="flex justify-between text-[10px] text-gray-500 font-mono">
                         <span>CPU UTILIZATION</span>
-                        <span className="text-slate-800">12.4%</span>
+                        <span className="text-slate-800">{cpuUtil.toFixed(1)}%</span>
                       </div>
                       <div className="w-full h-1.5 bg-slate-200 rounded overflow-hidden">
-                        <div className="w-[12.4%] h-full bg-blue-500" />
+                        <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${cpuUtil}%` }} />
                       </div>
                     </div>
                     <div className="space-y-1">
                       <div className="flex justify-between text-[10px] text-gray-500 font-mono">
                         <span>MEMORY WORKSET</span>
-                        <span className="text-slate-800">1.82 GB / 4.00 GB</span>
+                        <span className="text-slate-800">{memUtil.toFixed(2)} GB / 4.00 GB</span>
                       </div>
                       <div className="w-full h-1.5 bg-slate-200 rounded overflow-hidden">
-                        <div className="w-[45.5%] h-full bg-indigo-500 " />
+                        <div className="h-full bg-indigo-500 transition-all duration-500" style={{ width: `${(memUtil / 4.0) * 100}%` }} />
                       </div>
                     </div>
                     <div className="space-y-1">
                       <div className="flex justify-between text-[10px] text-gray-500 font-mono">
                         <span>NETWORK THROUGHPUT</span>
-                        <span className="text-slate-800">2.4 MBps</span>
+                        <span className="text-slate-800">{netThroughput.toFixed(1)} MBps</span>
                       </div>
                       <div className="w-full h-1.5 bg-slate-200 rounded overflow-hidden">
-                        <div className="w-[30%] h-full bg-blue-400" />
+                        <div className="h-full bg-blue-400 transition-all duration-500" style={{ width: `${Math.min(100, (netThroughput / 10.0) * 100)}%` }} />
                       </div>
                     </div>
                   </div>
@@ -740,8 +1020,6 @@ export default function SandboxDashboard() {
                         );
                       }
                     })}
-
-                    <div ref={terminalEndRef} />
                   </div>
                 )}
               </div>

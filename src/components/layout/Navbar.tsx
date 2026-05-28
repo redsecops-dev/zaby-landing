@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { navLinks, NavItem } from "@/config/nav";
 import { siteConfig } from "@/config/site";
 import Image from "next/image";
+import { ShimmerButton } from "@/components/shared";
 
 export function Navbar() {
   const progressRef = useRef<HTMLDivElement>(null);
@@ -197,14 +198,19 @@ export function Navbar() {
                 Sign in
               </Link>
 
-              {/* Gradient-border CTA button */}
-              <Link
-                href="https://platform.zaby.io/tenant/signup"
-                className="group relative hidden shrink-0 overflow-hidden rounded-full cursor-pointer md:block"
-                aria-label="Get started with Zaby"
+              {/* Shimmer CTA button */}
+              <ShimmerButton
+                asChild
+                shimmerColor="#e879f9"
+                background="var(--color-button-primary-bg)"
+                borderRadius="9999px"
+                className="hidden md:inline-flex group relative shrink-0 overflow-hidden rounded-full cursor-pointer px-5 py-3 shadow-[rgba(76,29,149,0.3)_0px_8px_20px_-8px] gap-2"
                 onMouseEnter={() => setActiveDropdown(null)}
               >
-                <span className="relative flex items-center gap-2 rounded-full bg-(--color-button-primary-bg) px-4 py-3.5 text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all duration-300 hover:bg-(--color-button-primary-hover) md:px-6">
+                <Link
+                  href="https://platform.zaby.io/tenant/signup"
+                  aria-label="Get started with Zaby"
+                >
                   <span className="text-xs font-medium uppercase tracking-wider text-white">
                     Get Started
                   </span>
@@ -213,8 +219,8 @@ export function Navbar() {
                     strokeWidth={1.5}
                     className="text-white transition-transform duration-300 group-hover:translate-x-1"
                   />
-                </span>
-              </Link>
+                </Link>
+              </ShimmerButton>
 
               {/* Mobile toggle */}
               <button

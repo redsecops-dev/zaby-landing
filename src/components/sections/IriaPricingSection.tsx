@@ -3,6 +3,7 @@
 import { startTransition, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { Icon } from "@iconify/react";
+import { ShimmerButton, CalendlyButton } from "@/components/shared";
 
 type BillingCycle = "monthly" | "annually";
 
@@ -334,22 +335,35 @@ function PlanCard({
           </p>
         ) : null}
 
-        <a
-          href="https://platform.zaby.io/tenant/signup"
-          className={`relative z-10 mb-8 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm transition-opacity ${
-            plan.highlighted
-              ? "text-white hover:opacity-80"
-              : "border border-neutral-200/60 bg-white text-neutral-800 hover:opacity-80"
-          }`}
-          style={plan.highlighted ? {
-            background: "linear-gradient(135deg, var(--color-button-primary-bg) 0%, var(--color-button-primary-hover) 100%)"
-          } : {}}
-        >
-          {plan.ctaLabel}
-          {plan.highlighted ? (
-            <Icon icon="solar:arrow-right-linear" width={16} height={16} />
-          ) : null}
-        </a>
+        {plan.name === "Enterprise" ? (
+          <CalendlyButton
+            variant="secondary"
+            text={plan.ctaLabel}
+            icon="solar:calendar-date-bold-duotone"
+            className="relative z-10 mb-8 flex w-full items-center justify-center gap-2 rounded-full border border-neutral-200/60 bg-white px-4 py-3 text-sm text-neutral-800 transition-all hover:bg-slate-50 hover:border-purple-500 font-medium"
+          />
+        ) : plan.highlighted ? (
+          <ShimmerButton
+            asChild
+            shimmerColor="#e879f9"
+            shimmerSize="0.1em"
+            background="var(--color-button-primary-bg)"
+            borderRadius="9999px"
+            className="relative z-10 mb-8 flex w-full items-center justify-center gap-2 px-4 py-3 text-sm shadow-[rgba(168,85,247,0.15)_0px_8px_16px_-4px] hover:shadow-[rgba(168,85,247,0.25)_0px_10px_22px_-4px]"
+          >
+            <a href="https://platform.zaby.io/tenant/signup">
+              <span className="relative z-10">{plan.ctaLabel}</span>
+              <Icon icon="solar:arrow-right-linear" width={16} height={16} className="relative z-10" />
+            </a>
+          </ShimmerButton>
+        ) : (
+          <a
+            href="https://platform.zaby.io/tenant/signup"
+            className="relative z-10 mb-8 flex w-full items-center justify-center gap-2 rounded-full border border-neutral-200/60 bg-white px-4 py-3 text-sm text-neutral-800 transition-opacity hover:opacity-80 hover:border-purple-500"
+          >
+            {plan.ctaLabel}
+          </a>
+        )}
 
         <div className="relative z-10 flex-1">
           <p

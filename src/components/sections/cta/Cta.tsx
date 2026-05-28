@@ -8,6 +8,7 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 import { GradientOrb } from "@/components/shared/GradientOrb";
 import { GridBackground } from "@/components/shared/GridBackground";
 import { Ripple } from "@/components/ui/ripple";
+import { ShimmerButton } from "@/components/shared";
 
 
 export function Cta() {
@@ -43,13 +44,16 @@ export function Cta() {
             />
 
             <div className="mt-12 flex flex-wrap gap-5 relative z-20">
-              <button
+              <ShimmerButton
+                shimmerColor="#e879f9"
+                background="var(--color-button-primary-bg)"
+                borderRadius="9999px"
+                className="group relative flex items-center justify-center gap-2.5 rounded-full px-8 py-4 text-sm font-semibold tracking-wide text-white shadow-lg shadow-purple-500/20"
                 onClick={() => router.push("https://platform.zaby.io/tenant/signup")}
-                className="cursor-pointer group relative flex items-center justify-center gap-2.5 rounded-full bg-[var(--color-button-primary-bg)] px-8 py-4 text-sm font-semibold tracking-wide text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-purple-500/20"
               >
-                Get Started
-                <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={18} />
-              </button>
+                <span className="relative z-10">Get Started</span>
+                <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300 relative z-10" size={18} />
+              </ShimmerButton>
               <button
                 onClick={() => router.push('/contact')}
                 className="cursor-pointer flex items-center justify-center gap-2.5 rounded-full border border-[var(--color-button-secondary-border)] backdrop-blur-md px-10 py-4 text-sm font-semibold text-[var(--color-button-secondary-text)] transition-all hover:bg-white/80 hover:scale-[1.02] active:scale-[0.98]"

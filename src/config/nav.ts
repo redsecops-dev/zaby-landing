@@ -27,16 +27,16 @@ export interface NavGroup {
 
 export const navLinks: NavItem[] = [
   {
-    label: "AI SaaS Tools",
-    href: "#ai-saas-tools",
+    label: "Workflows",
+    href: "#workflows",
     dropdown: true,
     sections: [
       {
         title: "Platform Tools",
         items: [
           { label: "AI Assessments", description: "Automated candidate screening and evaluation.", href: "/assessments" },
-          { label: "Mock Interviews", description: "Practice sessions with intelligent AI feedback.", href: "/mock-interviews" },
-          { label: "Skill Analytics", description: "Deep insights into team performance and gaps.", href: "/analytics" },
+          { label: "Hiring", description: "Automate your hiring process with AI.", href: "/hiring" },
+          { label: "Edtech", description: "Streamline your teaching process with AI.", href: "/edtech" },
         ]
       },
       {
