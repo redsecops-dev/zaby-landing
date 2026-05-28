@@ -24,6 +24,15 @@ export function InteractiveRobotSpline({ scene, className }: InteractiveRobotSpl
         <Spline
           scene={scene}
           className={className} 
+          style={{
+            width: 'calc(100% + 140px)',
+            height: 'calc(100% + 140px)',
+            position: 'absolute',
+            top: '-70px',
+            left: '-70px',
+            maxWidth: 'none',
+            maxHeight: 'none',
+          }}
         />
       </Suspense>
     </div>
