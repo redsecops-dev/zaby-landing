@@ -37,7 +37,7 @@ export function UseCasesSection() {
         title="Solutions Built for the Enterprise"
         subtitle="Discover how Zaby AI transforms operational efficiency across core organizational workflows."
         align="center"
-        size="md"
+        size="lg"
         className="mb-12 md:mb-16"
       />
 

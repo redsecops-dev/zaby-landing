@@ -4,58 +4,62 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
-import { GradientOrb } from "@/components/shared/GradientOrb";
+import { SectionWrapper, Container } from "@/components/layout";
+import { GradientOrb, HeroBadge, GlassPanel } from "@/components/shared";
+import { ScrollReveal } from "@/components/animations";
 import { VALUES } from "./data";
 
 export function ValuesSection() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
-      {/* Background orb */}
+    <SectionWrapper spacing="lg" background="transparent" className="overflow-visible">
       <GradientOrb
         color="blue"
         size="xl"
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 opacity-8"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 opacity-[0.06] pointer-events-none"
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <Container size="lg" className="relative z-10">
         {/* Heading */}
         <div className="mb-16 flex flex-col items-center text-center">
-          <div className="mb-4 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/50 bg-white/60 px-3 py-1 backdrop-blur-md">
-            <Icon icon="solar:star-bold-duotone" width={12} height={12} className="text-accent" />
-            <span className="text-xs font-medium tracking-wide text-accent/90">
-              How we operate
-            </span>
-          </div>
-          <h2 className="text-3xl font-semibold tracking-tight text-text-primary md:text-4xl lg:text-5xl">
-            Our{" "}
-            <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
-              Values
-            </span>
-          </h2>
-          <p className="mt-4 max-w-xl text-base font-light text-text-secondary">
-            Principles that drive every product decision, engineering choice, and team interaction at Zaby.
-          </p>
+          <ScrollReveal direction="up" delay={0.05}>
+            <HeroBadge text="How we operate" />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.1}>
+            <h2 className="text-3xl font-extrabold tracking-tight text-[var(--color-text-primary)] md:text-4xl lg:text-5xl font-display">
+              Our{" "}
+              <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent">
+                Values
+              </span>
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.15}>
+            <p className="mt-4 max-w-xl text-base font-light text-[var(--color-text-secondary)]">
+              Principles that drive every product decision, engineering choice, and team interaction at Zaby.
+            </p>
+          </ScrollReveal>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {VALUES.map((v, i) => (
-            <button
-              key={v.key}
-              onClick={() => setActiveTab(i)}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
-                activeTab === i
-                  ? "bg-(--color-button-primary-bg) text-white border-transparent shadow-[rgba(76,29,149,0.4)_0px_6px_20px_-6px]"
-                  : "bg-white/60 text-text-secondary border-white/60 backdrop-blur-md hover:bg-white/80 hover:text-text-primary"
-              )}
-            >
-              {v.label}
-            </button>
-          ))}
-        </div>
+        <ScrollReveal direction="up" delay={0.2}>
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {VALUES.map((v, i) => (
+              <button
+                key={v.key}
+                onClick={() => setActiveTab(i)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border cursor-pointer",
+                  activeTab === i
+                    ? "bg-(--color-button-primary-bg) text-white border-transparent shadow-[rgba(76,29,149,0.4)_0px_6px_20px_-6px]"
+                    : "bg-white/60 text-[var(--color-text-secondary)] border-[var(--color-border-strong)]/30 backdrop-blur-md hover:bg-white/80 hover:text-[var(--color-text-primary)]"
+                )}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
@@ -69,19 +73,22 @@ export function ValuesSection() {
           >
             {/* Text side */}
             <div className="flex flex-col gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 backdrop-blur-md border border-white/60 text-accent shadow-sm shadow-black/5">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 backdrop-blur-md border border-[var(--color-border-strong)]/30 text-[var(--color-accent)] shadow-sm shadow-black/5">
                 <Icon icon={VALUES[activeTab].icon} width={28} height={28} />
               </div>
-              <h3 className="text-2xl font-semibold text-text-primary">
+              <h3 className="text-2xl font-semibold text-[var(--color-text-primary)]">
                 {VALUES[activeTab].label}
               </h3>
-              <p className="text-base font-light text-text-secondary leading-relaxed">
+              <p className="text-base font-light text-[var(--color-text-secondary)] leading-relaxed">
                 {VALUES[activeTab].description}
               </p>
             </div>
 
             {/* Visual side */}
-            <div className="relative h-64 lg:h-80 rounded-3xl bg-white/40 backdrop-blur-md border border-white/60 overflow-hidden flex items-center justify-center shadow-sm shadow-black/5">
+            <GlassPanel
+              padding="none"
+              className="relative h-64 lg:h-80 rounded-3xl overflow-hidden flex items-center justify-center"
+            >
               {/* Subtle dot grid */}
               <div
                 className="absolute inset-0 opacity-[0.06]"
@@ -92,20 +99,20 @@ export function ValuesSection() {
                 }}
               />
               <div className="relative flex flex-col items-center gap-3">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/80 backdrop-blur-md border border-white/60 text-accent shadow-md shadow-accent/10">
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/80 backdrop-blur-md border border-[var(--color-border-strong)]/30 text-[var(--color-accent)] shadow-md shadow-[var(--color-accent)]/10">
                   <Icon icon={VALUES[activeTab].icon} width={40} height={40} />
                 </div>
-                <p className="text-sm font-medium text-text-secondary text-center max-w-xs px-8">
+                <p className="text-sm font-medium text-[var(--color-text-secondary)] text-center max-w-xs px-8">
                   {VALUES[activeTab].label}
                 </p>
               </div>
               {/* Corner orbs */}
-              <div className="absolute top-4 left-4 h-8 w-8 rounded-full bg-accent/15 blur-md" />
-              <div className="absolute bottom-4 right-4 h-12 w-12 rounded-full bg-accent-soft/15 blur-xl" />
-            </div>
+              <div className="absolute top-4 left-4 h-8 w-8 rounded-full bg-[var(--color-accent)]/15 blur-md" />
+              <div className="absolute bottom-4 right-4 h-12 w-12 rounded-full bg-[var(--color-accent-soft)]/15 blur-xl" />
+            </GlassPanel>
           </motion.div>
         </AnimatePresence>
-      </div>
-    </section>
+      </Container>
+    </SectionWrapper>
   );
 }

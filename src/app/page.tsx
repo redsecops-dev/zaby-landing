@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <TrustStripSection />
+      {/* <TrustStripSection /> */}
       <FeaturesSection />
       <AiSaasShowcase />
       <UseCasesSection />

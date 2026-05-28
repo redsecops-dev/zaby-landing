@@ -11,7 +11,6 @@ import {
   Building2,
   MapPin,
 } from "lucide-react";
-import { GradientOrb } from "@/components/shared/GradientOrb";
 import {
   HeroSection,
   StatsSection,
@@ -130,10 +129,7 @@ const HIRING_ROLES = [
 
 export default function AboutClient() {
   return (
-    <main className="relative antialiased overflow-x-hidden flex flex-col items-center w-full">
-      <GradientOrb color="purple" size="xl" className="absolute -top-32 -left-20 opacity-10 pointer-events-none" />
-      <GradientOrb color="pink" size="lg" className="absolute top-1/4 -right-16 opacity-8 pointer-events-none" />
-
+    <>
       <HeroSection 
         badge="About Zaby"
         title={
@@ -197,6 +193,6 @@ export default function AboutClient() {
         description="We're building the infrastructure layer that powers the next generation of autonomous enterprise operations. If you thrive on hard infrastructure problems and believe AI should execute, not just converse, come build with us."
         items={HIRING_ROLES}
       />
-    </main>
+    </>
   );
 }

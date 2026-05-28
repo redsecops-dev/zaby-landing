@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Sparkles,
   Zap,
   TrendingUp,
   Cpu,
@@ -12,10 +11,65 @@ import {
   Terminal
 } from "lucide-react";
 import InteractiveDottedGrid from "./InteractiveDottedGrid";
+import { HeroBadge, HeroHeading, RevealWord, GlassPanel } from "@/components/shared";
+import { Icon } from "@iconify/react";
 
 export default function QuestionBankHero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    let isDisposed = false;
+    let revertAnimations: (() => void) | undefined;
+
+    void (async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+
+      if (isDisposed) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const context = gsap.context(() => {
+        const words = section.querySelectorAll<HTMLElement>(".reveal-word");
+        const title = section.querySelector(".masked-reveal-title");
+
+        if (title && words.length > 0) {
+          gsap.to(words, {
+            y: "0%",
+            duration: 1.2,
+            stagger: 0.1,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: title,
+              start: "top 90%",
+              once: true,
+            },
+          });
+        }
+      }, section);
+
+      revertAnimations = () => context.revert();
+    })();
+
+    return () => {
+      isDisposed = true;
+      revertAnimations?.();
+    };
+  }, []);
+
   return (
-    <section className="relative z-10 px-4 pt-16 pb-12 md:px-6 md:pt-24 lg:pt-35 mx-auto max-w-7xl">
+    <section ref={sectionRef} className="relative z-10 px-4 pt-26 pb-12 md:px-6 md:pt-30 lg:pt-32 mx-auto max-w-7xl">
       <InteractiveDottedGrid />
       {/* Founding Access 90% OFF - Right Side Corner Badge */}
       {/* <motion.div
@@ -37,46 +91,45 @@ export default function QuestionBankHero() {
       </motion.div> */}
 
       <div className="flex flex-col items-center text-center">
+        {/* Badge */}
+        <HeroBadge 
+          text="✦ Zaby Question Bank" 
+          className="mb-8"
+        />
 
         {/* Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-6 max-w-3xl text-[2.15rem] font-extrabold leading-[1.1] tracking-tight text-[#171717] sm:text-5xl md:text-7xl lg:text-6xl"
-        >
-          Next-Gen{" "}
-          <span className="text-[#e879f9]">
-            Agentic Assessments
-          </span>
-        </motion.h1>
+        <HeroHeading
+          className="items-center lg:items-center text-center [&>h1]:lg:text-[5rem] [&>h1]:xl:text-[6rem] [&>p]:max-w-3xl" 
+          title={
+            <>
+              <RevealWord>Next-Gen</RevealWord>{" "}
+              <br className="hidden lg:block" />
+              <RevealWord className="bg-linear-to-br from-[var(--color-accent)] via-[#c026d3] to-[var(--color-accent-soft)] bg-clip-text text-transparent">
+                Agentic Assessments
+              </RevealWord>
+            </>
+          }
+          subtitle="ZABY replaces static MCQs and outdated coding tests with dynamic AI-generated labs, adaptive assessments, and real-time candidate intelligence."
+        />
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-8 max-w-3xl text-base font-light leading-relaxed text-[#525252] sm:text-lg md:text-xl"
-        >
-          ZABY replaces static MCQs and outdated coding tests with dynamic AI-generated labs,
-          adaptive assessments, and real-time candidate intelligence.
-        </motion.p>
-
-        {/* Button */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-16"
-        >
+        {/* Buttons */}
+        <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4 mb-16">
           <Link
             href="https://platform.zaby.io/tenant/signup"
-            className="group relative flex cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) text-white px-8 py-4 text-base font-bold tracking-wide shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] transition-all duration-300 hover:scale-[1.02] hover:translate-y-[-1px]"
+            className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-[var(--color-button-primary-bg)] px-8 py-4 text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-[var(--color-button-primary-hover)] hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] hover:scale-[1.02] sm:w-auto"
           >
-            <Zap className="h-5 w-5 text-white animate-pulse" />
+            <Zap className="h-5 w-5 animate-pulse" />
             Generate AI Assessment
           </Link>
-        </motion.div>
+
+          <Link
+            href="/contact"
+            className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-[var(--color-button-secondary-border)] bg-white/50 backdrop-blur-md px-10 py-4 text-base font-medium text-[var(--color-button-secondary-text)] transition-all hover:bg-white hover:scale-[1.02] sm:w-auto"
+          >
+            <Icon icon="solar:play-circle-linear" width={22} height={22} />
+            Watch Demo
+          </Link>
+        </div>
       </div>
 
       {/* Large Dashboard Interactive Mockup */}
@@ -103,7 +156,8 @@ export default function QuestionBankHero() {
             className="h-32 w-32"
           />
         </motion.div>
-        <div className="bg-white/95 rounded-[22px] overflow-hidden border border-white/50 aspect-video lg:aspect-[2.2/1] flex flex-col">
+        <div className="bg-white/95 rounded-[22px] overflow-hidden border border-white/50 aspect-video lg:aspect-[2.2/1] flex flex-col items-center justify-center
+        ">
 
           {/* Mock Header */}
           <div className="px-6 py-4 border-b border-[#e5e5e5] bg-[#fafafa]/80 flex justify-between items-center">

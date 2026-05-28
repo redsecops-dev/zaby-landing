@@ -4,8 +4,9 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { FadeUp } from "@/components/animations";
-import { GradientOrb } from "@/components/shared/GradientOrb";
+import { SectionWrapper, Container } from "@/components/layout";
+import { GradientOrb, HeroBadge } from "@/components/shared";
+import { ScrollReveal } from "@/components/animations";
 
 function RevealWord({
   children,
@@ -26,7 +27,7 @@ function RevealWord({
 }
 
 export function CareersHeroSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -78,41 +79,30 @@ export function CareersHeroSection() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32"
+    <SectionWrapper
+      spacing="none"
+      background="transparent"
+      className="relative mt-20 sm:mt-30 flex items-center justify-center overflow-visible"
     >
-      {/* Background orbs — matches home page aesthetic */}
       <GradientOrb
         color="purple"
         size="xl"
-        className="absolute -top-40 -right-40 opacity-10"
+        className="absolute right-1/4 top-1/2 -translate-y-1/2 opacity-[0.08] pointer-events-none"
       />
       <GradientOrb
         color="pink"
         size="lg"
-        className="absolute top-60 -left-32 opacity-8"
+        className="absolute left-1/4 top-1/4 opacity-[0.06] pointer-events-none"
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl">
-          {/* Badge — matches home page hero badge exactly */}
-          <FadeUp duration={0.5}>
-            <div className="mb-6 inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/50 bg-white/60 px-3 py-1 backdrop-blur-md">
-              <span className="text-xs font-medium tracking-wide text-accent/90">
-                ✦ Careers at Zaby
-              </span>
-              <Icon
-                icon="solar:alt-arrow-right-linear"
-                width={12}
-                height={12}
-                className="text-text-secondary"
-              />
-            </div>
-          </FadeUp>
+      <Container size="lg" className="relative z-10 py-12 sm:py-20">
+        <div ref={sectionRef} className="max-w-4xl">
+          <ScrollReveal direction="up" delay={0.05}>
+            <HeroBadge text="Careers at Zaby" icon="solar:alt-arrow-right-linear" />
+          </ScrollReveal>
 
-          {/* Headline — same font scale & weight as home hero */}
-          <h1 className="masked-reveal-title mb-6 text-[2.15rem] font-semibold leading-[1.08] tracking-tight text-text-primary sm:text-5xl md:text-6xl lg:text-7xl">
+          {/* Headline — GSAP RevealWord animation */}
+          <h1 className="masked-reveal-title mb-6 text-[2.15rem] font-semibold leading-[1.08] tracking-tight text-[var(--color-text-primary)] sm:text-5xl md:text-6xl lg:text-7xl">
             <RevealWord>We&apos;re building</RevealWord>{" "}
             <RevealWord>the infrastructure</RevealWord>{" "}
             <br className="hidden md:block" />
@@ -121,19 +111,17 @@ export function CareersHeroSection() {
             </RevealWord>
           </h1>
 
-          {/* Subtext */}
-          <FadeUp delay={0.3} duration={0.6}>
-            <p className="mb-10 max-w-2xl text-[0.98rem] font-light leading-relaxed text-text-secondary md:text-lg lg:text-xl">
+          <ScrollReveal direction="up" delay={0.3}>
+            <p className="mb-10 max-w-2xl text-[0.98rem] font-light leading-relaxed text-[var(--color-text-secondary)] md:text-lg lg:text-xl">
               Zaby is an execution-first operational AI platform. We&apos;re not
               building chatbots or prompt wrappers — we&apos;re building the
               runtime layer that enterprises use to deploy autonomous AI systems
               at scale. If you want to work on infrastructure that matters, this
               is it.
             </p>
-          </FadeUp>
+          </ScrollReveal>
 
-          {/* CTAs — exactly matching home page button styles */}
-          <FadeUp delay={0.45} duration={0.6}>
+          <ScrollReveal direction="up" delay={0.45}>
             <div className="flex w-full flex-col items-start gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
               <a
                 href="#open-positions"
@@ -151,9 +139,9 @@ export function CareersHeroSection() {
                 <ExternalLink className="w-3.5 h-3.5 opacity-60" />
               </Link>
             </div>
-          </FadeUp>
+          </ScrollReveal>
         </div>
-      </div>
-    </section>
+      </Container>
+    </SectionWrapper>
   );
 }

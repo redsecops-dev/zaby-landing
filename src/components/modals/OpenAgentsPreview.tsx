@@ -4,7 +4,17 @@ import React from "react";
 import { Network, Sparkles, Volume2, Globe, Cpu, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 import SandboxDashboard from "../shared/SandboxDashboard";
+import {
+  HeroLiquidMetalRoot,
+  HeroLiquidMetalContainer,
+  HeroLiquidMetalContent,
+  HeroLiquidMetalHeading,
+  HeroLiquidMetalDescription,
+  HeroLiquidMetalVisual,
+  HeroLiquidMetalMobileVisual,
+} from "@/components/ui/hero-liquid-metal";
 
 export function OpenAgentsPreview() {
   return (
@@ -712,49 +722,62 @@ export function OpenAgentsPreview() {
         <SandboxDashboard />
       </div>
 
-      {/* Bottom CTA / Enable Open Agents Section */}
-      <section className="relative min-h-[45vh] w-full flex flex-col items-center justify-center py-16 space-y-8 overflow-hidden bg-white border-t border-slate-200/80 mt-12 rounded-[2rem] shadow-xs">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.02)_0%,transparent_75%)] pointer-events-none" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center space-y-4 z-20 px-6"
+      {/* -------------------- SECTION 6: CTA BANNER WITH INTERACTIVE SHADER -------------------- */}
+      <footer className="w-full relative z-10 mt-12 flex flex-col gap-6">
+        <HeroLiquidMetalRoot
+          title="Workforce OS scales velocity."
+          subtitle="Agents build workspaces."
+          description="Deploy autonomous digital agents that run continuously, orchestrating repetitive enterprise workflows and interacting directly with your APIs and legacy systems."
+          image="https://shaders.paper.design/images/logos/diamond.svg"
+          desktopShaderProps={{
+            scale: 0.8,
+            speed: 0.7,
+            repetition: 7,
+            softness: 0.9,
+            distortion: 0.3,
+            colorTint: "#2563eb",
+          }}
+          mobileShaderProps={{
+            speed: 0.65,
+            scale: 0.78,
+            colorTint: "#60a5fa",
+          }}
+          className="w-full rounded-2xl bg-blue-500/5 backdrop-blur-lg text-white border border-blue-500/50 relative overflow-hidden min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
         >
-          {/* Stats Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100/50 justify-center mx-auto">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 font-mono">99.9% Task Success Rate</span>
-          </div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text"
-          >
-            Scale Operational Velocity
-          </motion.h2>
-          <p className="max-w-xl mx-auto font-light text-slate-500 leading-relaxed text-sm md:text-base">
-            Deploy autonomous digital agents that run continuously, orchestrating repetitive enterprise workflows and interacting directly with your APIs and legacy systems.
-          </p>
-        </motion.div>
-
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => window.open('https://platform.zaby.io/tenant/signup', '_blank')}
-          className="px-12 py-4 font-medium rounded-full tracking-tight transition-all duration-500 z-20 bg-slate-900 text-white hover:bg-slate-800 hover:shadow-[0_0_40px_rgba(15,23,42,0.15)] cursor-pointer"
-        >
-          Deploy Sandbox Now
-        </motion.button>
-
-        <div className="text-[10px] tracking-[1em] uppercase z-20 text-slate-900/50 pt-4">
-          OPEN AGENTS © ZABY WORKFORCE OS
-        </div>
-      </section>
+          <HeroLiquidMetalContainer className="relative z-10 grid gap-6 pb-0 sm:pb-0 lg:pb-0 sm:gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center lg:gap-8 w-full max-w-none px-0">
+            <HeroLiquidMetalContent className="p-0 sm:px-0 md:px-0 lg:pr-0 lg:pl-0 xl:pl-0 2xl:pl-0 text-left items-start gap-3">
+              <HeroLiquidMetalHeading 
+                className="text-left pt-0 sm:pt-0 lg:pt-0"
+                headingClassName="!text-black text-2xl md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-light leading-tight tracking-tight text-white text-left lg:text-left pt-0 sm:pt-0" 
+              />
+              <HeroLiquidMetalDescription 
+                className="text-left mx-0 max-w-none pb-0 sm:pb-0 lg:pb-0"
+                descriptionClassName="text-gray-500 text-xs md:text-sm leading-relaxed max-w-lg text-left lg:text-left" 
+              />
+              
+              <div className="relative z-10 flex flex-wrap gap-3 pt-4 border-t border-white/10 mt-2 w-full justify-start">
+                <Link 
+                  href="https://platform.zaby.io/tenant/signup"
+                  target="_blank"
+                  className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-[var(--color-button-primary-bg)] px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-[var(--color-button-primary-hover)] hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+                >
+                  Deploy Sandbox Now
+                  <Icon icon="solar:arrow-right-linear" />
+                </Link>
+                <Link 
+                  href="https://platform.zaby.io/docs"
+                  target="_blank"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-[var(--color-button-secondary-border)] bg-[var(--color-button-secondary-bg)] px-8 py-3.5 font-medium text-[var(--color-button-secondary-text)] transition-all hover:bg-[#e2e8f0] sm:w-auto"
+                >
+                  View Documentation
+                </Link>
+              </div>
+            </HeroLiquidMetalContent>
+            <HeroLiquidMetalVisual className="h-[200px] lg:h-[240px] xl:h-[310px] relative" />
+          </HeroLiquidMetalContainer>
+          <HeroLiquidMetalMobileVisual />
+        </HeroLiquidMetalRoot>
+      </footer>
     </div>
   );
 }

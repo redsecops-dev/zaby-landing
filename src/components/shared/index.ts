@@ -10,4 +10,7 @@ export type { GlassPanelProps } from "./GlassPanel";
 export { GridBackground } from "./GridBackground";
 export type { GridBackgroundProps } from "./GridBackground";
 
+export { HeroBadge } from "./HeroBadge";
+export { HeroHeading, RevealWord } from "./HeroHeading";
+
 export * from "./icons";
