@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SectionHeading, ShimmerButton } from "@/components/shared";
 import {
   HeroLiquidMetalRoot,
   HeroLiquidMetalContainer,
@@ -33,7 +34,7 @@ import {
 // --- Components ---
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
-  <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-600 ring-1 ring-inset ring-blue-500/20 uppercase tracking-tight font-medium mb-6 backdrop-blur-sm">
+  <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs text-primary ring-1 ring-inset ring-primary/20 uppercase tracking-tight font-medium mb-6 backdrop-blur-sm">
     {children}
   </div>
 );
@@ -63,7 +64,7 @@ const HeroSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col items-center justify-center py-24 overflow-hidden bg-white"
+      className="relative min-h-screen flex flex-col items-center justify-center py-24 overflow-hidden bg-[var(--color-bg)]"
     >
       {/* Background Effects */}
 
@@ -73,7 +74,7 @@ const HeroSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl md:text-7xl font-light text-slate-900 tracking-tight leading-[1.1] max-w-4xl glass-text"
+          className="text-4xl sm:text-5xl md:text-7xl font-light text-[var(--color-text-primary)] tracking-tight leading-[1.1] max-w-4xl glass-text"
         >
           Unify every customer{" "}
           <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent font-light">
@@ -86,7 +87,7 @@ const HeroSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="mt-8 max-w-2xl text-base sm:text-lg text-slate-600 leading-relaxed font-light"
+          className="mt-8 max-w-2xl text-base sm:text-lg text-[var(--color-text-secondary)] leading-relaxed font-light"
         >
           Deploy AI-native conversational systems across messaging, voice,
           support, and enterprise communication channels from a single
@@ -112,9 +113,9 @@ const HeroSection = () => {
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
               <linearGradient id="line-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-                <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.8" />
+                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0" />
+                <stop offset="50%" stopColor="var(--color-primary)" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.8" />
               </linearGradient>
             </defs>
 
@@ -123,7 +124,8 @@ const HeroSection = () => {
                 {/* Background path */}
                 <path
                   d={`M${ch.x} ${ch.y} C ${ch.x} 150, 450 200, 450 330`}
-                  stroke="rgba(0,0,0,0.05)"
+                  stroke="var(--color-border-strong)"
+                  strokeOpacity="0.05"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                 />
@@ -151,7 +153,7 @@ const HeroSection = () => {
                 {/* Pulse travel */}
                 <motion.circle
                   r="3.5"
-                  fill="#3b82f6"
+                  fill="var(--color-primary)"
                   filter="url(#hub-glow)"
                   initial={{ offsetDistance: "0%" }}
                   animate={{ offsetDistance: "100%" }}
@@ -176,15 +178,15 @@ const HeroSection = () => {
               className="absolute hidden sm:flex flex-col items-center gap-2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 hover:scale-110"
               style={{ top: ch.y, left: `${(ch.x / 900) * 100}%` }}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-slate-200 shadow-xl backdrop-blur-xl group relative">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-bg)] border border-[var(--color-border-strong)] backdrop-blur-xl group relative">
                 <Icon
                   icon={ch.icon}
                   className="text-2xl"
                   style={{ color: ch.color }}
                 />
-                <div className="absolute inset-0 rounded-2xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
+              <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-secondary)] font-bold">
                 {ch.name}
               </span>
             </div>
@@ -193,23 +195,23 @@ const HeroSection = () => {
           {/* Center Core Node */}
           <div className="absolute top-[85%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
             <div className="relative group">
-              <div className="absolute inset-0 rounded-3xl bg-blue-500/20 blur-2xl animate-pulse" />
-              <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-white border border-blue-500/20 shadow-[0_8px_30px_rgba(59,130,246,0.15)]">
-                {/* <Icon icon="solar:bolt-circle-bold-duotone" className="text-5xl text-blue-600" /> */}
-                <Bot className="text-5xl text-blue-600" />
+              <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-2xl animate-pulse" />
+              <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-[var(--color-bg)] border border-primary/20 shadow-[0_8px_30px_rgba(var(--color-primary-rgb),0.15)]">
+                {/* <Icon icon="solar:bolt-circle-bold-duotone" className="text-5xl text-primary" /> */}
+                <Bot className="text-5xl text-primary" />
 
                 {/* Orbital Rings */}
-                <div className="absolute inset-[-10px] rounded-full border border-blue-500/10 animate-[spin_10s_linear_infinite]" />
-                <div className="absolute inset-[-20px] rounded-full border border-blue-500/5 animate-[spin_15s_linear_infinite_reverse]" />
+                <div className="absolute inset-[-10px] rounded-full border border-primary/10 animate-[spin_10s_linear_infinite]" />
+                <div className="absolute inset-[-20px] rounded-full border border-primary/5 animate-[spin_15s_linear_infinite_reverse]" />
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em]">
+              <span className="text-xs font-bold text-[var(--color-text-primary)] uppercase tracking-[0.2em]">
                 Zaby Conversational Runtime
               </span>
               <div className="flex items-center gap-2 mt-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                <span className="text-[10px] text-blue-600/80 font-bold uppercase tracking-widest">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <span className="text-[10px] text-primary/80 font-bold uppercase tracking-widest">
                   Operational Core Active
                 </span>
               </div>
@@ -218,7 +220,7 @@ const HeroSection = () => {
         </div>
 
         {/* Bottom Feature Strip */}
-        <div className="mt-32 w-full pt-12 border-t border-slate-100">
+        <div className="mt-32 w-full pt-12 border-t border-[var(--color-border-strong)]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               "Real-time orchestration",
@@ -227,8 +229,8 @@ const HeroSection = () => {
               "Autonomous conversations",
             ].map((text, i) => (
               <div key={i} className="flex flex-col items-center gap-3 group">
-                <div className="h-px w-12 bg-blue-600/30 group-hover:w-20 transition-all duration-500" />
-                <span className="text-[11px] uppercase tracking-widest text-slate-600 group-hover:text-slate-900 font-bold transition-colors">
+                <div className="h-px w-12 bg-primary/30 group-hover:w-20 transition-all duration-500" />
+                <span className="text-[11px] uppercase tracking-widest text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] font-bold transition-colors">
                   {text}
                 </span>
               </div>
@@ -286,7 +288,7 @@ const FeatureSection = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-green-50 border border-green-100 flex items-center justify-center mb-8 shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-green-50 border border-green-100 flex items-center justify-center mb-8">
                 <Icon icon="logos:whatsapp-icon" className="text-3xl" />
               </div>
               <h3 className="text-4xl md:text-5xl font-medium text-slate-900 mb-6 tracking-tight">
@@ -314,7 +316,7 @@ const FeatureSection = () => {
               </ul>
             </motion.div>
             <motion.div
-              className="relative h-[500px] bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-green-500/5 overflow-hidden"
+              className="relative h-[500px] bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden"
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -323,7 +325,7 @@ const FeatureSection = () => {
               <div className="absolute inset-x-0 top-0 h-14 bg-slate-50 border-b border-slate-100 flex items-center px-6 justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-[10px]">
-                    Z
+                    <Icon icon="logos:whatsapp-icon" className="text-xl" />
                   </div>
                   <span className="text-xs font-bold text-slate-700 uppercase tracking-widest">
                     WhatsApp Agent
@@ -337,7 +339,7 @@ const FeatureSection = () => {
                   your enterprise workflows today?
                 </div>
                 <motion.div
-                  className="bg-blue-600 text-white rounded-2xl rounded-tr-none p-4 max-w-[80%] ml-auto text-sm font-medium shadow-lg"
+                  className="bg-blue-600 text-white rounded-2xl rounded-tr-none p-4 max-w-[80%] ml-auto text-sm font-medium"
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1 }}
@@ -400,7 +402,7 @@ const FeatureSection = () => {
                     <div className="absolute inset-[-12px] rounded-full border border-blue-500/20 animate-ping opacity-75 pointer-events-none" />
                     <div className="absolute inset-[-30px] rounded-full border border-blue-500/5 animate-ping opacity-40 [animation-delay:0.7s] pointer-events-none" />
 
-                    <div className="relative w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20 border border-blue-400/20 z-10 transition-transform duration-300 group-hover/mic:scale-105">
+                    <div className="relative w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center border border-blue-400/20 z-10 transition-transform duration-300 group-hover/mic:scale-105">
                       <Phone className="w-8 h-8 text-white" />
                     </div>
                   </div>
@@ -435,7 +437,7 @@ const FeatureSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-8 shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-8 ">
                 <Phone className="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-4xl md:text-5xl font-medium text-slate-900 mb-6 tracking-tight">
@@ -475,7 +477,7 @@ const FeatureSection = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center mb-8 shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center mb-8 ">
                 <History className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-4xl md:text-5xl font-medium text-slate-900 mb-6 tracking-tight">
@@ -493,7 +495,7 @@ const FeatureSection = () => {
                   "Semantic Search",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4 group/item">
-                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover/item:border-purple-300 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center group-hover/item:border-purple-300 transition-colors">
                       <Icon
                         icon="solar:check-read-linear"
                         className="text-purple-600"
@@ -611,7 +613,7 @@ const FeatureSection = () => {
             scales with your organizational complexity. Route inquiries to the
             perfect autonomous unit instantly.
           </p>
-          <div className="relative max-w-5xl mx-auto aspect-[900/450] bg-slate-950 rounded-[3rem] overflow-hidden shadow-2xl group border border-white/10">
+          <div className="relative max-w-5xl mx-auto aspect-[900/450] bg-slate-950 rounded-[3rem] overflow-hidden  group border border-white/10">
             {/* Decorative grid & background gradient */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px]" />
             <div className="absolute inset-0 bg-radial-gradient from-purple-500/10 via-transparent to-transparent opacity-60" />
@@ -622,30 +624,37 @@ const FeatureSection = () => {
               className="absolute inset-0 w-full h-full pointer-events-none z-0"
             >
               <defs>
+                <filter id="route-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
                 <linearGradient
                   id="glow-grad-left"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
+                  gradientUnits="userSpaceOnUse"
+                  x1="270"
+                  y1="225"
+                  x2="450"
+                  y2="225"
                 >
                   <stop offset="0%" stopColor="#10b981" stopOpacity="0.1" />
-                  <stop offset="100%" stopColor="#a855f7" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.8" />
                 </linearGradient>
                 <linearGradient
                   id="glow-grad-right"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
+                  gradientUnits="userSpaceOnUse"
+                  x1="450"
+                  y1="225"
+                  x2="630"
+                  y2="225"
                 >
-                  <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
+                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0.1" />
                 </linearGradient>
               </defs>
 
               {/* Left WhatsApp connection */}
               <path
+                id="p-whatsapp"
                 d="M 270 120 C 350 120, 360 225, 450 225"
                 stroke="rgba(255,255,255,0.04)"
                 strokeWidth="2"
@@ -660,9 +669,13 @@ const FeatureSection = () => {
                 animate={{ strokeDashoffset: [0, -32] }}
                 transition={{ repeat: Infinity, ease: "linear", duration: 2.5 }}
               />
+              <motion.circle r="2.5" fill="var(--color-primary)" filter="url(#route-glow)">
+                <animateMotion dur="2.5s" repeatCount="indefinite" path="M 270 120 C 350 120, 360 225, 450 225" />
+              </motion.circle>
 
               {/* Left Voice connection */}
               <path
+                id="p-voice"
                 d="M 270 330 C 350 330, 360 225, 450 225"
                 stroke="rgba(255,255,255,0.04)"
                 strokeWidth="2"
@@ -682,9 +695,13 @@ const FeatureSection = () => {
                   delay: 0.5,
                 }}
               />
+              <motion.circle r="2.5" fill="var(--color-primary)" filter="url(#route-glow)">
+                <animateMotion dur="2.5s" begin="0.5s" repeatCount="indefinite" path="M 270 330 C 350 330, 360 225, 450 225" />
+              </motion.circle>
 
               {/* Right AI Agent connection */}
               <path
+                id="p-agent"
                 d="M 450 225 C 540 225, 550 90, 630 90"
                 stroke="rgba(255,255,255,0.04)"
                 strokeWidth="2"
@@ -696,24 +713,28 @@ const FeatureSection = () => {
                 strokeWidth="2"
                 strokeDasharray="6 10"
                 fill="none"
-                animate={{ strokeDashoffset: [0, 32] }}
+                animate={{ strokeDashoffset: [0, -32] }}
                 transition={{ repeat: Infinity, ease: "linear", duration: 3 }}
               />
+              <motion.circle r="2.5" fill="var(--color-primary)" filter="url(#route-glow)">
+                <animateMotion dur="3s" repeatCount="indefinite" path="M 450 225 C 540 225, 550 90, 630 90" />
+              </motion.circle>
 
               {/* Right Support Team connection */}
               <path
-                d="M 450 225 H 630"
+                id="p-support"
+                d="M 450 225 L 630 225"
                 stroke="rgba(255,255,255,0.04)"
                 strokeWidth="2"
                 fill="none"
               />
               <motion.path
-                d="M 450 225 H 630"
+                d="M 450 225 L 630 225"
                 stroke="url(#glow-grad-right)"
                 strokeWidth="2"
-                strokeDasharray="6 10"
+                strokeDasharray="8 12"
                 fill="none"
-                animate={{ strokeDashoffset: [0, 32] }}
+                animate={{ strokeDashoffset: [0, -40] }}
                 transition={{
                   repeat: Infinity,
                   ease: "linear",
@@ -721,9 +742,13 @@ const FeatureSection = () => {
                   delay: 0.2,
                 }}
               />
+              <motion.circle r="2.5" fill="var(--color-primary)" filter="url(#route-glow)">
+                <animateMotion dur="2s" begin="0.2s" repeatCount="indefinite" path="M 450 225 L 630 225" />
+              </motion.circle>
 
               {/* Right DB connection */}
               <path
+                id="p-db"
                 d="M 450 225 C 540 225, 550 360, 630 360"
                 stroke="rgba(255,255,255,0.04)"
                 strokeWidth="2"
@@ -735,7 +760,7 @@ const FeatureSection = () => {
                 strokeWidth="2"
                 strokeDasharray="6 10"
                 fill="none"
-                animate={{ strokeDashoffset: [0, 32] }}
+                animate={{ strokeDashoffset: [0, -32] }}
                 transition={{
                   repeat: Infinity,
                   ease: "linear",
@@ -743,12 +768,15 @@ const FeatureSection = () => {
                   delay: 0.4,
                 }}
               />
+              <motion.circle r="2.5" fill="var(--color-primary)" filter="url(#route-glow)">
+                <animateMotion dur="3.5s" begin="0.4s" repeatCount="indefinite" path="M 450 225 C 540 225, 550 360, 630 360" />
+              </motion.circle>
             </svg>
 
             {/* HTML Cards Layer */}
             <div className="absolute inset-0 w-full h-full z-10 flex items-center justify-between px-12 select-none">
               {/* Left Column: Input Channels */}
-              <div className="flex flex-col gap-12 w-[240px] text-left">
+              <div className="flex flex-col gap-30 ml-10 w-[240px] text-left">
                 {/* WhatsApp Card */}
                 <motion.div
                   className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3 w-full backdrop-blur-md relative overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-emerald-500/30 group/node"
@@ -835,7 +863,7 @@ const FeatureSection = () => {
               </div>
 
               {/* Right Column: Destinations */}
-              <div className="flex flex-col gap-8 w-[240px] text-left">
+              <div className="flex flex-col gap-16 mr-5 w-[240px] text-left">
                 {/* AI Agent Node */}
                 <motion.div
                   className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3 w-full backdrop-blur-md relative overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-emerald-500/30 group/node"
@@ -912,7 +940,6 @@ const FeatureSection = () => {
     </section>
   );
 };
-
 // --- Section 3: Platform Glance ---
 
 const PlatformGlance = () => {
@@ -946,7 +973,7 @@ const PlatformGlance = () => {
               },
             ].map((item, i) => (
               <div key={i} className="flex gap-6 group">
-                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-purple-500 transition-all duration-500">
                   {item.icon}
                 </div>
                 <div>
@@ -963,12 +990,12 @@ const PlatformGlance = () => {
         </div>
 
         <div className="relative">
-          <div className="relative rounded-3xl border border-slate-200 bg-slate-50 aspect-square overflow-hidden group shadow-2xl shadow-black/5">
+          <div className="relative rounded-3xl border border-slate-200 bg-slate-50 aspect-square overflow-hidden group">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:40px_40px]" />
 
             {/* Mock Dashboard Visualization */}
             <div className="absolute inset-12 flex flex-col gap-6">
-              <div className="h-1/3 w-full rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm shadow-sm">
+              <div className="h-1/3 w-full rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
@@ -1010,7 +1037,7 @@ const PlatformGlance = () => {
               </div>
 
               <div className="flex-1 grid grid-cols-2 gap-6">
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm flex flex-col justify-between shadow-sm">
+                <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm flex flex-col justify-between ">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                     Sentiment
                   </span>
@@ -1018,7 +1045,7 @@ const PlatformGlance = () => {
                     Positive (98%)
                   </div>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm flex flex-col justify-between shadow-sm">
+                <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur-sm flex flex-col justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                     Latency
                   </span>
@@ -1028,7 +1055,7 @@ const PlatformGlance = () => {
                 </div>
               </div>
 
-              <div className="h-1/4 w-full rounded-2xl border border-blue-600/20 bg-white p-6 backdrop-blur-sm flex items-center justify-between group-hover:border-blue-600 transition-colors shadow-sm">
+              <div className="h-1/4 w-full rounded-2xl border border-blue-600/20 bg-white p-6 backdrop-blur-sm flex items-center justify-between group-hover:border-blue-600 transition-colors">
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 rounded-full bg-blue-600/10 flex items-center justify-center">
                     <Workflow className="w-4 h-4 text-blue-600" />
@@ -1053,12 +1080,13 @@ const PlatformGlance = () => {
   );
 };
 
+
 // --- Section 4: CTA Section ---
 
 const CTASection = () => {
   const router = useRouter();
   return (
-    <section className="relative py-40 bg-white px-6 text-center overflow-hidden">
+    <section className="relative py-40 bg-[var(--color-bg)] px-6 text-center overflow-hidden">
       {/* Background Animated Communication Mesh */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <svg
@@ -1073,7 +1101,7 @@ const CTASection = () => {
               y1={i * 10}
               x2="100"
               y2={i * 10 + 5}
-              stroke="rgba(59, 130, 246, 0.5)"
+              stroke="var(--color-primary)"
               strokeWidth="0.1"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -1084,35 +1112,33 @@ const CTASection = () => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-light text-slate-900 tracking-tight leading-[1.1] glass-text">
-          Deploy conversational AI systems that{" "}
-          <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent font-light">
-            operate
-          </span>{" "}
-          beyond chat.
-        </h2>
-        <p className="mt-10 max-w-2xl text-base sm:text-xl text-slate-600 font-light leading-relaxed">
-          Build operational AI communication infrastructure across voice,
-          messaging, workflows, and enterprise systems.
-        </p>
+        <SectionHeading 
+          title={<>Deploy conversational AI systems that <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent font-light">operate</span> beyond chat.</>}
+          subtitle="Build operational AI communication infrastructure across voice, messaging, workflows, and enterprise systems."
+          align="center"
+        />
 
         <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center">
-          <Link
-            href="https://platform.zaby.io/signup"
-            className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-8 py-6 text-md font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+          <ShimmerButton 
+            asChild
+            shimmerColor="#e879f9"
+            background="var(--color-button-primary-bg)"
+            className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full px-8 py-6 text-md font-medium tracking-wide text-white shadow-[var(--shadow-glow-accent)] transition-all hover:bg-(--color-button-primary-hover) sm:w-auto"
           >
-            Start Building
-          </Link>
+            <Link href="https://platform.zaby.io/signup">
+              Start Building
+            </Link>
+          </ShimmerButton>
           <button
             onClick={() => router.push("https://platform.zaby.io/signup")}
-            className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-6 font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
+            className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-6 font-medium text-(--color-button-secondary-text) transition-all hover:bg-white sm:w-auto"
           >
             Explore Runtime
           </button>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-t from-blue-600/5 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-t from-primary/5 to-transparent blur-3xl pointer-events-none" />
     </section>
   );
 };
@@ -1121,7 +1147,7 @@ const CTASection = () => {
 
 export default function ConversationalAI() {
   return (
-    <div className="w-full min-h-screen h-auto bg-white text-slate-800 font-sans antialiased selection:bg-blue-500/10 p-6 md:p-12 lg:p-16 flex flex-col gap-16 relative overflow-x-hidden">
+    <div className="w-full min-h-screen h-auto bg-[var(--color-bg)] text-[var(--color-text-primary)] font-sans antialiased selection:bg-primary/10 p-6 md:p-12 lg:p-16 flex flex-col gap-16 relative overflow-x-hidden">
       <HeroSection />
       <FeatureSection />
       <PlatformGlance />
@@ -1139,37 +1165,41 @@ export default function ConversationalAI() {
             repetition: 6,
             softness: 0.8,
             distortion: 0.4,
-            colorTint: "#2563eb",
+            colorTint: "#e879f9",
           }}
           mobileShaderProps={{
             speed: 0.65,
             scale: 0.78,
-            colorTint: "#60a5fa",
+            colorTint: "#e879f9",
           }}
-          className="w-full rounded-2xl bg-purple-500/5 backdrop-blur-lg text-white border border-purple-500/50 relative overflow-hidden min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
+          className="w-full rounded-2xl bg-primary/5 backdrop-blur-lg text-white border border-primary/50 relative overflow-hidden min-h-[320px] h-auto flex flex-col justify-between p-6 md:p-8"
         >
           <HeroLiquidMetalContainer className="relative z-10 grid gap-6 pb-0 sm:pb-0 lg:pb-0 sm:gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-center lg:gap-8 w-full max-w-none px-0">
             <HeroLiquidMetalContent className="p-0 sm:px-0 md:px-0 lg:pr-0 lg:pl-0 xl:pl-0 2xl:pl-0 text-left items-start gap-3">
               <HeroLiquidMetalHeading
                 className="text-left pt-0 sm:pt-0 lg:pt-0"
-                headingClassName="text-2xl !text-black md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-light leading-tight tracking-tight text-white text-left lg:text-left pt-0 sm:pt-0"
+                headingClassName="text-2xl !text-[var(--color-text-primary)] md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl font-light leading-tight tracking-tight text-white text-left lg:text-left pt-0 sm:pt-0"
               />
               <HeroLiquidMetalDescription
                 className="text-left mx-0 max-w-none pb-0 sm:pb-0 lg:pb-0"
-                descriptionClassName="!text-slate-500 font-light text-xs md:text-sm leading-relaxed max-w-lg text-left lg:text-left"
+                descriptionClassName="!text-[var(--color-text-secondary)] font-light text-xs md:text-sm leading-relaxed max-w-lg text-left lg:text-left"
               />
 
               <div className="relative z-10 flex flex-wrap gap-3 pt-4 border-t border-white/10 mt-2 w-full justify-start">
-                <Link
-                  href="https://platform.zaby.io/signup"
-                  className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+                <ShimmerButton 
+                  asChild
+                  shimmerColor="#e879f9"
+                  background="var(--color-button-primary-bg)"
+                  className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium tracking-wide text-white shadow-[var(--shadow-glow-accent)] transition-all hover:bg-(--color-button-primary-hover) sm:w-auto"
                 >
-                  Start Building
-                  <Icon icon="solar:arrow-right-linear" />
-                </Link>
+                  <Link href="https://platform.zaby.io/signup">
+                    Start Building
+                    <Icon icon="solar:arrow-right-linear" />
+                  </Link>
+                </ShimmerButton>
                 <Link
                   href="https://platform.zaby.io/signup"
-                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-3.5 font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-8 py-3.5 font-medium text-(--color-button-secondary-text) transition-all hover:bg-white sm:w-auto"
                 >
                   Explore Runtime
                 </Link>
