@@ -14,7 +14,7 @@ import { GlassPanel, GradientOrb, GridBackground } from "@/components/shared";
 const CARD_HASH_MAP: Record<number, string> = {
   1: "agent-squad",
   4: "ai-infra",
-  7: "ai-memory",
+  7: "integrations",
   8: "agentic-workflow",
   9: "conversational-ai",
 };
@@ -101,7 +101,6 @@ export function FeaturesSection() {
                     tasks across your entire business. Integrate seamlessly with
                     your workflows, automate complex processes, and scale
                     operations with intelligent autonomy.
-                    <br />
                     Experience 24/7 execution, adaptive learning, and reliable
                     results—no manual intervention required.
                   </p>

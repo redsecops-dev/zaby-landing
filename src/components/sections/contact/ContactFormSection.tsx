@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
 import { SectionWrapper, Container } from "@/components/layout";
-import { GlassPanel, GradientOrb, SectionHeading, GridBackground } from "@/components/shared";
+import { GlassPanel, GradientOrb, SectionHeading, GridBackground, TurnstileCaptcha } from "@/components/shared";
 import { ScrollReveal } from "@/components/animations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,6 +51,8 @@ export function ContactFormSection() {
   const [form, setForm] = useState<ContactFormData>(INITIAL_FORM);
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -66,9 +68,18 @@ export function ContactFormSection() {
     setStatus("loading");
     setErrorMessage("");
 
+    if (!turnstileToken) {
+      setErrorMessage("Please complete the captcha verification.");
+      setStatus("error");
+      return;
+    }
+
+    // https://prod-api.zaby.io/api/v1/public/contact?
+
+
     try {
       const res = await fetch(
-        "https://prod-api.zaby.io/api/v1/public/contact",
+        "http://localhost:9080/api/v1/public/contact",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -79,6 +90,7 @@ export function ContactFormSection() {
             company: form.company.trim() || undefined,
             subject: form.subject,
             message: form.message.trim(),
+            turnstileToken,
           }),
         }
       );
@@ -86,6 +98,8 @@ export function ContactFormSection() {
       if (res.ok) {
         setStatus("success");
         setForm(INITIAL_FORM);
+        setTurnstileToken(null);
+        setTurnstileKey((k) => k + 1);
       } else {
         const data = await res.json().catch(() => null);
         setErrorMessage(
@@ -290,6 +304,16 @@ export function ContactFormSection() {
                   />
                 </div>
 
+                {/* Turnstile Captcha */}
+                <div className="mt-6 flex justify-center">
+                  <TurnstileCaptcha
+                    resetKey={turnstileKey}
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                  />
+                </div>
+
                 {/* Error banner */}
                 {status === "error" && (
                   <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-200/60 bg-red-50/60 px-4 py-3 text-sm text-red-600">
@@ -306,7 +330,7 @@ export function ContactFormSection() {
                 {/* Submit */}
                 <Button
                   type="submit"
-                  disabled={status === "loading"}
+                  disabled={status === "loading" || !turnstileToken}
                   className="mt-7 cursor-pointer flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-button-primary-bg)] hover:bg-[var(--color-button-primary-hover)] text-white shadow-[rgba(76,29,149,0.2)_0px_10px_30px_-10px] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 h-auto py-3.5"
                 >
                   {status === "loading" ? (

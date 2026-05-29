@@ -3,8 +3,8 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { useScrollTriggerAnimation } from "@/lib/gsap-utils";
+import { SectionHeading } from "@/components/shared";
 
 interface ArchitectureNode {
   id: string;
@@ -22,7 +22,7 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
     title: "RENO Runtime Core",
     desc: "The central nervous system of Zaby. It orchestrates real-time synchronization between disparate memory layers, ensuring a unified stream of consciousness for AI agents.",
     icon: "solar:database-bold-duotone",
-    color: "#3b82f6",
+    color: "#e879f9",
     lane: "ORCHESTRATION",
     runtime: "core.v2",
   },
@@ -58,7 +58,7 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
     title: "MCP Runtime",
     desc: "The coordination protocol that manages external tool discovery and secure execution, ensuring agents can safely navigate complex software environments.",
     icon: "solar:cpu-bolt-bold-duotone",
-    color: "#3b82f6",
+    color: "#e879f9",
     lane: "EXECUTION",
     runtime: "coordination.v2",
   },
@@ -82,8 +82,6 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
   },
 ];
 
-
-
 const FeatureCard = ({ node, index }: { node: ArchitectureNode; index: number }) => {
   return (
     <motion.div
@@ -93,7 +91,7 @@ const FeatureCard = ({ node, index }: { node: ArchitectureNode; index: number })
       transition={{ duration: 0.8, delay: index * 0.1, ease: "easeOut" }}
       className="group relative w-full"
     >
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white p-8 transition-all duration-500 hover:border-blue-500/20">
+      <div className="relative overflow-hidden rounded-[2.5rem] border border-[var(--color-border-strong)] bg-[var(--color-bg)] p-8 transition-all duration-500 hover:border-primary/20">
         {/* Subtle background glow */}
         <div 
           className="absolute -right-20 -top-20 h-64 w-64 rounded-full blur-[80px] transition-opacity duration-500 opacity-[0.03] group-hover:opacity-[0.08]"
@@ -116,20 +114,20 @@ const FeatureCard = ({ node, index }: { node: ArchitectureNode; index: number })
           {/* Content Section */}
           <div className="flex-1 space-y-3">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase">
+              <span className="font-mono text-[10px] font-bold tracking-[0.2em] text-[var(--color-text-secondary)] uppercase">
                 {node.lane}
               </span>
-              <span className="h-3 w-px bg-slate-200" />
-              <span className="font-mono text-[10px] text-slate-400">
+              <span className="h-3 w-px bg-[var(--color-border-strong)]" />
+              <span className="font-mono text-[10px] text-[var(--color-text-secondary)]">
                 {node.runtime}
               </span>
             </div>
             
-            <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
+            <h3 className="text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
               {node.title}
             </h3>
             
-            <p className="max-w-2xl text-base font-light leading-relaxed text-slate-500">
+            <p className="max-w-2xl text-base font-light leading-relaxed text-[var(--color-text-secondary)]">
               {node.desc}
             </p>
           </div>
@@ -140,7 +138,7 @@ const FeatureCard = ({ node, index }: { node: ArchitectureNode; index: number })
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Active</span>
              </div>
-             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Runtime Secure</span>
+             <span className="text-[10px] font-mono text-[var(--color-text-secondary)] uppercase tracking-widest">Runtime Secure</span>
           </div>
         </div>
       </div>
@@ -154,24 +152,20 @@ export default function MemoryArchitectureSection() {
   useScrollTriggerAnimation(containerRef);
 
   return (
-    <section ref={containerRef} className="relative bg-white px-6 py-32 lg:px-8">
+    <section ref={containerRef} className="relative bg-[var(--color-bg)] px-6 py-32 lg:px-8">
       {/* Background patterns */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.015] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-blue-50/[0.2] via-transparent to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-primary/[0.05] via-transparent to-transparent" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-5xl">
-        <div className="mb-20 flex flex-col items-center text-center">
-          
-          <h2 className="reveal-text text-4xl md:text-5xl font-light tracking-tight leading-tight glass-text">
-            The Anatomy of <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent font-light">Intelligence.</span>
-          </h2>
-          
-          <p className="reveal-text mt-6 max-w-2xl text-lg font-light leading-relaxed text-slate-500">
-            RENO orchestrates multiple persistent memory layers to deliver accurate, 
-            contextual, and continuously improving AI operations.
-          </p>
+        <div className="mb-20">
+          <SectionHeading 
+            title={<>The Anatomy of <span className="bg-linear-to-br from-accent via-[#c026d3] to-accent-soft bg-clip-text text-transparent font-light">Intelligence.</span></>}
+            subtitle="RENO orchestrates multiple persistent memory layers to deliver accurate, contextual, and continuously improving AI operations."
+            align="center"
+          />
         </div>
 
         <div className="flex flex-col gap-6">

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { navLinks, NavItem } from "@/config/nav";
 import { siteConfig } from "@/config/site";
 import Image from "next/image";
+import { ShimmerButton } from "@/components/shared";
 
 export function Navbar() {
   const progressRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,22 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [activeSidebarItem, setActiveSidebarItem] = useState<string | null>(null);
   const [mobileAccordions, setMobileAccordions] = useState<Record<string, boolean>>({});
+
+  const handleMouseEnterLink = (link: NavItem) => {
+    if (link.dropdown) {
+      setActiveDropdown(link.label);
+      if (link.menuStyle === "sidebar" && link.sidebarItems && link.sidebarItems.length > 0) {
+        setActiveSidebarItem(link.sidebarItems[0].label);
+      } else {
+        setActiveSidebarItem(null);
+      }
+    } else {
+      setActiveDropdown(null);
+      setActiveSidebarItem(null);
+    }
+  };
 
   const toggleMobileAccordion = (label: string) => {
     setMobileAccordions(prev => ({
@@ -147,7 +163,7 @@ export function Navbar() {
                 <div 
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() => link.dropdown ? setActiveDropdown(link.label) : setActiveDropdown(null)}
+                  onMouseEnter={() => handleMouseEnterLink(link)}
                 >
                   <Link
                     href={link.href}
@@ -197,14 +213,19 @@ export function Navbar() {
                 Sign in
               </Link>
 
-              {/* Gradient-border CTA button */}
-              <Link
-                href="https://platform.zaby.io/tenant/signup"
-                className="group relative hidden shrink-0 overflow-hidden rounded-full cursor-pointer md:block"
-                aria-label="Get started with Zaby"
+              {/* Shimmer CTA button */}
+              <ShimmerButton
+                asChild
+                shimmerColor="#e879f9"
+                background="var(--color-button-primary-bg)"
+                borderRadius="9999px"
+                className="hidden md:inline-flex group relative shrink-0 overflow-hidden rounded-full cursor-pointer px-5 py-3 shadow-[rgba(76,29,149,0.3)_0px_8px_20px_-8px] gap-2"
                 onMouseEnter={() => setActiveDropdown(null)}
               >
-                <span className="relative flex items-center gap-2 rounded-full bg-(--color-button-primary-bg) px-4 py-3.5 text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all duration-300 hover:bg-(--color-button-primary-hover) md:px-6">
+                <Link
+                  href="https://platform.zaby.io/tenant/signup"
+                  aria-label="Get started with Zaby"
+                >
                   <span className="text-xs font-medium uppercase tracking-wider text-white">
                     Get Started
                   </span>
@@ -213,8 +234,8 @@ export function Navbar() {
                     strokeWidth={1.5}
                     className="text-white transition-transform duration-300 group-hover:translate-x-1"
                   />
-                </span>
-              </Link>
+                </Link>
+              </ShimmerButton>
 
               {/* Mobile toggle */}
               <button
@@ -260,60 +281,161 @@ export function Navbar() {
                         ? "rounded-b-2xl border-t-0" 
                         : "rounded-2xl"
                     )}>
-                      <div className="mx-auto grid max-w-7xl grid-cols-12 gap-0">
-                        {/* Left content: Dynamic based on active dropdown */}
-                        <div className="col-span-8 grid grid-cols-2 gap-8 p-10">
-                          {activeLink.sections?.map((section) => (
-                            <div key={section.title} className="space-y-6">
-                              <h3 className="text-[12px] font-bold uppercase tracking-[0.1em] text-text-secondary/60">
-                                {section.title}
-                              </h3>
-                              <ul className="space-y-1">
-                                {section.items.map((item) => (
-                                  <li key={item.label}>
-                                    <Link 
-                                      href={item.href}
-                                      className="group flex flex-col space-y-1 rounded-xl p-3 transition-all duration-200 hover:bg-slate-50"
-                                      onClick={() => setActiveDropdown(null)}
-                                    >
-                                      <div className="text-[1rem] font-semibold text-text-primary transition-colors group-hover:text-accent">
-                                        {item.label}
-                                      </div>
-                                      {item.description && (
-                                        <p className="text-[0.85rem] leading-relaxed text-text-secondary/80">
-                                          {item.description}
-                                        </p>
-                                      )}
-                                    </Link>
-                                  </li>
+                      <div className="mx-auto grid max-w-7xl grid-cols-12 gap-0 min-h-[420px]">
+                        {activeLink.menuStyle === "sidebar" ? (
+                          <>
+                            {/* Left Sidebar Content */}
+                            <div className="col-span-4 border-r border-border/40 p-6 bg-slate-50/10">
+                              <div className="space-y-1">
+                                {activeLink.sidebarItems?.map((item) => (
+                                  <Link
+                                    key={item.label}
+                                    href={item.href}
+                                    className={cn(
+                                      "group flex flex-col space-y-1 rounded-xl p-4 transition-all duration-200",
+                                      activeSidebarItem === item.label 
+                                        ? "bg-white shadow-sm ring-1 ring-border/40" 
+                                        : "hover:bg-white/60"
+                                    )}
+                                    onMouseEnter={() => setActiveSidebarItem(item.label)}
+                                    onClick={() => setActiveDropdown(null)}
+                                  >
+                                    <div className={cn(
+                                      "text-[0.95rem] font-bold transition-colors",
+                                      activeSidebarItem === item.label ? "text-accent" : "text-text-primary"
+                                    )}>
+                                      {item.label}
+                                    </div>
+                                    {item.description && (
+                                      <p className="text-[0.82rem] leading-snug text-text-secondary/70">
+                                        {item.description}
+                                      </p>
+                                    )}
+                                  </Link>
                                 ))}
-                              </ul>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Right Featured Section */}
-                        {activeLink.featured && (
-                          <div className="col-span-4 flex flex-col justify-center border-l border-border/40 bg-slate-50/30 p-10">
-                            <div className="space-y-8">
-                              <div className="space-y-4">
-                                <h4 className="text-[1.25rem] font-bold tracking-tight text-text-primary">
-                                  {activeLink.featured.title}
-                                </h4>
-                                <p className="text-[0.95rem] leading-relaxed text-text-secondary/90">
-                                  {activeLink.featured.description}
-                                </p>
                               </div>
-                              <Link 
-                                href={activeLink.featured.href}
-                                className="group/btn inline-flex items-center gap-2 rounded-full bg-accent/5 px-6 py-3 text-[0.92rem] font-bold text-accent border border-accent/20 transition-all hover:bg-accent hover:text-white"
-                                onClick={() => setActiveDropdown(null)}
-                              >
-                                {activeLink.featured.ctaLabel}
-                                <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
-                              </Link>
                             </div>
-                          </div>
+
+                            {/* Right Dynamic Content Content */}
+                            <div className="col-span-8 p-10 bg-white">
+                              {(() => {
+                                const activeItem = activeLink.sidebarItems?.find(i => i.label === activeSidebarItem);
+                                if (!activeItem) return null;
+
+                                return (
+                                  <motion.div
+                                    key={activeSidebarItem}
+                                    initial={{ opacity: 0, x: 10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="h-full flex flex-col justify-between"
+                                  >
+                                    <div className="space-y-8">
+                                      <div className="space-y-4">
+                                        <h4 className="text-[1.5rem] font-bold tracking-tight text-text-primary leading-tight">
+                                          {activeItem.content.title}
+                                        </h4>
+                                        {activeItem.content.description && (
+                                          <p className="text-[1rem] leading-relaxed text-text-secondary/90 max-w-xl">
+                                            {activeItem.content.description}
+                                          </p>
+                                        )}
+                                      </div>
+
+                                      <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                                        {activeItem.content.features.map((feature) => (
+                                          <Link 
+                                            key={feature.title}
+                                            href={feature.href}
+                                            className="group/feat space-y-1 block"
+                                            onClick={() => setActiveDropdown(null)}
+                                          >
+                                            <div className="text-[0.92rem] font-bold text-text-primary group-hover/feat:text-accent transition-colors flex items-center gap-1.5">
+                                              {feature.title}
+                                              <ArrowRight size={12} className="opacity-0 -translate-x-2 group-hover/feat:opacity-100 group-hover/feat:translate-x-0 transition-all" />
+                                            </div>
+                                            <p className="text-[0.85rem] leading-snug text-text-secondary/80">
+                                              {feature.description}
+                                            </p>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+
+                                    {activeItem.content.href && (
+                                      <div className="mt-10 pt-8 border-t border-border/40">
+                                        <Link 
+                                          href={activeItem.content.href}
+                                          className="group/btn inline-flex items-center gap-2 rounded-full bg-accent/5 px-6 py-3 text-[0.92rem] font-bold text-accent border border-accent/20 transition-all hover:bg-accent hover:text-white"
+                                          onClick={() => setActiveDropdown(null)}
+                                        >
+                                          {activeItem.content.ctaLabel || "Learn More"}
+                                          <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                                        </Link>
+                                      </div>
+                                    )}
+                                  </motion.div>
+                                );
+                              })()}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {/* Left content: Dynamic based on active dropdown */}
+                            <div className="col-span-8 grid grid-cols-2 gap-8 p-10">
+                              {activeLink.sections?.map((section) => (
+                                <div key={section.title} className="space-y-6">
+                                  <h3 className="text-[12px] font-bold uppercase tracking-[0.1em] text-text-secondary/60">
+                                    {section.title}
+                                  </h3>
+                                  <ul className="space-y-1">
+                                    {section.items.map((item) => (
+                                      <li key={item.label}>
+                                        <Link 
+                                          href={item.href}
+                                          className="group flex flex-col space-y-1 rounded-xl p-3 transition-all duration-200 hover:bg-slate-50"
+                                          onClick={() => setActiveDropdown(null)}
+                                        >
+                                          <div className="text-[1rem] font-semibold text-text-primary transition-colors group-hover:text-accent">
+                                            {item.label}
+                                          </div>
+                                          {item.description && (
+                                            <p className="text-[0.85rem] leading-relaxed text-text-secondary/80">
+                                              {item.description}
+                                            </p>
+                                          )}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Right Featured Section */}
+                            {activeLink.featured && (
+                              <div className="col-span-4 flex flex-col justify-center border-l border-border/40 bg-slate-50/30 p-10">
+                                <div className="space-y-8">
+                                  <div className="space-y-4">
+                                    <h4 className="text-[1.25rem] font-bold tracking-tight text-text-primary">
+                                      {activeLink.featured.title}
+                                    </h4>
+                                    <p className="text-[0.95rem] leading-relaxed text-text-secondary/90">
+                                      {activeLink.featured.description}
+                                    </p>
+                                  </div>
+                                  <Link 
+                                    href={activeLink.featured.href}
+                                    className="group/btn inline-flex items-center gap-2 rounded-full bg-accent/5 px-6 py-3 text-[0.92rem] font-bold text-accent border border-accent/20 transition-all hover:bg-accent hover:text-white"
+                                    onClick={() => setActiveDropdown(null)}
+                                  >
+                                    {activeLink.featured.ctaLabel}
+                                    <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                                  </Link>
+                                </div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>

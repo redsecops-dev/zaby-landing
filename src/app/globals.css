@@ -309,7 +309,7 @@
     background-position: 200%;
     }
   }
-  
+
   --animate-background-position-spin: background-position-spin 3000ms infinite alternate;
   @keyframes background-position-spin {
     0% {
@@ -318,6 +318,37 @@
     100% {
       background-position: bottom center;
     }
+  }
+}
+
+/* Shimmer Button Animations */
+.animate-shimmer-slide {
+  animation: shimmer-slide var(--speed) ease-in-out infinite alternate;
+}
+.animate-spin-around {
+  animation: spin-around calc(var(--speed) * 2) infinite linear;
+}
+
+@keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+  }
+}
+
+@keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+  }
+  15%,
+  35% {
+    transform: translateZ(0) rotate(90deg);
+  }
+  65%,
+  85% {
+    transform: translateZ(0) rotate(270deg);
+  }
+  100% {
+    transform: translateZ(0) rotate(360deg);
   }
 }
 
@@ -387,4 +418,31 @@ a[href*="spline.design"],
   --color-3: oklch(69.6% 0.165 251);
   --color-4: oklch(80.2% 0.134 225);
   --color-5: oklch(90.7% 0.231 133);
+}
+
+/* Hide Calendly overlay scrollbars */
+.calendly-overlay {
+  overflow-y: hidden !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE 10+ */
+}
+.calendly-overlay::-webkit-scrollbar {
+  display: none !important; /* Safari and Chrome */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hide all scrollbars globally when Calendly modal is active */
+.calendly-open,
+.calendly-open body,
+.calendly-open * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.calendly-open::-webkit-scrollbar,
+.calendly-open body::-webkit-scrollbar,
+.calendly-open *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }

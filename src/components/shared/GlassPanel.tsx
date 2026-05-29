@@ -1,3 +1,4 @@
+import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -19,10 +20,15 @@ export interface GlassPanelProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof panelVariants> {}
 
-export function GlassPanel({ padding, className, children, ...props }: GlassPanelProps) {
-  return (
-    <div className={cn(panelVariants({ padding }), className)} {...props}>
-      {children}
-    </div>
-  );
-}
+export const GlassPanel = React.forwardRef<HTMLDivElement, GlassPanelProps>(
+  ({ padding, className, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn(panelVariants({ padding }), className)} {...props}>
+        {children}
+      </div>
+    );
+  }
+);
+
+GlassPanel.displayName = "GlassPanel";
+

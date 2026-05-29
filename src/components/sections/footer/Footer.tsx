@@ -65,27 +65,27 @@ function FooterSection() {
             {
               title: "Platform",
               links: [
-                { label: "Overview", href: "/" },
-                { label: "Case Studies", href: "/case-studies" },
+                { label: "Business", href: "/" },
+                { label: "Individual", href: "/case-studies" },
                 { label: "Support", href: "/support" },
               ]
             },
             {
-              title: "Operational Layers",
+              title: "AI Native",
               links: [
                 { label: "Agent Squad", href: "/#agent-squad" },
-                { label: "AI Operational Systems", href: "/#ai-operational-systems" },
-                { label: "Autonomous Workforce", href: "/#autonomous-workforce" },
-                { label: "Enterprise Runtime", href: "/#enterprise-runtime" }
+                { label: "AI Infra", href: "/#ai-infra" },
+                { label: "Integrations", href: "/#integrations" },
+                { label: "Agentic Workflow", href: "/#agentic-workflow" },
+                { label: "Conversational AI", href: "/#conversational-ai" }
               ]
             },
             {
-              title: "Technical Components",
+              title: "Workflows",
               links: [
-                { label: "Execution Core", href: "/#execution-core" },
-                { label: "Workflow Engine", href: "/#workflow-engine" },
-                { label: "Memory Store", href: "/#memory-store" },
-                { label: "Agent Runtime", href: "/#agent-runtime" }
+                { label: "Assessments", href: "/" },
+                { label: "Hiring", href: "/" },
+                { label: "Edtech", href: "/" },
               ]
             },
             {

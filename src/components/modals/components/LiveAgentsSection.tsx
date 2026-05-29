@@ -307,7 +307,7 @@ export default function LiveAgentsSection({
         {/* ── Section header ─────────────────────────────────────────────── */}
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500 shadow-sm">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-500" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-purple-500" />
             Live Agent Exchange
           </div>
           <h2 className="text-2xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-3xl">

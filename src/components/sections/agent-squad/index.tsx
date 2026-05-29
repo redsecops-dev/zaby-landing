@@ -191,7 +191,7 @@ export default function AgentSquad() {
         let cleanupGsap: (() => void) | null = null;
 
         const init = async () => {
-            if (!rootRef.current || !frameRef.current || !canvasRef.current) {
+            if (!rootRef.current) {
                 return;
             }
 
@@ -201,7 +201,7 @@ export default function AgentSquad() {
                 import("three"),
             ]);
 
-            if (isDisposed || !rootRef.current || !frameRef.current || !canvasRef.current) {
+            if (isDisposed || !rootRef.current) {
                 return;
             }
 
@@ -211,122 +211,124 @@ export default function AgentSquad() {
             const frame = frameRef.current;
             const canvas = canvasRef.current;
 
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            camera.position.z = 50;
+            if (frame && canvas) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                camera.position.z = 50;
 
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setClearColor(0xffffff, 0);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.setClearColor(0xffffff, 0);
 
-            const vertexShader = `
-                uniform float uTime;
-                attribute float size;
-                varying float vDepth;
-                void main() {
-                    vec3 pos = position;
-                    pos.z += sin(pos.x * 0.1 + uTime * 0.5) * 2.0;
-                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                    vDepth = -mvPosition.z;
-                    gl_PointSize = size * (300.0 / -mvPosition.z);
-                    gl_Position = projectionMatrix * mvPosition;
+                const vertexShader = `
+                    uniform float uTime;
+                    attribute float size;
+                    varying float vDepth;
+                    void main() {
+                        vec3 pos = position;
+                        pos.z += sin(pos.x * 0.1 + uTime * 0.5) * 2.0;
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        vDepth = -mvPosition.z;
+                        gl_PointSize = size * (300.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `;
+
+                const fragmentShader = `
+                    uniform float uTime;
+                    uniform vec3 uColor;
+                    varying float vDepth;
+                    void main() {
+                        vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                        float radius = length(xy);
+                        if (radius > 0.5) discard;
+                        float alpha = smoothstep(0.5, 0.4, radius);
+                        float depthFade = smoothstep(150.0, 20.0, vDepth);
+                        float pulse = (sin(uTime * 0.8) * 0.5 + 0.5) * 0.3 + 0.1;
+                        gl_FragColor = vec4(uColor, alpha * depthFade * pulse);
+                    }
+                `;
+
+                const particles = 1500;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particles * 3);
+                const sizes = new Float32Array(particles);
+
+                for (let i = 0; i < particles; i += 1) {
+                    positions[i * 3] = (Math.random() - 0.5) * 200;
+                    positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+                    positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+                    sizes[i] = Math.random() * 1.5 + 0.5;
                 }
-            `;
 
-            const fragmentShader = `
-                uniform float uTime;
-                uniform vec3 uColor;
-                varying float vDepth;
-                void main() {
-                    vec2 xy = gl_PointCoord.xy - vec2(0.5);
-                    float radius = length(xy);
-                    if (radius > 0.5) discard;
-                    float alpha = smoothstep(0.5, 0.4, radius);
-                    float depthFade = smoothstep(150.0, 20.0, vDepth);
-                    float pulse = (sin(uTime * 0.8) * 0.5 + 0.5) * 0.3 + 0.1;
-                    gl_FragColor = vec4(uColor, alpha * depthFade * pulse);
-                }
-            `;
+                geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
-            const particles = 1500;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particles * 3);
-            const sizes = new Float32Array(particles);
+                const material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTime: { value: 0 },
+                        uColor: { value: new THREE.Color(0x94a3b8) },
+                    },
+                    vertexShader,
+                    fragmentShader,
+                    transparent: true,
+                    depthWrite: false,
+                    blending: THREE.NormalBlending,
+                });
 
-            for (let i = 0; i < particles; i += 1) {
-                positions[i * 3] = (Math.random() - 0.5) * 200;
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
-                sizes[i] = Math.random() * 1.5 + 0.5;
-            }
+                const pointCloud = new THREE.Points(geometry, material);
+                scene.add(pointCloud);
 
-            geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
+                let mouseX = 0;
+                let mouseY = 0;
+                const clock = new THREE.Timer();
 
-            const material = new THREE.ShaderMaterial({
-                uniforms: {
-                    uTime: { value: 0 },
-                    uColor: { value: new THREE.Color(0x94a3b8) },
-                },
-                vertexShader,
-                fragmentShader,
-                transparent: true,
-                depthWrite: false,
-                blending: THREE.NormalBlending,
-            });
+                const setCanvasSize = () => {
+                    const bounds = frame.getBoundingClientRect();
+                    const width = Math.max(1, bounds.width || window.innerWidth);
+                    const height = Math.max(1, bounds.height || window.innerHeight);
+                    camera.aspect = width / height;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(width, height, false);
+                };
 
-            const pointCloud = new THREE.Points(geometry, material);
-            scene.add(pointCloud);
+                onPointerMove = (event) => {
+                    const rect = frame.getBoundingClientRect();
+                    const halfWidth = rect.width / 2;
+                    const halfHeight = rect.height / 2;
+                    mouseX = (event.clientX - rect.left - halfWidth) * 0.05;
+                    mouseY = (event.clientY - rect.top - halfHeight) * 0.05;
+                };
 
-            let mouseX = 0;
-            let mouseY = 0;
-            const clock = new THREE.Timer();
+                onResize = () => {
+                    setCanvasSize();
+                    ScrollTrigger.refresh();
+                };
 
-            const setCanvasSize = () => {
-                const bounds = frame.getBoundingClientRect();
-                const width = Math.max(1, bounds.width || window.innerWidth);
-                const height = Math.max(1, bounds.height || window.innerHeight);
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-                renderer.setSize(width, height, false);
-            };
-
-            onPointerMove = (event) => {
-                const rect = frame.getBoundingClientRect();
-                const halfWidth = rect.width / 2;
-                const halfHeight = rect.height / 2;
-                mouseX = (event.clientX - rect.left - halfWidth) * 0.05;
-                mouseY = (event.clientY - rect.top - halfHeight) * 0.05;
-            };
-
-            onResize = () => {
+                frame.addEventListener("pointermove", onPointerMove, { passive: true });
+                window.addEventListener("resize", onResize);
                 setCanvasSize();
-                ScrollTrigger.refresh();
-            };
 
-            frame.addEventListener("pointermove", onPointerMove, { passive: true });
-            window.addEventListener("resize", onResize);
-            setCanvasSize();
+                const render = () => {
+                    material.uniforms.uTime.value = clock.getElapsed();
+                    camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.05;
+                    camera.position.y += (-mouseY * 0.2 - camera.position.y) * 0.05;
+                    camera.lookAt(scene.position);
+                    renderer.render(scene, camera);
+                    animationFrameId = window.requestAnimationFrame(render);
+                };
+                render();
 
-            const render = () => {
-                material.uniforms.uTime.value = clock.getElapsed();
-                camera.position.x += (mouseX * 0.2 - camera.position.x) * 0.05;
-                camera.position.y += (-mouseY * 0.2 - camera.position.y) * 0.05;
-                camera.lookAt(scene.position);
-                renderer.render(scene, camera);
-                animationFrameId = window.requestAnimationFrame(render);
-            };
-            render();
-
-            cleanupThree = () => {
-                window.cancelAnimationFrame(animationFrameId);
-                frame.removeEventListener("pointermove", onPointerMove as EventListener);
-                window.removeEventListener("resize", onResize as EventListener);
-                scene.remove(pointCloud);
-                geometry.dispose();
-                material.dispose();
-                renderer.dispose();
-            };
+                cleanupThree = () => {
+                    window.cancelAnimationFrame(animationFrameId);
+                    frame.removeEventListener("pointermove", onPointerMove as EventListener);
+                    window.removeEventListener("resize", onResize as EventListener);
+                    scene.remove(pointCloud);
+                    geometry.dispose();
+                    material.dispose();
+                    renderer.dispose();
+                };
+            }
 
             const context = gsap.context(() => {
                 const cards = gsap.utils.toArray<HTMLElement>(".card-wrapper", root);
@@ -531,8 +533,8 @@ export default function AgentSquad() {
     return (
         <section ref={rootRef} className="relative w-full overflow-x-hidden bg-white text-slate-900 selection:bg-slate-200">
             <section className="relative h-screen min-h-[760px] w-full overflow-hidden">
-                <div ref={frameRef} className="pointer-events-none absolute inset-6 z-0 overflow-hidden sm:inset-12">
-                    <div
+                {/* <div ref={frameRef} className="pointer-events-none absolute inset-6 z-0 overflow-hidden sm:inset-12"> */}
+                    {/* <div
                         className="absolute inset-0"
                         style={{
                             maskImage: "radial-gradient(circle at center, black 0%, black 56%, rgba(0,0,0,0.55) 72%, transparent 92%)",
@@ -541,20 +543,20 @@ export default function AgentSquad() {
                     >
                         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-50/80 via-white to-slate-100" />
                         <canvas ref={canvasRef} className="absolute inset-0 opacity-40" />
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                         className="absolute inset-0 border border-slate-900/[0.04]"
                         style={{ backgroundImage: "repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0, rgba(0,0,0,0.01) 1px, transparent 1px, transparent 10px)" }}
-                    />
-                    <div
+                    /> */}
+                    {/* <div
                         className="absolute inset-0 opacity-30"
                         style={{
                             backgroundImage:
                                 "linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)",
                             backgroundSize: "64px 64px",
                         }}
-                    />
-                </div>
+                    /> */}
+                {/* </div> */}
 
                 <main data-carousel-area className="relative z-10 flex h-full w-full cursor-grab active:cursor-grabbing" style={{ touchAction: "pan-y" }}>
                     {/* ── Left: card fan ────────────────────────────────── */}

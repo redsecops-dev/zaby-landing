@@ -11,7 +11,9 @@ import {
   HeroHeading, 
   RevealWord, 
   GradientOrb, 
-  GridBackground 
+  GridBackground,
+  ShimmerButton,
+  CalendlyButton
 } from "@/components/shared";
 
 export function HeroSection() {
@@ -119,7 +121,7 @@ export function HeroSection() {
         size="lg" 
         className="absolute top-[20%] -right-[5%] opacity-15 blur-[100px] z-0" 
       />
-      <GridBackground variant="dots" opacity="light" className="z-0 opacity-[0.05]" />
+      {/* <GridBackground variant="dots" opacity="light" className="z-0 opacity-[0.05]" /> */}
 
       <div className="relative z-10 overflow-visible px-4 pt-26 md:px-6 md:pt-30 lg:pb-0 lg:pt-24">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 pb-10 md:gap-10 md:pb-12 lg:grid-cols-2 lg:gap-8">
@@ -147,25 +149,25 @@ export function HeroSection() {
 
             {/* CTA buttons */}
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <Button
+              <ShimmerButton
                 asChild
-                size="lg"
-                className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-(--color-button-primary-bg) px-8 py-7 text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-(--color-button-primary-hover) hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
+                shimmerColor="#e879f9"
+                background="var(--color-button-primary-bg)"
+                borderRadius="9999px"
+                className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full px-8 py-[18px] text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
               >
                 <Link href="https://platform.zaby.io/tenant/signup">
-                  <Icon icon="solar:bolt-linear" width={22} height={22} />
-                  Get started free
+                  <Icon icon="solar:bolt-linear" width={22} height={22} className="relative z-10" />
+                  <span className="relative z-10">Get started free</span>
                 </Link>
-              </Button>
+              </ShimmerButton>
 
-              <Button
-                size="lg"
-                variant="outline"
-                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-full border border-(--color-button-secondary-border) bg-(--color-button-secondary-bg) px-10 py-7 text-base font-medium text-(--color-button-secondary-text) transition-all hover:bg-[#e9d5ff] sm:w-auto"
-              >
-                <Icon icon="solar:play-circle-linear" width={22} height={22} />
-                See how it works
-              </Button>
+              <CalendlyButton
+                variant="secondary"
+                text="Book a Demo"
+                icon="solar:calendar-date-bold-duotone"
+                className="w-full sm:w-auto px-8 py-[21px] text-base rounded-full h-auto text-[var(--color-button-secondary-text)] border border-[var(--color-button-secondary-border)] bg-[var(--color-button-secondary-bg)] hover:bg-white/40 font-medium"
+              />
             </div>
           </div>
 

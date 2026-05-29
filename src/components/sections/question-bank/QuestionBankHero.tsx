@@ -11,7 +11,7 @@ import {
   Terminal
 } from "lucide-react";
 import InteractiveDottedGrid from "./InteractiveDottedGrid";
-import { HeroBadge, HeroHeading, RevealWord, GlassPanel } from "@/components/shared";
+import { HeroBadge, HeroHeading, RevealWord, GlassPanel, ShimmerButton } from "@/components/shared";
 import { Icon } from "@iconify/react";
 
 export default function QuestionBankHero() {
@@ -114,13 +114,18 @@ export default function QuestionBankHero() {
 
         {/* Buttons */}
         <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4 mb-16">
-          <Link
-            href="https://platform.zaby.io/tenant/signup"
-            className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-[var(--color-button-primary-bg)] px-8 py-4 text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] transition-all hover:bg-[var(--color-button-primary-hover)] hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] hover:scale-[1.02] sm:w-auto"
+          <ShimmerButton
+            asChild
+            shimmerColor="#e879f9"
+            background="var(--color-button-primary-bg)"
+            borderRadius="9999px"
+            className="group relative flex w-full cursor-pointer items-center justify-center gap-3 rounded-full px-8 py-4 text-base font-medium tracking-wide text-white shadow-[rgba(76,29,149,0.5)_0px_10px_30px_-10px] hover:shadow-[rgba(76,29,149,0.6)_0px_12px_34px_-10px] sm:w-auto"
           >
-            <Zap className="h-5 w-5 animate-pulse" />
-            Generate AI Assessment
-          </Link>
+            <Link href="https://platform.zaby.io/tenant/signup">
+              <Zap className="h-5 w-5 animate-pulse relative z-10" />
+              <span className="relative z-10">Generate AI Assessment</span>
+            </Link>
+          </ShimmerButton>
 
           <Link
             href="/contact"

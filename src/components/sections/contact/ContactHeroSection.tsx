@@ -2,7 +2,7 @@
 
 import React from "react";
 import { SectionWrapper, Container } from "@/components/layout";
-import { HeroBadge, HeroHeading, GradientOrb } from "@/components/shared";
+import { HeroBadge, HeroHeading, GradientOrb, CalendlyButton } from "@/components/shared";
 import { ScrollReveal } from "@/components/animations";
 
 export function ContactHeroSection() {
@@ -49,6 +49,14 @@ export function ContactHeroSection() {
             }
             subtitle="Ready to deploy operational AI across your business? We're here to help you build, configure, and scale your AI workforce."
           />
+
+          <div className="mt-8 flex justify-center">
+            <CalendlyButton
+              variant="hero"
+              text="Schedule a Demo"
+              icon="solar:calendar-date-bold-duotone"
+            />
+          </div>
         </ScrollReveal>
       </Container>
     </SectionWrapper>

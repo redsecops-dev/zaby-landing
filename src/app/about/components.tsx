@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, LucideIcon } from "lucide-react";
 import { SectionWrapper, Container } from "@/components/layout";
-import { GlassPanel, GradientOrb, HeroBadge } from "@/components/shared";
+import { GlassPanel, GradientOrb, HeroBadge, ShimmerButton } from "@/components/shared";
 import { ScrollReveal } from "@/components/animations";
 import { cn } from "@/lib/utils";
 
@@ -54,13 +54,18 @@ export const HeroSection = ({ badge, title, description }: HeroProps) => (
 
       <ScrollReveal direction="up" delay={0.25}>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Link
-            href="https://platform.zaby.io/tenant/signup"
-            className="inline-flex items-center gap-2 rounded-full bg-(--color-button-primary-bg) px-8 py-4 text-sm font-medium text-white transition-all hover:bg-(--color-button-primary-hover) cursor-pointer"
+          <ShimmerButton
+            asChild
+            shimmerColor="#e879f9"
+            background="var(--color-button-primary-bg)"
+            borderRadius="9999px"
+            className="group relative flex cursor-pointer items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-medium tracking-wide text-white shadow-[rgba(47,19,98,0.15)_0px_10px_25px_-5px]"
           >
-            Start Building
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+            <Link href="https://platform.zaby.io/tenant/signup">
+              <span className="relative z-10">Start Building</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 relative z-10" />
+            </Link>
+          </ShimmerButton>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-strong)]/50 bg-white px-8 py-4 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:bg-slate-50 cursor-pointer"
@@ -147,7 +152,7 @@ export const MissionSection = ({
             <GlassPanel
               key={i}
               padding="md"
-              className="flex flex-col items-center gap-2.5 rounded-2xl transition-all hover:border-[var(--color-accent)]/20 hover:shadow-sm"
+              className="flex flex-col items-center gap-2.5 rounded-2xl transition-all hover:border-[var(--color-accent)]/20"
             >
               <Icon className="w-5 h-5 text-[var(--color-accent)]" />
               <span className="text-sm font-medium text-[var(--color-text-primary)]">
@@ -262,7 +267,7 @@ export const ValuesSection = ({
           <ScrollReveal key={i} direction="up" delay={0.12 + i * 0.08}>
             <GlassPanel
               padding="lg"
-              className="rounded-2xl transition-all hover:border-[var(--color-accent)]/20 hover:shadow-sm text-center flex flex-col items-center h-full"
+              className="rounded-2xl transition-all hover:border-[var(--color-accent)]/20 text-center flex flex-col items-center h-full"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/15">
                 <Icon className="w-6 h-6 text-[var(--color-accent)]" />
@@ -357,13 +362,18 @@ export const HiringSection = ({
 
       <ScrollReveal direction="up" delay={0.2}>
         <div className="pt-6">
-          <Link
-            href="/careers"
-            className="inline-flex items-center gap-2 rounded-full bg-(--color-button-primary-bg) px-8 py-4 text-sm font-medium text-white transition-all hover:bg-(--color-button-primary-hover) cursor-pointer"
+          <ShimmerButton
+            asChild
+            shimmerColor="#e879f9"
+            background="var(--color-button-primary-bg)"
+            borderRadius="9999px"
+            className="group relative flex cursor-pointer items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-medium tracking-wide text-white shadow-[rgba(47,19,98,0.15)_0px_10px_25px_-5px]"
           >
-            See Open Roles
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+            <Link href="/careers">
+              <span className="relative z-10">See Open Roles</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 relative z-10" />
+            </Link>
+          </ShimmerButton>
         </div>
       </ScrollReveal>
 
@@ -373,7 +383,7 @@ export const HiringSection = ({
             {items.map((item, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-[var(--color-border-strong)]/40 bg-white p-4 text-center transition-all hover:border-[var(--color-accent)]/20 hover:shadow-sm"
+                className="rounded-xl border border-[var(--color-border-strong)]/40 bg-white p-4 text-center transition-all hover:border-[var(--color-accent)]/20"
               >
                 <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]/70 mb-1">
                   {item.dept}
